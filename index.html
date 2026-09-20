@@ -1,0 +1,3786 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 知識全景與實戰指南：從文字接龍到多 Agent 協作</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --comic-border: #1e293b;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-comic: 4px 4px 0px #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    /* 頂部導航 */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--border-color);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Hero 區域 */
+    .hero {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
+      color: white;
+      padding: 4rem 1.5rem 5rem;
+      text-align: center;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 780px;
+      margin: 0 auto 2rem;
+      opacity: 0.95;
+    }
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .hero-tag {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    /* 主內容容器 */
+    .container {
+      max-width: 1100px;
+      margin: -2.5rem auto 0;
+      padding: 0 1.25rem;
+      position: relative;
+    }
+
+    /* 卡片通用樣式 */
+    .section-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+    .section-header {
+      margin-bottom: 2rem;
+    }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0e7ff;
+      color: #3730a3;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+    .section-header h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-top: 0.5rem;
+    }
+
+    /* 四格情境漫畫組件 (優化現代漫畫風格) */
+    .comic-strip {
+      background: #fdfbf7;
+      border: 2px solid #334155;
+      border-radius: 16px;
+      box-shadow: 4px 6px 0px #1e293b;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      position: relative;
+    }
+    .comic-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px dashed #cbd5e1;
+    }
+    .comic-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comic-title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+    }
+    .comic-read-order {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #b45309;
+      background: #fef3c7;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #fde68a;
+    }
+    .comic-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .comic-panel {
+      background: white;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      box-shadow: 2px 3px 0px #334155;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .comic-panel:hover {
+      transform: translateY(-2px);
+      box-shadow: 3px 5px 0px #1e293b;
+    }
+    .comic-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid #f1f5f9;
+    }
+    .comic-step-tag {
+      background: #f59e0b;
+      color: #1e293b;
+      font-weight: 900;
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1.5px solid #1e293b;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .comic-panel-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #1e293b;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .comic-img-box {
+      width: 100%;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+    .comic-img-box svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    /* 真實漫畫對話氣泡 */
+    .comic-bubble {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.82rem;
+      color: #1e293b;
+      line-height: 1.45;
+      margin-bottom: 0.6rem;
+      position: relative;
+    }
+    .comic-bubble::after {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 20px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 7px solid #f1f5f9;
+    }
+    .comic-bubble::before {
+      content: "";
+      position: absolute;
+      top: -9px;
+      left: 19px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 9px solid #cbd5e1;
+    }
+    .comic-speaker {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: #4338ca;
+      background: #e0e7ff;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-right: 4px;
+    }
+    .comic-caption {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: auto;
+      background: #f8fafc;
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      border-left: 3px solid #94a3b8;
+    }
+
+    /* 說明卡片網格 */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .concept-card {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      background: #ffffff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .concept-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .concept-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+    }
+    .concept-card p {
+      font-size: 0.95rem;
+      color: #475569;
+    }
+
+    /* 技術演進流程時間軸 (Evolution Steps) */
+    .timeline-container {
+      margin: 2rem 0;
+      position: relative;
+      padding-left: 2rem;
+    }
+    .timeline-container::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 10px;
+      bottom: 10px;
+      width: 3px;
+      background: linear-gradient(180deg, #4f46e5 0%, #06b6d4 100%);
+      border-radius: 999px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.75rem;
+    }
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    .timeline-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.35rem;
+    }
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* 核心名詞生活百科卡片 (Term Encyclopedia Cards) */
+    .term-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .term-box:hover {
+      border-color: #6366f1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+      background: #ffffff;
+    }
+    .term-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .term-name-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .term-num {
+      background: #1e293b;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .term-name-zh {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #0f172a;
+    }
+    .term-name-en {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-family: monospace;
+    }
+    .term-analogy-badge {
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #fde68a;
+    }
+    .term-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+      font-size: 0.88rem;
+    }
+    @media (max-width: 640px) {
+      .term-content-grid { grid-template-columns: 1fr; }
+    }
+    .term-row {
+      background: #f1f5f9;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+    }
+    .term-row strong {
+      color: #1e293b;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* 技術深潛揭秘框 (Deep Dive Box) */
+    .deep-dive-box {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: #e0e7ff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 5px solid #818cf8;
+    }
+    .deep-dive-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .deep-dive-box p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #c7d2fe;
+    }
+    .deep-dive-box code {
+      background: rgba(0, 0, 0, 0.35);
+      color: #fde047;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* 📦 對話歷史包裹打包展示專用樣式 (Stateless Visualizer) */
+    .stateless-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .stateless-demo { grid-template-columns: 1fr; }
+    }
+    .packet-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 1.1rem;
+      position: relative;
+    }
+    .packet-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.6rem;
+    }
+    .packet-badge.round1 { background: #38bdf8; color: #082f49; }
+    .packet-badge.round2 { background: #f43f5e; color: #4c0519; }
+    .packet-bundle {
+      background: #0f172a;
+      border: 1.5px dashed #64748b;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: monospace;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #cbd5e1;
+      margin-top: 0.5rem;
+    }
+    .packet-tag-old {
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .packet-tag-new {
+      color: #fde047;
+      background: rgba(234, 179, 8, 0.2);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    .packet-weight {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    /* ⚡ 重點速讀模式專用樣式 (ADHD-Friendly UX) */
+    .adhd-banner {
+      background: linear-gradient(135deg, #fef3c7 0%, #ffedd5 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.15);
+    }
+    .adhd-banner-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .adhd-banner-content {
+      flex: 1;
+    }
+    .adhd-banner-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #92400e;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .adhd-banner-text {
+      font-size: 0.88rem;
+      color: #78350f;
+      line-height: 1.5;
+    }
+    .adhd-banner-text strong {
+      color: #b45309;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* 折疊抽屜控制器 (Accordion Controls) */
+    .drawer-toggle-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .drawer-toggle-bar:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+    .drawer-toggle-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .drawer-btn {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #4338ca;
+      background: #e0e7ff;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .term-drawer-content {
+      display: block; /* 預設可切換 */
+    }
+    .term-drawer-collapsed .term-content-grid {
+      display: none !important;
+    }
+    .term-drawer-collapsed .term-quick-preview {
+      display: block !important;
+    }
+    .term-quick-preview {
+      display: none;
+      font-size: 0.85rem;
+      color: #475569;
+      background: #f8fafc;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      margin-top: 0.4rem;
+      border-left: 3px solid #6366f1;
+    }
+
+    /* 互動元件容器 */
+    .interactive-box {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin: 2rem 0 1rem;
+    }
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .interactive-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .interactive-badge {
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    /* 互動 1: 文字接龍模擬器 */
+    .token-display-box {
+      background: white;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      padding: 1.25rem;
+      font-size: 1.15rem;
+      min-height: 70px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .token-item {
+      background: #e2e8f0;
+      color: #1e293b;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      display: inline-block;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .token-item.predicted {
+      background: #fef08a;
+      color: #854d0e;
+      border: 2px solid #eab308;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .token-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .temp-slider-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .token-prob-chart {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      padding: 1rem;
+    }
+    .prob-bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .prob-word {
+      width: 70px;
+      font-weight: 700;
+      text-align: right;
+    }
+    .prob-track {
+      flex: 1;
+      height: 20px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .prob-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #3b82f6);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+    .prob-val {
+      width: 50px;
+      font-weight: 600;
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* 互動 2: 網頁 vs 施工隊對決 */
+    .duel-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .duel-card {
+      background: white;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      padding: 1.25rem;
+      position: relative;
+    }
+    .duel-card.web {
+      border-top: 5px solid #3b82f6;
+    }
+    .duel-card.agent {
+      border-top: 5px solid #10b981;
+    }
+    .duel-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .duel-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+    }
+    .duel-screen {
+      background: #1e293b;
+      color: #f8fafc;
+      font-family: monospace;
+      font-size: 0.8rem;
+      padding: 1rem;
+      border-radius: 8px;
+      min-height: 140px;
+      max-height: 140px;
+      overflow-y: auto;
+      margin: 1rem 0;
+      line-height: 1.4;
+    }
+    .btn-action {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-action:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* 互動 3: 多 Agent 協作沙盒 */
+    .agent-pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .agent-node {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .agent-node.active {
+      border-color: #6366f1;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.35);
+      transform: translateY(-4px);
+    }
+    .agent-node.done {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .node-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .node-role {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #1e293b;
+    }
+    .node-status {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+    .pipeline-log {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 1rem;
+      border-radius: 8px;
+      height: 120px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    /* 互動 4: 隨堂測驗 */
+    .quiz-card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .quiz-question {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+    .quiz-options {
+      display: grid;
+      gap: 0.5rem;
+    }
+    .quiz-btn {
+      text-align: left;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .quiz-btn:hover {
+      background: #e2e8f0;
+    }
+    .quiz-btn.correct {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+      font-weight: 700;
+    }
+    .quiz-btn.wrong {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      display: none;
+    }
+
+    /* 響應式適配 */
+    @media (max-width: 1024px) {
+      .comic-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .duel-container { grid-template-columns: 1fr; }
+      .agent-pipeline { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .section-card { padding: 1.5rem; }
+    }
+    @media (max-width: 640px) {
+      .comic-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導航 -->
+  <nav class="navbar">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/>
+        <path d="M9 21h6"/>
+      </svg>
+      <span>AI 知識全景與實戰指南</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#ch1">1. 文字接龍原理</a></li>
+      <li><a href="#ch2">2. 一問一答應用</a></li>
+      <li><a href="#ch3">3. 電腦工作施工隊</a></li>
+      <li><a href="#ch4">4. 多 Agent 協作規劃</a></li>
+      <li><a href="#quiz">5. 實戰隨堂測驗</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero 看板 -->
+  <header class="hero">
+    <div class="hero-badge">💡 初學者零門檻躍遷寶典 · ⚡ 重點速讀友善設計</div>
+    <h1>從「聊天打字」到「多 Agent 自動化施工隊」</h1>
+    <p>告別無聊又分散注意力的冗長文字！全單元穿插<strong>情境四格漫畫</strong>、<strong>30 秒專注速讀卡 (TL;DR)</strong> 與<strong>即時可點擊互動沙盒</strong>，用最生動有趣的方式帶你輕鬆看懂從文字接龍到多 Agent 施工隊的完整全貌！</p>
+    <div class="hero-tags">
+      <span class="hero-tag">🎨 4 組完整情境四格漫畫</span>
+      <span class="hero-tag">⚡ 重點速讀模式</span>
+      <span class="hero-tag">📁 核心名詞抽屜收合</span>
+      <span class="hero-tag">🛠️ 本機 Antigravity 施工隊</span>
+      <span class="hero-tag">🤝 多 Agent 組織分工</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 第一單元：機器學習與文字接龍原理 -->
+    <section id="ch1" class="section-card">
+      <div class="section-header">
+        <span class="section-tag">單元 01 · 核心大腦解密</span>
+        <h2>
+          <span>🧠 揭開神秘面紗：機器學習與文字接龍</span>
+        </h2>
+        <p class="section-desc">你以為 AI 是通曉古今的神仙？其實它更像一位讀遍全天下圖書、猜測下一個字詞準確率極高的「文字接龍大師」！</p>
+      </div>
+
+      <!-- ⚡ 重點速讀模式 (30 秒吸收精華) -->
+      <div class="adhd-banner">
+        <div class="adhd-banner-icon">⚡</div>
+        <div class="adhd-banner-content">
+          <div class="adhd-banner-title">重點速讀卡：單元 1 核心三秒悟透</div>
+          <div class="adhd-banner-text">
+            1. <strong>不是神仙</strong>：AI 沒有意識與感情，本質是算統計機率的<strong>文字接龍大師</strong>。<br>
+            2. <strong>演進關鍵</strong>：從「寫死食譜」➔「阿嬤挑西瓜找規律」➔「拿螢光筆一眼看穿前後文的 Transformer」。<br>
+            3. <strong>為什麼胡說八道</strong>：接龍時只顧語法順暢，若無課本參考就會自信地<strong>瞎編圓謊（幻覺）</strong>。
+          </div>
+        </div>
+      </div>
+
+      <!-- 四格漫畫：文字接龍 (精緻升級版) -->
+      <div class="comic-strip">
+        <div class="comic-header">
+          <div class="comic-header-left">
+            <span style="font-size: 1.6rem;">🎨</span>
+            <span class="comic-title">情境四格漫畫：阿凱發現了 AI 的文字接龍祕密</span>
+          </div>
+          <span class="comic-read-order">閱讀順序：❶ 起 ➔ ❷ 承 ➔ ❸ 轉 ➔ ❹ 合</span>
+        </div>
+        <div class="comic-grid">
+          <!-- panel 1 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag">❶ 起</span>
+              <span class="comic-panel-title">膜拜神仙大腦</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="halo" cx="70%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#fef08a" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <!-- 背景光暈 -->
+                <rect width="240" height="150" fill="#f8fafc"/>
+                <circle cx="165" cy="65" r="55" fill="url(#halo)"/>
+                <!-- 阿凱 (左側) -->
+                <circle cx="65" cy="60" r="26" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 星星眼 -->
+                <path d="M55 56 L57 60 L61 60 L58 63 L59 67 L55 64 L51 67 L52 63 L49 60 L53 60 Z" fill="#eab308" stroke="#ca8a04" stroke-width="0.8"/>
+                <path d="M75 56 L77 60 L81 60 L78 63 L79 67 L75 64 L71 67 L72 63 L69 60 L73 60 Z" fill="#eab308" stroke="#ca8a04" stroke-width="0.8"/>
+                <!-- 崇拜笑容 -->
+                <path d="M57 74 Q65 82 73 74" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <!-- 身體與合十雙手 -->
+                <path d="M40 120 C40 95 90 95 90 120 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2.5"/>
+                <ellipse cx="65" cy="98" rx="10" ry="14" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+                <text x="65" y="102" font-size="9" text-anchor="middle" font-weight="900" fill="#1e293b">🙏</text>
+                <!-- 雲端與發光水晶球 (右側) -->
+                <path d="M125 110 Q145 95 165 110 Q185 95 205 110 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="165" cy="65" r="28" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+                <path d="M150 55 Q165 40 180 55 Q165 70 150 55" fill="#a5b4fc" opacity="0.6"/>
+                <text x="165" y="62" font-size="12" text-anchor="middle" font-weight="900" fill="#4338ca">AI 大腦</text>
+                <text x="165" y="78" font-size="9" text-anchor="middle" font-weight="bold" fill="#6366f1">100% 全知？</text>
+                <!-- 光芒射線 -->
+                <line x1="165" y1="28" x2="165" y2="20" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="195" y1="40" x2="203" y2="34" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="198" y1="75" x2="208" y2="78" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「哇！問什麼秒回，AI 裡面一定住著無所不知的算命仙！」
+            </div>
+            <div class="comic-caption">📌 迷思：以為 AI 具備自由意識與全知全能的智慧。</div>
+          </div>
+
+          <!-- panel 2 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#ef4444;color:#fff;">❷ 承</span>
+              <span class="comic-panel-title">驚見離譜幻覺</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#fff1f2"/>
+                <!-- 阿凱崩潰抓頭 (左側) -->
+                <circle cx="65" cy="65" r="26" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 蚊香眼 -->
+                <ellipse cx="55" cy="60" rx="6" ry="6" fill="none" stroke="#1e293b" stroke-width="2"/>
+                <ellipse cx="75" cy="60" rx="6" ry="6" fill="none" stroke="#1e293b" stroke-width="2"/>
+                <!-- 掉下巴驚呼 -->
+                <ellipse cx="65" cy="78" rx="8" ry="10" fill="#1e293b"/>
+                <!-- 冷汗 -->
+                <path d="M40 50 Q43 58 38 60 Q35 56 40 50 Z" fill="#38bdf8"/>
+                <path d="M88 52 Q92 60 87 62 Q84 58 88 52 Z" fill="#38bdf8"/>
+                <!-- 抓頭雙手 -->
+                <path d="M40 125 C40 100 90 100 90 125 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2.5"/>
+                <path d="M38 75 Q42 55 52 50" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M92 75 Q88 55 78 50" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- 電腦螢幕跳出離譜回答 (右側) -->
+                <rect x="115" y="25" width="115" height="90" rx="8" fill="#ffffff" stroke="#ef4444" stroke-width="3"/>
+                <rect x="115" y="25" width="115" height="20" rx="8" fill="#fee2e2"/>
+                <text x="172" y="39" font-size="9" text-anchor="middle" font-weight="900" fill="#991b1b">⚠️ AI 幻覺警報</text>
+                <text x="172" y="65" font-size="9" text-anchor="middle" font-weight="bold" fill="#dc2626">問：林黛玉是誰？</text>
+                <rect x="122" y="73" width="101" height="34" rx="4" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+                <text x="172" y="86" font-size="8.5" text-anchor="middle" font-weight="900" fill="#b91c1c">答：倒拔垂楊柳的</text>
+                <text x="172" y="99" font-size="8.5" text-anchor="middle" font-weight="900" fill="#b91c1c">梁山好漢！！</text>
+                <!-- 混亂問號 -->
+                <text x="120" y="20" font-size="16" font-weight="900" fill="#f59e0b">？</text>
+                <text x="210" y="20" font-size="20" font-weight="900" fill="#ef4444">？！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「等等！問它紅樓夢，它怎麼說林黛玉倒拔垂楊柳？！」
+            </div>
+            <div class="comic-caption">📌 痛點：遇到自信滿滿的胡說八道（幻覺）大惑不解。</div>
+          </div>
+
+          <!-- panel 3 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#3b82f6;color:#fff;">❸ 轉</span>
+              <span class="comic-panel-title">看懂接龍機關</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdfa"/>
+                <!-- 工程師推眼鏡 (左側) -->
+                <circle cx="55" cy="65" r="24" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 黑框眼鏡與微笑 -->
+                <rect x="42" y="58" width="11" height="8" rx="2" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+                <rect x="57" y="58" width="11" height="8" rx="2" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+                <line x1="53" y1="62" x2="57" y2="62" stroke="#1e293b" stroke-width="2"/>
+                <path d="M48 76 Q55 82 62 76" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <!-- 身穿襯衫領帶 -->
+                <path d="M30 125 C30 100 80 100 80 125 Z" fill="#0284c7" stroke="#1e293b" stroke-width="2.5"/>
+                <polygon points="55,100 52,118 55,124 58,118" fill="#f59e0b"/>
+                <!-- 指揮棒指向投影 -->
+                <line x1="75" y1="95" x2="105" y2="65" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="106" cy="64" r="3" fill="#f59e0b"/>
+                <!-- 科技全息投影圖 (右側) -->
+                <rect x="110" y="20" width="122" height="105" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="2"/>
+                <rect x="110" y="20" width="122" height="20" rx="8" fill="#ccfbf1"/>
+                <text x="171" y="34" font-size="8.5" text-anchor="middle" font-weight="900" fill="#0f766e">機率決策樹 (Next-Token)</text>
+                <text x="120" y="55" font-size="9" font-weight="bold" fill="#334155">前文：「床前明月」</text>
+                <!-- 機率分支 -->
+                <rect x="120" y="63" width="70" height="14" rx="3" fill="#3b82f6"/>
+                <text x="124" y="73" font-size="8" fill="#ffffff" font-weight="bold">➔ 光 (98.2%)</text>
+                <rect x="120" y="81" width="30" height="14" rx="3" fill="#94a3b8"/>
+                <text x="124" y="91" font-size="8" fill="#ffffff" font-weight="bold">➔ 亮 (1.1%)</text>
+                <rect x="120" y="99" width="15" height="14" rx="3" fill="#f87171"/>
+                <text x="124" y="109" font-size="8" fill="#ffffff" font-weight="bold">➔ 餅 (0.05%)</text>
+                <text x="175" y="118" font-size="7.5" font-weight="bold" fill="#0f766e">隨機骰出下一字！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👓 專家</span>「它不是真懂物理世界，是在算『下一個字出現的統計機率』！」
+            </div>
+            <div class="comic-caption">📌 真相：大語言模型本質是高維統計的文字接龍高手。</div>
+          </div>
+
+          <!-- panel 4 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#10b981;color:#fff;">❹ 合</span>
+              <span class="comic-panel-title">掌握接龍心法</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdf4"/>
+                <!-- 金光散射背景 -->
+                <circle cx="120" cy="55" r="50" fill="#dcfce7" opacity="0.6"/>
+                <!-- 大燈泡靈感爆發 -->
+                <circle cx="120" cy="22" r="14" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
+                <rect x="116" y="36" width="8" height="4" fill="#a16207"/>
+                <line x1="120" y1="3" x2="120" y2="0" stroke="#eab308" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="136" y1="12" x2="141" y2="8" stroke="#eab308" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="104" y1="12" x2="99" y2="8" stroke="#eab308" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- 阿凱自信微笑 (中間) -->
+                <circle cx="120" cy="70" r="26" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <circle cx="111" cy="66" r="3" fill="#1e293b"/>
+                <circle cx="129" cy="66" r="3" fill="#1e293b"/>
+                <path d="M112 78 Q120 86 128 78" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M95 130 C95 105 145 105 145 130 Z" fill="#10b981" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 比讚大拇指 -->
+                <rect x="150" y="100" width="14" height="20" rx="4" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+                <path d="M156 95 L156 102" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+                <text x="157" y="115" font-size="12" text-anchor="middle">👍</text>
+                <!-- 手拿 Prompt 筆記本 -->
+                <rect x="68" y="100" width="30" height="25" rx="3" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+                <rect x="68" y="100" width="30" height="6" fill="#3b82f6"/>
+                <text x="83" y="117" font-size="7" font-weight="900" text-anchor="middle" fill="#1e293b">Prompt</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「懂了！只要給足背景、設定好角色約束，接出來的答案就超準！」
+            </div>
+            <div class="comic-caption">📌 成果：建立正確心智模型，用好提示詞駕馭接龍大腦！</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心概念演進時間軸 (完整 6 大階梯) -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📈 完整智能演進歷程：從 1950 算盤到 2026 文字接龍大師的 6 大階梯</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">循序漸進看懂 AI 如何一步步突破瓶頸，每個階段都有日常生活具象對照：</p>
+      </div>
+
+      <div class="timeline-container">
+        <!-- 階段 1 -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">
+            <span>階梯 1 (1950s~1980s)：符號規則時代（專家系統 Expert Systems）</span>
+            <span style="font-size: 0.75rem; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 999px;">寫死食譜秘笈</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：人類專家把自身經驗化為一條條 <code>if / else</code> 規則寫進電腦（例如醫療診斷：若發燒且喉嚨痛 ➔ 判定扁桃腺發炎）。<br>
+            <strong>生活比喻</strong>：像一個死記硬背把脈秘笈的學徒，秘笈上沒寫的怪病，他就兩眼一抹黑完全不會看！<br>
+            <strong>致命瓶頸</strong>：世界太複雜，人類根本寫不完所有可能發生的規則例外。
+          </div>
+        </div>
+
+        <!-- 階段 2 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #06b6d4;"></div>
+          <div class="timeline-title">
+            <span>階梯 2 (1980s~1990s)：統計找規律（傳統機器學習 Machine Learning）</span>
+            <span style="font-size: 0.75rem; background: #cffafe; color: #0e7490; padding: 2px 8px; border-radius: 999px;">挑西瓜吃瓜大師</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：不直接給規則，而是餵給電腦 100 萬顆西瓜的重量、敲擊音頻與甜度，讓演算法自己找出特徵與答案之間的數學規律。<br>
+            <strong>生活比喻</strong>：菜市場挑瓜老手不用帶量角器，看過吃過 10 萬顆瓜，拍一拍聽沉悶聲、看瓜臍凹陷，一眼就知道甜不甜！<br>
+            <strong>局限性</strong>：必須由人類工程師手動設計特徵（例如人工告訴電腦要去量敲擊聲音和重量），遇到貓狗照片這種高維影像就束手無策。
+          </div>
+        </div>
+
+        <!-- 階段 3 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #8b5cf6;"></div>
+          <div class="timeline-title">
+            <span>階梯 3 (2006~2012)：仿生特徵萃取（深度學習與神經網路 Deep Learning）</span>
+            <span style="font-size: 0.75rem; background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 999px;">工廠流水線與試喝調味</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：模仿人腦神經元，堆疊幾十上百層數學神經元。第 1 層自動看邊緣線條、第 2 層拼輪廓、頂層認出整張臉。<br>
+            <strong>生活比喻</strong>：工廠流水線組裝玩具，初級工拼積木，高級工認出皮卡丘。調整參數的「反向傳播」就像廚師試喝牛肉湯，太鹹了就往回微調鹽巴劑量！<br>
+            <strong>突破</strong>：電腦首度在圖像識別大賽（ImageNet）碾壓人類肉眼，迎來現代 AI 大爆發。
+          </div>
+        </div>
+
+        <!-- 階段 4 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #f59e0b;"></div>
+          <div class="timeline-title">
+            <span>階梯 4 (2014~2016)：文字處理的苦惱（序列模型 RNN / LSTM）</span>
+            <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 999px;">金魚腦的記憶瓶頸</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：一個字接著一個字依序閱讀句子。讀到第 2 個字時帶著第 1 個字的記憶。<br>
+            <strong>生活比喻</strong>：像金魚腦背九九乘法表，讀到長文章的第 80 個字時，開頭第 1 個字講過什麼早就忘得一乾二淨！<br>
+            <strong>瓶頸</strong>：早期機器翻譯經常前後矛盾、牛頭不對馬嘴，長篇文章完全無法理解。
+          </div>
+        </div>
+
+        <!-- 階段 5 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #ec4899;"></div>
+          <div class="timeline-title">
+            <span>階梯 5 (2017)：世紀大突破（Transformer 與注意力機制 Self-Attention）</span>
+            <span style="font-size: 0.75rem; background: #fce7f3; color: #be185d; padding: 2px 8px; border-radius: 999px;">自帶多色螢光筆</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：Google 發表神作論文《Attention Is All You Need》。電腦不再逐字讀，而是一瞬間把整篇文章攤開，透過注意力機制計算全文字詞之間的相互關聯！<br>
+            <strong>生活比喻</strong>：給電腦一支「智慧多色螢光筆」，讀到後面的「它」時，螢光筆瞬間在前面 50 頁的「那隻小黑狗」畫上重點，一眼看穿前因後果！<br>
+            <strong>影響</strong>：打破序列計算限制，支援超大規模並行運算，現代 GPT 系列與 Gemini 的底層基石就此奠定。
+          </div>
+        </div>
+
+        <!-- 階段 6 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #10b981;"></div>
+          <div class="timeline-title">
+            <span>階梯 6 (2020~2026)：文字接龍巨人與人類對齊（LLM 預訓練與 RLHF）</span>
+            <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 999px;">吞噬文明的接龍大師</span>
+          </div>
+          <div class="timeline-desc">
+            <strong>運作方式</strong>：吞噬全人類數百萬本圖書、論文與開源代碼，在千億維度空間中學會了「預測下一個字（Next-Token）」。再透過人類回饋強化學習（RLHF），被教導懂得講禮貌、遵守人類價值觀與法律紅線。<br>
+            <strong>生活比喻</strong>：一位讀遍大英圖書館的超級填空達人，經過文明禮儀培訓後，成為能幫你寫作、寫代碼、做分析的貼身數位神助手！
+          </div>
+        </div>
+      </div>
+
+      <!-- 技術深潛揭秘框 -->
+      <div class="deep-dive-box">
+        <div class="deep-dive-title">
+          <span>🔍 技術深潛：電腦根本不懂中文，它是怎麼計算文字的？</span>
+        </div>
+        <p>
+          當你輸入「床前明月」時，電腦並不是直接看懂這四個漢字，而是經歷了精密的三步數學轉換：<br>
+          1. <strong>Tokenization（積木切片）</strong>：文字被切割成一塊塊「詞元（Token）」，並轉成對應的整數編號。<br>
+          2. <strong>Embedding（向量定位）</strong>：每個 Token 被映射到一個擁有數千維度的幾何空間中，得到一串如 <code>[0.82, -0.14, 0.65, ...]</code> 的坐標。在那個空間中，「月亮」與「夜空」靠得很近，而「西瓜」則離得很遠。<br>
+          3. <strong>Softmax 機率矩陣</strong>：神經網路經過千百億次矩陣相乘，最後在字典所有 10 萬個備選詞中輸出一個機率表：選「光」的機率 98.2%、選「餅」的機率 0.05%！
+        </p>
+      </div>
+
+      <!-- 核心名詞生活百科專欄 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📚 單元 01 專屬核心名詞生活百科（初學者必備辭海）</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">依專案七大維度白話拆解，用日常生活最熟悉的經驗，看懂模型大腦內部的重要術語：</p>
+      </div>
+
+      <!-- 重點名詞折疊抽屜開關 -->
+      <div class="drawer-toggle-bar" onclick="toggleTermDrawer('drawer1')">
+        <div class="drawer-toggle-title"><span>📁 核心名詞抽屜（點擊一鍵展開/收合詳細維度，保持頁面清爽）</span></div>
+        <div class="drawer-btn" id="btn-drawer1">收合詳細 ▲</div>
+      </div>
+      <div id="drawer1" class="term-drawer-content">
+
+      <!-- 名詞 1: 演算法 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">01</span>
+            <span class="term-name-zh">演算法</span>
+            <span class="term-name-en">Algorithm</span>
+          </div>
+          <span class="term-analogy-badge">🍳 料理步驟 SOP</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            電腦解決問題的一步一步操作清單，順序不能顛倒。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            所有數據處理、排序、模型運算背後的底層指揮指揮棒。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            煮滷肉：焯水去血 ➔ 炒糖色爆香 ➔ 倒醬油滷包 ➔ 小火燉煮。順序亂了全走味！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            誤以為演算法等於高深莫測的魔法，其實就是電腦遵循的標準工作流程。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 2: 機器學習 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">02</span>
+            <span class="term-name-zh">機器學習</span>
+            <span class="term-name-en">Machine Learning (ML)</span>
+          </div>
+          <span class="term-analogy-badge">🍉 老師傅看瓜自學</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            不給死板規則，給大量歷史數據，讓電腦自己摸索出背後的規律。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            從經驗中不斷演化改善預測準確率的核心學習引擎。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            吃瓜大師不用量角器，看過吃過 10 萬顆瓜，一眼敲一下就知道甜不甜！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為電腦有人的理解力，其實電腦找到的是數字特徵相關性而非真正的哲學因果。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 02-B: 深度學習與神經網路 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">02-B</span>
+            <span class="term-name-zh">深度學習與神經網路</span>
+            <span class="term-name-en">Deep Learning & Neural Networks</span>
+          </div>
+          <span class="term-analogy-badge">🏭 分工流水線與廚師試湯</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            模仿大腦多層神經元連結，一層層把雜亂信號提煉成高階概念的龐大數學網路。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            看懂圖片、聽懂語音、理解語言的現代人工智慧底層主力骨架。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            工廠組裝流水線：第 1 站辨識螺絲釘，第 2 站組裝輪胎，最後一站驗收整部跑車！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為裡面真的有像人體細胞一樣的生物腦；其實全部是浮點數矩陣加權乘加。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 02-C: Transformer 與注意力機制 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">02-C</span>
+            <span class="term-name-zh">Transformer 與注意力機制</span>
+            <span class="term-name-en">Transformer & Self-Attention</span>
+          </div>
+          <span class="term-analogy-badge">🖍️ 讀書抓關聯的多色螢光筆</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            能瞬間看清整篇文章中任何兩個字詞之間關聯強弱的革命性神經網路架構。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            現代所有大語言模型（GPT、Gemini、Claude）共同的底層靈魂。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            讀懸疑小說時，看到第 300 頁凶器是一把雨傘，螢光筆立刻在第 5 頁出現的雨傘畫上紅線！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為它是一臺像變形金剛一樣的硬體機器；它是一種純軟體的演算法模型結構。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 02-D: RLHF 人類對齊 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">02-D</span>
+            <span class="term-name-zh">人類回饋強化學習</span>
+            <span class="term-name-en">RLHF (Human Alignment)</span>
+          </div>
+          <span class="term-analogy-badge">🧑‍🏫 馴服野獸的文明禮儀老師</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            由人類標註員給模型回答打分，教導模型如何有禮貌、有用、安全地回答問題。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            把只會文字接龍的「野生狂暴模型」，調教成符合人類倫理道德的「貼心好秘書」。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            幼兒園老師發小紅花：小朋友答得有禮貌給貼紙獎勵，講粗話就扣分，逐漸學會懂事！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為模型天生就懂道德；若沒有 RLHF，原生模型接龍時會隨意噴出髒話或危險化學配方。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 3: Token -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">03</span>
+            <span class="term-name-zh">詞元 (Token)</span>
+            <span class="term-name-en">Token</span>
+          </div>
+          <span class="term-analogy-badge">🧱 語言的樂高積木</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            AI 閱讀與計算文字時的最小基本積木單位，通常一個漢字約 1~2 個 Token。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            所有計費（API 費用）、記憶長度限制（Context Window）的計量基準單位。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            像把一句話拆成一塊塊樂高積木塊，AI 是一塊一塊積木拼接接龍，不是整個句子瞬間噴出。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為「1 個 Token = 1 個字」，其實英文單詞常切成字根，中文通常一個字占 1~2 個 Token。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 4: Embedding -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">04</span>
+            <span class="term-name-zh">向量嵌入</span>
+            <span class="term-name-en">Embedding</span>
+          </div>
+          <span class="term-analogy-badge">📍 詞語的語意 GPS 座標</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            把人類文字轉成一串數字座標，讓意思越相近的話，在空間裡的距離越近。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            讓電腦能做「語意搜尋」的靈魂！搜「感冒發燒」能自動找到「頭痛流鼻水」的段落。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            像美食地圖的經緯度：「牛肉麵」和「排骨飯」在小吃區（距離近），離「跑車」十萬八千里。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為只是按字面關鍵字搜尋，其實它是算數學幾何距離，哪怕沒寫同一個字也能認出意思相同！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 5: 上下文視窗 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">05</span>
+            <span class="term-name-zh">上下文視窗</span>
+            <span class="term-name-en">Context Window</span>
+          </div>
+          <span class="term-analogy-badge">🪑 工作辦公桌桌面大小</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            AI 進行這一次思考時，眼前同時擺得下、看得到的文字容量上限。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            決定了你能一口氣丟幾萬字論文、或是能跟它聊多久不忘記前文的關鍵容量。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            辦公桌桌面：桌子越大能放越多參考文件；桌面滿了，最舊的文件就會被擠落掉到地上忘掉！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為視窗越大越好無極限，其實桌面上放太多厚重資料時，AI 也會「注意力發散（Needle In A Haystack）」。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 6: 溫度參數 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">06</span>
+            <span class="term-name-zh">隨機溫度</span>
+            <span class="term-name-en">Temperature</span>
+          </div>
+          <span class="term-analogy-badge">🎲 想像力靈感骰子</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            控制 AI 接龍時「大膽冒險程度」的參數。數值越低越保守，數值越高越天馬行空。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            寫代碼、算帳設 0.0~0.2（保證精確一致）；寫科幻小說、行銷標語設 0.7~1.0（創意爆發）。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            喝咖啡提神程度：0 杯（嚴肅老會計，一板一眼）；3 杯（靈感藝術家，滿嘴奇思妙想）。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為溫度開到 1.5 會變聰明，其實太高會導致機率失控，胡言亂語甚至亂碼。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 7: 幻覺 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">07</span>
+            <span class="term-name-zh">幻覺 (一本正經胡說八道)</span>
+            <span class="term-name-en">Hallucination</span>
+          </div>
+          <span class="term-analogy-badge">🎭 說故事達人的圓謊病</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            AI 吐出語法極度自然、語氣極度篤定，但內容完全憑空捏造、背離事實的回答。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            文字接龍機制的先天副作用。必須搭配 RAG 知識庫或 Guardrails 護欄加以約束。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            面試者遇到不會的問題不敢承認「我不知道」，而是憑藉流利口條當場編造一套逼真謊言！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            誤以為是 AI「心存惡意」在騙人；其實它根本不知道自己在講假話，它只是按機率把詞接順。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 8: RAG 檢索增強生成 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">08</span>
+            <span class="term-name-zh">RAG (檢索增強生成)</span>
+            <span class="term-name-en">Retrieval-Augmented Generation</span>
+          </div>
+          <span class="term-analogy-badge">📖 閉卷默背 vs 開卷查課本</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            回答問題前，先去公司的私有檔案庫搜尋精準參考資料，再拿著資料回答問題。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            企業克服幻覺、導入內部知識庫的最強武器，讓 AI 回答自帶引文依據（Citation）。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            閉卷考試靠記憶容易記錯法條；開卷考試把最新民法典擺在桌上翻閱比對，100% 準確！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 RAG 是重新訓練模型，其實只是把查到的段落偷偷塞進 Prompt 前面當參考書！
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- 互動元件 1：文字接龍模擬器 -->
+      <div class="interactive-box">
+        <div class="interactive-header">
+          <div class="interactive-title">
+            <span>🎮 互動體驗實驗室：文字接龍機關模擬器</span>
+          </div>
+          <span class="interactive-badge">即時運算</span>
+        </div>
+        <p style="color: #475569; font-size: 0.95rem; margin-bottom: 0.75rem;">點擊下方情境按鈕更換句子，調整隨機溫度（越高越放飛），親手體會大語言模型如何依據機率骰出下一個 Token（詞元）！</p>
+
+        <!-- 情境句子快速切換 -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; align-items: center;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #4338ca;">📝 選擇開頭句子：</span>
+          <button class="btn-action" style="background: #e0e7ff; color: #3730a3; padding: 0.35rem 0.75rem; font-size: 0.82rem;" onclick="changePrompt('poem')">古詩：春眠不覺曉</button>
+          <button class="btn-action" style="background: #e0e7ff; color: #3730a3; padding: 0.35rem 0.75rem; font-size: 0.82rem;" onclick="changePrompt('ai')">科普：人工智慧的大腦</button>
+          <button class="btn-action" style="background: #e0e7ff; color: #3730a3; padding: 0.35rem 0.75rem; font-size: 0.82rem;" onclick="changePrompt('food')">生活：今天晚餐我想吃</button>
+        </div>
+
+        <!-- 文字展示區 -->
+        <div class="token-display-box" id="tokenDisplayBox">
+          <span class="token-item">春眠</span>
+          <span class="token-item">不覺</span>
+          <span class="token-item">曉</span>
+          <span class="token-item">處處</span>
+          <span class="token-item">聞</span>
+        </div>
+
+        <div class="token-controls">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn-action" id="btnPredictNext" onclick="predictNextToken()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              預測並接出下一個詞！
+            </button>
+            <button class="btn-action" style="background: #64748b;" onclick="resetTokens()">
+              ↺ 重設句子
+            </button>
+          </div>
+
+          <div class="temp-slider-group">
+            <label for="tempSlider" style="font-size: 0.9rem; font-weight: 700;">隨機溫度 (Temp): <span id="tempVal">0.7</span></label>
+            <input type="range" id="tempSlider" min="0.1" max="1.5" step="0.1" value="0.7" oninput="updateTemperature(this.value)">
+          </div>
+        </div>
+
+        <!-- 機率分佈條形圖 -->
+        <div class="token-prob-chart">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">候選字詞機率分佈 (Softmax Probabilities)：</div>
+          <div id="probBars">
+            <!-- JS 動態生成 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第二單元：一問一答日常應用 -->
+    <section id="ch2" class="section-card">
+      <div class="section-header">
+        <span class="section-tag">單元 02 · 動嘴聊天的日常境界</span>
+        <h2>
+          <span>💬 一問一答日常應用：發揮對話式 AI 的極致甜蜜點</span>
+        </h2>
+        <p class="section-desc">ChatGPT、Gemini 網頁對話框是人人上手的起點。掌握這套心法，日常生活與工作效率立刻翻倍！</p>
+      </div>
+
+      <!-- ⚡ 重點速讀模式 (30 秒吸收精華) -->
+      <div class="adhd-banner">
+        <div class="adhd-banner-icon">⚡</div>
+        <div class="adhd-banner-content">
+          <div class="adhd-banner-title">重點速讀卡：單元 2 核心三秒悟透</div>
+          <div class="adhd-banner-text">
+            1. <strong>甜蜜點</strong>：靈感腦力激盪、潤飾客訴信、長文摘要，動嘴就能解決。<br>
+            2. <strong>提示詞四支柱</strong>：<strong>角色 (Role) + 背景 (Context) + 任務 (Task) + 約束 (Constraint)</strong>。<br>
+            3. <strong>致命盲區</strong>：AI 是<strong>完全無狀態（沒記憶）</strong>的，每次聊天都是後台把歷史記錄整包重送；聊太長就會失憶，且<strong>碰不到本機檔案</strong>！
+          </div>
+        </div>
+      </div>
+
+      <!-- 四格漫畫：單元 02 專屬情境漫畫 (對話日常與碰壁) -->
+      <div class="comic-strip">
+        <div class="comic-header">
+          <div class="comic-header-left">
+            <span style="font-size: 1.6rem;">📱</span>
+            <span class="comic-title">情境四格漫畫：阿凱的對話日常——從靈感神燈到撞上天花板</span>
+          </div>
+          <span class="comic-read-order">閱讀順序：❶ 起 ➔ ❷ 承 ➔ ❸ 轉 ➔ ❹ 合</span>
+        </div>
+        <div class="comic-grid">
+          <!-- panel 1 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag">❶ 起</span>
+              <span class="comic-panel-title">靈感神燈顯靈</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdfa"/>
+                <!-- 神燈冒煙 (左側) -->
+                <ellipse cx="60" cy="115" rx="35" ry="12" fill="#eab308" stroke="#a16207" stroke-width="2"/>
+                <path d="M40 115 Q30 90 20 85 Q35 85 45 105" fill="#facc15" stroke="#a16207" stroke-width="1.5"/>
+                <path d="M75 112 Q90 100 85 85" stroke="#a16207" stroke-width="3" fill="none"/>
+                <!-- 青煙升起 -->
+                <path d="M60 100 Q45 75 70 55 Q95 35 80 20" stroke="#0d9488" stroke-width="3" stroke-dasharray="4,4" fill="none"/>
+                <!-- 精靈 AI 浮現 -->
+                <circle cx="85" cy="30" r="18" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+                <circle cx="80" cy="27" r="2" fill="#0f766e"/>
+                <circle cx="90" cy="27" r="2" fill="#0f766e"/>
+                <path d="M80 34 Q85 38 90 34" stroke="#0f766e" stroke-width="1.5" fill="none"/>
+                <text x="85" y="44" font-size="7" font-weight="900" text-anchor="middle" fill="#0f766e">AI 靈感精靈</text>
+                <!-- 阿凱驚喜手舞足蹈 (右側) -->
+                <circle cx="165" cy="65" r="24" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <path d="M157 60 Q160 56 163 60" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <path d="M167 60 Q170 56 173 60" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <path d="M158 72 Q165 80 172 72" stroke="#1e293b" stroke-width="2.5" fill="none"/>
+                <path d="M145 125 C145 100 185 100 185 125 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 冒出的文案氣泡 -->
+                <rect x="120" y="15" width="95" height="28" rx="6" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
+                <text x="167" y="27" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#0f766e">💡 10 個中秋促銷金句</text>
+                <text x="167" y="38" font-size="7" text-anchor="middle" fill="#64748b">3 秒全部寫好！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「打一句話，活動企劃與客訴信 3 秒潤飾好！太神啦！」
+            </div>
+            <div class="comic-caption">📌 甜蜜點：日常文字腦力激盪，動嘴即能輕鬆搞定。</div>
+          </div>
+
+          <!-- panel 2 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#3b82f6;color:#fff;">❷ 承</span>
+              <span class="comic-panel-title">掌握提示四柱</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#eff6ff"/>
+                <!-- 四大支柱石碑 (背景) -->
+                <g transform="translate(10, 20)">
+                  <rect x="5" y="10" width="45" height="95" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                  <text x="27" y="30" font-size="8" font-weight="900" text-anchor="middle" fill="#1e40af">1. 角色</text>
+                  <text x="27" y="55" font-size="7" text-anchor="middle" fill="#3b82f6">Role</text>
+                  
+                  <rect x="55" y="10" width="45" height="95" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                  <text x="77" y="30" font-size="8" font-weight="900" text-anchor="middle" fill="#1e40af">2. 背景</text>
+                  <text x="77" y="55" font-size="7" text-anchor="middle" fill="#3b82f6">Context</text>
+
+                  <rect x="105" y="10" width="45" height="95" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                  <text x="127" y="30" font-size="8" font-weight="900" text-anchor="middle" fill="#1e40af">3. 任務</text>
+                  <text x="127" y="55" font-size="7" text-anchor="middle" fill="#3b82f6">Task</text>
+
+                  <rect x="155" y="10" width="45" height="95" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                  <text x="177" y="30" font-size="8" font-weight="900" text-anchor="middle" fill="#1e40af">4. 約束</text>
+                  <text x="177" y="55" font-size="7" text-anchor="middle" fill="#3b82f6">Limit</text>
+                </g>
+                <!-- 阿凱手拿羽毛筆指揮 -->
+                <circle cx="210" cy="85" r="18" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+                <circle cx="205" cy="82" r="2" fill="#1e293b"/>
+                <path d="M205 91 Q210 95 215 91" stroke="#1e293b" stroke-width="1.5" fill="none"/>
+                <path d="M195 135 C195 115 225 115 225 135 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2"/>
+                <line x1="200" y1="95" x2="175" y2="70" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「學會角色+背景+任務+約束，AI 吐出的文案品質直接起飛！」
+            </div>
+            <div class="comic-caption">📌 進階：利用結構化提示詞，精確控制輸出品質。</div>
+          </div>
+
+          <!-- panel 3 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#ef4444;color:#fff;">❸ 轉</span>
+              <span class="comic-panel-title">聊太長當場失憶</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#fff1f2"/>
+                <!-- 阿凱咆哮 (左側) -->
+                <circle cx="65" cy="65" r="24" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <ellipse cx="58" cy="60" rx="4" ry="4" fill="#1e293b"/>
+                <ellipse cx="72" cy="60" rx="4" ry="4" fill="#1e293b"/>
+                <ellipse cx="65" cy="77" rx="9" ry="11" fill="#1e293b"/>
+                <path d="M45 125 C45 100 85 100 85 125 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2.5"/>
+                <text x="35" y="45" font-size="16">💢</text>
+                <!-- 網頁對話框 (右側) -->
+                <rect x="110" y="25" width="120" height="95" rx="8" fill="#ffffff" stroke="#ef4444" stroke-width="2"/>
+                <rect x="110" y="25" width="120" height="18" rx="8" fill="#fee2e2"/>
+                <text x="170" y="38" font-size="8" text-anchor="middle" font-weight="bold" fill="#991b1b">ChatGPT 網頁對話視窗</text>
+                <!-- 對話氣泡 -->
+                <rect x="118" y="50" width="104" height="26" rx="4" fill="#f1f5f9"/>
+                <text x="122" y="62" font-size="7.5" fill="#1e293b">問：照剛才講的第3點修改</text>
+                <text x="122" y="72" font-size="7.5" font-weight="bold" fill="#dc2626">答：抱歉，請問第3點是什麼？</text>
+                <!-- 記憶被切斷 -->
+                <line x1="115" y1="85" x2="225" y2="85" stroke="#ef4444" stroke-width="2" stroke-dasharray="3,3"/>
+                <text x="170" y="105" font-size="8" font-weight="900" text-anchor="middle" fill="#b91c1c">❌ 上下文超載，前文遭截斷！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「等等！聊到第 20 句，你怎麼把我一開始講的預算全忘了？！」
+            </div>
+            <div class="comic-caption">📌 痛點：AI 本質無狀態，聊得太長前面的記憶被無情切除。</div>
+          </div>
+
+          <!-- panel 4 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#10b981;color:#fff;">❹ 合</span>
+              <span class="comic-panel-title">碰不到硬碟興嘆</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f8fafc"/>
+                <!-- 電腦螢幕阻隔牆 -->
+                <rect x="110" y="15" width="10" height="120" fill="#94a3b8"/>
+                <text x="115" y="75" font-size="8" font-weight="900" fill="#ffffff" text-anchor="middle" transform="rotate(90 115 75)">瀏覽器沙盒邊界</text>
+                <!-- 網頁 AI 困在左邊 -->
+                <circle cx="60" cy="65" r="22" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+                <text x="60" y="69" font-size="8" font-weight="bold" text-anchor="middle" fill="#4338ca">網頁 AI</text>
+                <text x="60" y="100" font-size="7.5" text-anchor="middle" fill="#64748b">出不去瀏覽器</text>
+                <!-- 右邊阿凱的本機硬碟 -->
+                <rect x="145" y="40" width="75" height="60" rx="6" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+                <text x="182" y="60" font-size="8.5" font-weight="900" text-anchor="middle" fill="#0f172a">D:\我的工作報表</text>
+                <text x="182" y="75" font-size="7.5" text-anchor="middle" fill="#dc2626">無法讀寫與執行！</text>
+                <text x="182" y="90" font-size="12" text-anchor="middle">🔒</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「而且它碰不到我硬碟！看來真要做事，得呼叫本機施工隊了！」
+            </div>
+            <div class="comic-caption">📌 覺醒：網頁對話框已到極限，必須邁向本機 Agent 施工隊！</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h3>💡 對話式 AI 最擅長的 4 大甜蜜場景</h3>
+          <ul style="padding-left: 1.25rem; font-size: 0.95rem; color: #475569; line-height: 1.7;">
+            <li><strong>靈感碰撞與腦力激盪</strong>：活動主題企劃、生日送禮點子、行銷標題 10 連發。</li>
+            <li><strong>語言風格潤飾與改寫</strong>：把火爆客訴回信修飾得客氣禮貌、中英互譯。</li>
+            <li><strong>長文摘要與提煉重點</strong>：貼上 5,000 字會議逐字稿，3 秒抓出待辦清單。</li>
+            <li><strong>陪練與角色扮演問答</strong>：模擬面試官、外語口說教練、生活疑難排解。</li>
+          </ul>
+        </div>
+        <div class="concept-card">
+          <h3>🎯 提示詞黃金 4 支柱（Prompting 101）</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem; color: #64748b;">不要只打「幫我寫文案」，改用專業四支柱：</p>
+          <div style="background: #f1f5f9; padding: 0.75rem; border-radius: 8px; font-size: 0.88rem; line-height: 1.6;">
+            <div><strong>1. 角色 (Role)</strong>：請你扮演資深健康營養顧問...</div>
+            <div><strong>2. 背景 (Context)</strong>：對象是 65 歲有輕微高血壓的長輩...</div>
+            <div><strong>3. 任務 (Task)</strong>：規劃一週低鈉且方便料理的晚餐菜單...</div>
+            <div><strong>4. 約束 (Constraint)</strong>：用表格呈現，避開油炸，字體易讀...</div>
+          </div>
+        </div>
+        <div class="concept-card">
+          <h3>🛑 網頁對話版無法跨越的「天花板」</h3>
+          <p>很多人問：「既然網頁 AI 這麼厲害，為什麼我還得天天加班手動做報表？」</p>
+          <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #ef4444; font-weight: 600;">
+            ❌ 碰不到你的電腦硬碟（無法批次改 200 個檔案）<br>
+            ❌ 只能給出代碼或建議，無法親自安裝與執行<br>
+            ❌ 對話視窗一關閉，剛才聊的進度與記憶全部忘光
+          </div>
+        </div>
+      </div>
+
+      <!-- 技術深潛：無狀態的聊天框真相 -->
+      <div class="deep-dive-box" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-left-color: #38bdf8;">
+        <div class="deep-dive-title">
+          <span>🕵️ 幕後真相揭秘：AI 真的「記得」你們剛才聊了什麼嗎？</span>
+        </div>
+        <p>
+          初學者常驚嘆：「剛才我說我叫阿凱，過五分鐘再問它，它居然還記得我的名字！AI 記性真好！」<br><br>
+          <strong>冷酷的真相是：AI 模型本身是完全「無狀態（Stateless）」且毫無記憶的！</strong><br>
+          大語言模型就像一位<strong>每次醒來都完全失憶的人</strong>。你每次在網頁上敲下一句話按下 Enter，網頁後台其實悄悄把你<strong>「從第一句開始所有的問答歷史記錄」打包成一大捆包裹</strong>，一口氣塞給模型重新看一遍！
+        </p>
+
+        <!-- 📦 第一輪 vs 第二輪打包包裹實境對照 -->
+        <div class="stateless-demo">
+          <!-- 第一輪 -->
+          <div class="packet-card">
+            <span class="packet-badge round1">🟢 第 1 輪對話：輕盈小包裹</span>
+            <div style="font-size: 0.85rem; color: #93c5fd; margin-bottom: 4px;">你剛打下第一句話時，送給模型的包裹長這樣：</div>
+            <div class="packet-bundle">
+              <span class="packet-tag-new">[使用者]</span> 你好，我叫阿凱，我今年 25 歲。<br>
+              <span style="color: #64748b;">➔ AI 思考並輸出：</span><br>
+              <span class="packet-tag-new">[AI 回答]</span> 你好阿凱！很高興認識你，有什麼想聊聊的嗎？
+            </div>
+            <div class="packet-weight">
+              <span style="color: #38bdf8;">📦 包裹總大小：約 35 Tokens</span>
+              <span style="color: #4ade80;">⚡ 運算速度：極快 (0.3s)</span>
+            </div>
+          </div>
+
+          <!-- 第二輪 -->
+          <div class="packet-card" style="border-color: rgba(244, 63, 94, 0.4);">
+            <span class="packet-badge round2">🔴 第 2 輪對話：肥大雪球包裹</span>
+            <div style="font-size: 0.85rem; color: #fca5a5; margin-bottom: 4px;">你只問了一句「我叫什麼？」，但後台偷偷打包了整包前文：</div>
+            <div class="packet-bundle">
+              <span class="packet-tag-old">[歷史: 使用者] 你好，我叫阿凱，我今年 25 歲。</span><br>
+              <span class="packet-tag-old">[歷史: AI 回答] 你好阿凱！很高興認識你...</span><br>
+              <span class="packet-tag-new" style="background: rgba(239, 68, 68, 0.3); color: #fecaca;">[當前: 使用者] 我叫什麼名字？</span><br>
+              <span style="color: #64748b;">➔ AI 必須把上面整大捆全部讀完，才接出：</span><br>
+              <span class="packet-tag-new">[AI 回答] 你剛才說過你叫阿凱！</span>
+            </div>
+            <div class="packet-weight">
+              <span style="color: #f43f5e;">📦 包裹總大小：暴增至 95 Tokens！</span>
+              <span style="color: #fbbf24;">⏳ 消耗量：翻倍成長</span>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top: 1rem;">
+          看懂了嗎？<strong>AI 根本沒有「回想」起你是阿凱，而是你在第二輪時，網頁後台把第一輪的字句當作新題目重新餵給了它！</strong><br><br>
+          這就是為什麼：<br>
+          1. <strong>聊得越長，回應越慢、費用越貴</strong>：就像滾雪球，聊到第 50 輪時，即使你只打一個「好」，送出去的包裹可能已高達 10,000 字！每次都要從頭算一次。<br>
+          2. <strong>聊到一定長度，AI 開始失憶或答非所問</strong>：因為對話包裹超過了模型的<strong>「上下文視窗（Context Window）」</strong>上限，後台只能狠心把最前面的歷史記錄像垃圾一樣切掉拋棄！
+        </p>
+      </div>
+
+      <!-- 提示技術演進矩陣 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>🎯 從新手到高手的提示詞三階演進階梯</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">別再只會隨性打一句話！學會這三種結構，回答品質天差地別：</p>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h3 style="color: #64748b;">🥉 初級：零樣本 (Zero-Shot)</h3>
+          <p><strong>做法</strong>：直接提問，不給任何示範（例如：「幫我把這段話分類成客訴或諮詢」）。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #94a3b8;"><strong>缺點</strong>：全憑模型自由猜測，分類標準經常飄忽不定、風格難以統一。</p>
+        </div>
+        <div class="concept-card">
+          <h3 style="color: #2563eb;">🥈 中級：少樣本學習 (Few-Shot)</h3>
+          <p><strong>做法</strong>：在問題前「給 2~3 個標準範例照著抄」（例如：給出 3 篇範例標註「退貨=客訴」、「詢價=諮詢」）。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #1e40af;"><strong>優點</strong>：勝過千言萬語！模型立刻摸透你的輸出格式與判斷尺度。</p>
+        </div>
+        <div class="concept-card">
+          <h3 style="color: #059669;">🥇 高級：思維鏈 (Chain-of-Thought)</h3>
+          <p><strong>做法</strong>：加入<strong>「請一步一步思考，並把中間推理過程寫出來」</strong>這句神奇咒語！</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #065f46;"><strong>奇效</strong>：迫使文字接龍在大腦草稿紙上先寫下邏輯步驟，數學題正確率直接從 40% 飆升至 85%！</p>
+        </div>
+      </div>
+
+      <!-- 第二單元核心名詞百科 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📚 單元 02 專屬核心名詞生活百科</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">搞懂日常對話框底層的規則、格式與安全機制：</p>
+      </div>
+
+      <!-- 重點名詞折疊抽屜開關 -->
+      <div class="drawer-toggle-bar" onclick="toggleTermDrawer('drawer2')">
+        <div class="drawer-toggle-title"><span>📁 核心名詞抽屜（點擊一鍵展開/收合詳細維度）</span></div>
+        <div class="drawer-btn" id="btn-drawer2">收合詳細 ▲</div>
+      </div>
+      <div id="drawer2" class="term-drawer-content">
+
+      <!-- 名詞 09: 提示詞工程 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">09</span>
+            <span class="term-name-zh">提示詞工程</span>
+            <span class="term-name-en">Prompt Engineering</span>
+          </div>
+          <span class="term-analogy-badge">🪄 召喚神燈的精確許願咒語</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            用最清晰無歧義的語言和結構，引導 AI 接出最符合預期答案的溝通藝術。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            輸入端的品質決定輸出端的上限（Garbage in, Garbage out 的解法）。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            跟裝潢師傅溝通：「幫我弄好看點」會慘不忍睹；「用日式無印風、淺橡木地板、暖白光」才會完美落地。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為提示詞是在「寫死代碼」；其實它是在高維機率空間裡下錨，框定接龍搜尋的範疇。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 10: 系統提示詞 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">10</span>
+            <span class="term-name-zh">系統提示詞</span>
+            <span class="term-name-en">System Prompt</span>
+          </div>
+          <span class="term-analogy-badge">🎭 演員進場前的角色底牌</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            在使用者開口說話前，由後台開發者悄悄植入的最上位最高優先級規則指令。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            決定 AI 的性格、職責邊界、安全防線以及禁止透露的機密。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            劇團導演在後台交代的演戲守則：「你等一下上台扮演嚴肅的法官，無論被告說什麼都不准笑！」
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為自己在網頁打的話是第一優先，其實 System Prompt 擁有更高權威，能拒絕回答危險問題。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 10-B: 少樣本學習 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">10-B</span>
+            <span class="term-name-zh">少樣本學習</span>
+            <span class="term-name-en">Few-Shot Prompting</span>
+          </div>
+          <span class="term-analogy-badge">🌰 給栗子照著剝，示範三遍</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            在提問前先提供 2~3 個「輸入 ➔ 輸出」的標準樣品，讓 AI 照葫蘆畫瓢。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            極致穩定輸出風格與格式的最簡單有效技巧，無需重新訓練模型。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            教新進員工填報銷單：講半小時規定不如直接拿三張前輩填好的範本給他照著抄！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為必須給幾千個例子；其實大模型理解力極強，給 2~3 個好例子就足夠了！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 10-C: 思維鏈 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">10-C</span>
+            <span class="term-name-zh">思維鏈 (CoT)</span>
+            <span class="term-name-en">Chain-of-Thought</span>
+          </div>
+          <span class="term-analogy-badge">📝 大腦草稿紙一步步列算式</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            要求 AI「請一步一步思考」，把中間推理步驟逐行寫下來再給出最終答案。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            解決多步驟邏輯題、數學應用題與複雜架構設計的必備咒語。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            小學生考數學大題：不能直接心算寫出一個數字（容易算錯），必須在草稿紙列出第 1 步、第 2 步、第 3 步！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 AI 會浪費時間說廢話；事實上正是因為它把中間推導過程接出來，最後的結論才能精準命中！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 11: 結構化輸出 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">11</span>
+            <span class="term-name-zh">結構化輸出</span>
+            <span class="term-name-en">Structured Output (JSON)</span>
+          </div>
+          <span class="term-analogy-badge">📋 嚴格公文填表格，不准話撈</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            強制規定 AI 不能長篇大論閒聊，必須按照指定的格式（如 JSON 表格）回傳數據。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            AI 銜接傳統企業系統、資料庫或自動化流程的最關鍵橋樑。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            報稅或填戶籍謄本：規定每個格子填姓名、身分證號、生日，不能在上面寫心情散文！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為給人看的文字才親切；在程式自動化世界裡，標準的 JSON 才能被下游程式自動讀取！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 12: 護欄安全機制 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">12</span>
+            <span class="term-name-zh">護欄機制</span>
+            <span class="term-name-en">Guardrails</span>
+          </div>
+          <span class="term-analogy-badge">🚧 懸崖邊的高速公路安全護欄</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            在輸入端和輸出端架設的安全過濾器，主動攔截洩漏個資、粗話或越獄攻擊。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            企業上線 AI 應用的合規守門員，避免品牌公關危機與資安漏洞。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            遊樂園雲霄飛車的安全壓桿：車子跑得再快，也能把乘客安全固定在軌道內不拋飛。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為模型自己懂得道德；其實模型什麼都敢算，完全靠外圍的 Guardrails 在硬性攔截！
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 第三單元：電腦工作自動化與程式碼施工隊 -->
+    <section id="ch3" class="section-card">
+      <div class="section-header">
+        <span class="section-tag">單元 03 · 走出瀏覽器的科技革命</span>
+        <h2>
+          <span>🛠️ 程式碼施工隊：Claude Cowork / Codex / Antigravity 自動化大躍進</span>
+        </h2>
+        <p class="section-desc">擺脫被困在網頁聊天框的束縛！當 AI 拿起扳手和終端機，它能直接走進你的本機環境幫你施工！</p>
+      </div>
+
+      <!-- ⚡ 重點速讀模式 (30 秒吸收精華) -->
+      <div class="adhd-banner">
+        <div class="adhd-banner-icon">⚡</div>
+        <div class="adhd-banner-content">
+          <div class="adhd-banner-title">重點速讀卡：單元 3 核心三秒悟透</div>
+          <div class="adhd-banner-text">
+            1. <strong>從動嘴到動手</strong>：網頁 AI 只給代碼建議（顧問）；Antigravity / Codex 帶工具箱<strong>親自進場施工（工班）</strong>。<br>
+            2. <strong>超強保證</strong>：執行報錯不哭泣，<strong>自動看日誌自我修復</strong>，直到終端機回傳 <strong>Exit code: 0</strong> 才算通過驗收。<br>
+            3. <strong>通用插孔 MCP</strong>：就像 <strong>Type-C 傳輸線</strong>，隨插即用秒接幾百種企業軟體與資料庫。
+          </div>
+        </div>
+      </div>
+
+      <!-- 四格漫畫：施工隊進場 (精緻升級版) -->
+      <div class="comic-strip">
+        <div class="comic-header">
+          <div class="comic-header-left">
+            <span style="font-size: 1.6rem;">🏗️</span>
+            <span class="comic-title">情境四格漫畫：阿凱遇見 Antigravity 施工隊</span>
+          </div>
+          <span class="comic-read-order">閱讀順序：❶ 起 ➔ ❷ 承 ➔ ❸ 轉 ➔ ❹ 合</span>
+        </div>
+        <div class="comic-grid">
+          <!-- panel 1 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag">❶ 起</span>
+              <span class="comic-panel-title">崩潰文件地獄</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f8fafc"/>
+                <!-- 堆積如山的 Excel 資料夾 -->
+                <rect x="20" y="55" width="65" height="75" rx="4" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+                <rect x="25" y="40" width="65" height="75" rx="4" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+                <rect x="30" y="25" width="65" height="75" rx="4" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+                <text x="62" y="70" font-size="9" font-weight="900" text-anchor="middle" fill="#1e293b">300 份 Excel</text>
+                <!-- 阿凱被夾在中間崩潰抓狂 -->
+                <circle cx="150" cy="65" r="24" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <ellipse cx="142" cy="60" rx="5" ry="5" fill="none" stroke="#1e293b" stroke-width="2"/>
+                <ellipse cx="158" cy="60" rx="5" ry="5" fill="none" stroke="#1e293b" stroke-width="2"/>
+                <ellipse cx="150" cy="76" rx="7" ry="9" fill="#1e293b"/>
+                <path d="M125 125 C125 100 175 100 175 125 Z" fill="#3b82f6" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 散落飛舞的紙張 -->
+                <rect x="180" y="30" width="22" height="28" rx="2" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" transform="rotate(15 180 30)"/>
+                <rect x="195" y="75" width="20" height="25" rx="2" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" transform="rotate(-20 195 75)"/>
+                <text x="150" y="25" font-size="12" text-anchor="middle" font-weight="900" fill="#ef4444">救命！要加班到天亮！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「救命！老闆要我整理 300 份本機報表並轉格式，今天要通宵了！」
+            </div>
+            <div class="comic-caption">📌 痛點：重複繁瑣的本地數位勞務，手動處理痛苦萬分。</div>
+          </div>
+
+          <!-- panel 2 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#ef4444;color:#fff;">❷ 承</span>
+              <span class="comic-panel-title">動嘴顧問吐長文</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#eff6ff"/>
+                <!-- 西裝革履的網頁 AI 顧問喝咖啡 -->
+                <circle cx="65" cy="55" r="22" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <path d="M58 53 L62 53" stroke="#1e293b" stroke-width="2"/>
+                <path d="M68 53 L72 53" stroke="#1e293b" stroke-width="2"/>
+                <path d="M60 65 Q65 70 70 65" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <!-- 西裝與領帶 -->
+                <path d="M45 115 C45 90 85 90 85 115 Z" fill="#1e293b" stroke="#1e293b" stroke-width="2.5"/>
+                <polygon points="65,95 62,110 65,115 68,110" fill="#ef4444"/>
+                <text x="95" y="45" font-size="16">☕</text>
+                <!-- 像衛生紙一樣落落長的代碼紙條 -->
+                <path d="M110 30 L220 30 L210 135 L120 135 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+                <rect x="115" y="35" width="95" height="12" rx="2" fill="#dbeafe"/>
+                <text x="162" y="44" font-size="8" text-anchor="middle" font-weight="bold" fill="#1e40af">📄 請手動複製 200 行代碼</text>
+                <text x="125" y="62" font-size="7.5" font-family="monospace" fill="#64748b">1. 打開終端機...</text>
+                <text x="125" y="76" font-size="7.5" font-family="monospace" fill="#64748b">2. pip install pandas</text>
+                <text x="125" y="90" font-size="7.5" font-family="monospace" fill="#64748b">3. 自己去改報錯...</text>
+                <text x="125" y="104" font-size="7.5" font-family="monospace" fill="#64748b">4. 自己存檔改檔名...</text>
+                <text x="125" y="120" font-size="8" font-weight="bold" fill="#dc2626">⚠️ 後續手動操作請自理</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">🤖 網頁顧問</span>「很簡單！您只要在電腦安裝 Python，手動貼上這 200 行 code...」
+            </div>
+            <div class="comic-caption">📌 瓶頸：網頁版只給食譜，卻無法幫忙洗菜下鍋切肉。</div>
+          </div>
+
+          <!-- panel 3 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#3b82f6;color:#fff;">❸ 轉</span>
+              <span class="comic-panel-title">施工隊全副武裝</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdf4"/>
+                <!-- 施工隊隊長 (頭戴鮮黃安全帽) -->
+                <path d="M45 42 Q65 24 85 42 Z" fill="#facc15" stroke="#a16207" stroke-width="2.5"/>
+                <rect x="38" y="42" width="54" height="6" rx="2" fill="#eab308"/>
+                <circle cx="65" cy="62" r="22" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <circle cx="58" cy="58" r="3" fill="#1e293b"/>
+                <circle cx="72" cy="58" r="3" fill="#1e293b"/>
+                <path d="M58 70 Q65 76 72 70" stroke="#1e293b" stroke-width="2.5" fill="none"/>
+                <!-- 工作服與工具箱 -->
+                <path d="M40 125 C40 95 90 95 90 125 Z" fill="#0284c7" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 提著發光的工具箱 -->
+                <rect x="85" y="90" width="35" height="26" rx="4" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                <path d="M96 90 L96 82 L109 82 L109 90" stroke="#c2410c" stroke-width="2" fill="none"/>
+                <text x="102" y="107" font-size="12" text-anchor="middle">⚡</text>
+                <!-- 終端機與代碼流水線 (右側) -->
+                <rect x="125" y="25" width="105" height="95" rx="6" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+                <circle cx="135" cy="35" r="3" fill="#ef4444"/>
+                <circle cx="143" cy="35" r="3" fill="#eab308"/>
+                <circle cx="151" cy="35" r="3" fill="#22c55e"/>
+                <text x="135" y="55" font-size="8" font-family="monospace" fill="#38bdf8">$ run batch.py</text>
+                <text x="135" y="70" font-size="8" font-family="monospace" fill="#4ade80">> Scanning files...</text>
+                <text x="135" y="85" font-size="8" font-family="monospace" fill="#4ade80">> Processing 100/100</text>
+                <text x="135" y="100" font-size="8" font-family="monospace" fill="#facc15">> Generating charts</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👷 施工隊</span>「退後！本機終端機與檔案工具就緒，交給我們直接自動施工！」
+            </div>
+            <div class="comic-caption">📌 突破：程式碼代理具備本地硬碟讀寫與自動執行能力。</div>
+          </div>
+
+          <!-- panel 4 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#10b981;color:#fff;">❹ 合</span>
+              <span class="comic-panel-title">秒速驗收下班</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdf4"/>
+                <!-- 巨大綠色成功徽章 -->
+                <circle cx="80" cy="65" r="45" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+                <path d="M60 65 L73 78 L100 50" stroke="#16a34a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <text x="80" y="125" font-size="9" text-anchor="middle" font-weight="900" fill="#15803d">Exit code: 0 測試全通！</text>
+                <!-- 阿凱瀟灑背包下班 (右側) -->
+                <circle cx="175" cy="55" r="22" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <circle cx="168" cy="52" r="2.5" fill="#1e293b"/>
+                <circle cx="182" cy="52" r="2.5" fill="#1e293b"/>
+                <path d="M168 64 Q175 70 182 64" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <path d="M155 120 C155 95 195 95 195 120 Z" fill="#10b981" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 單肩公事包 -->
+                <rect x="195" y="85" width="26" height="20" rx="3" fill="#92400e" stroke="#1e293b" stroke-width="2"/>
+                <text x="175" y="24" font-size="12" text-anchor="middle" font-weight="900" fill="#059669">準時 18:00 打卡！🎉</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「天啊！自動排查報錯、產出圖表並通過驗收，我能準時下班了！」
+            </div>
+            <div class="comic-caption">📌 價值：從「動嘴諮詢」跨越到「成果交付」，大幅節省工時！</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 演進時間軸：AI 如何走出瀏覽器長出手腳？ -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📈 代理人進化史：AI 是如何「長出雙手雙腳」走出瀏覽器的？</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">從只能打字到自動操作本機電腦，中間經歷了五次革命性的技術飛躍：</p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">
+            <span>第 1 代：純文字打字機（Chatbot）</span>
+            <span style="font-size: 0.75rem; background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 999px;">動嘴不動手</span>
+          </div>
+          <div class="timeline-desc">
+            輸入文字，輸出文字。問它台北現在氣溫多少，它只能憑舊記憶胡猜，或者告訴你去中央氣象署網站查。
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #06b6d4;"></div>
+          <div class="timeline-title">
+            <span>第 2 代：工具呼叫開竅（Function Calling / Tool Calling）</span>
+            <span style="font-size: 0.75rem; background: #cffafe; color: #0e7490; padding: 2px 8px; border-radius: 999px;">外掛瑞士刀</span>
+          </div>
+          <div class="timeline-desc">
+            模型學會了「暫停文字輸出」。當被問到即時天氣時，它會輸出一段結構化參數 <code>get_weather(city="Taipei")</code>，通知後台伺服器打 API，拿到結果後再整理成人話回覆！
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #8b5cf6;"></div>
+          <div class="timeline-title">
+            <span>第 3 代：萬用統一插孔（MCP 協議）</span>
+            <span style="font-size: 0.75rem; background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 999px;">AI 的 Type-C</span>
+          </div>
+          <div class="timeline-desc">
+            以前每接一個新工具（Google Drive、GitHub、資料庫）都要工程師從頭寫轉接代碼。<strong>Model Context Protocol (MCP)</strong> 讓所有工具標準化，隨插即用，一秒掛載幾百種外掛！
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #10b981;"></div>
+          <div class="timeline-title">
+            <span>第 4 代：程式碼代理施工隊（Antigravity / Codex / Claude Code）</span>
+            <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 999px;">進場施工水電隊</span>
+          </div>
+          <div class="timeline-desc">
+            AI 不僅會叫 API，更獲得了<strong>本地檔案系統讀寫授權與命令列終端機</strong>！它可以親自建立代碼檔案、安裝套件、批次改 500 個檔名、執行測試腳本，並根據報錯日誌自我修復，直到測試通過！
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #f59e0b;"></div>
+          <div class="timeline-title">
+            <span>第 5 代：視覺與電腦操作（Computer Use / OS Agent）</span>
+            <span style="font-size: 0.75rem; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 999px;">滑鼠鍵盤全託管</span>
+          </div>
+          <div class="timeline-desc">
+            AI 擁有即時螢幕截圖視覺辨識能力。它像人類坐在螢幕前一樣，看得到桌面圖示、移動滑鼠點擊按鈕、跨應用程式複製貼上，真正解放人類在日常軟體間的重複勞動。
+          </div>
+        </div>
+      </div>
+
+      <!-- 技術深潛：客觀確定性驗證與自我修復 -->
+      <div class="deep-dive-box" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); border-left-color: #34d399;">
+        <div class="deep-dive-title">
+          <span>🛡️ 核心深潛：為什麼 Antigravity 施工隊比單純問 AI 寫 Code 靠譜 100 倍？</span>
+        </div>
+        <p>
+          如果你讓網頁版 AI 寫一段 Python 程式碼，它給完就揮揮衣袖離開，根本不知道那段代碼能不能跑、有沒有少裝模組。<br><br>
+          而在 <strong>Google Antigravity</strong> 這類程式碼代理架構中，引入了革命性的<strong>「確定性驗證（Deterministic Verification）」</strong>工作流：<br>
+          1. <strong>TDD 測試先行</strong>：施工隊進場先定義「怎樣才算成功」（例如：必須產出 100 份正確圖表）。<br>
+          2. <strong>自主編寫並執行</strong>：自動呼叫終端機運行 <code>python run.py</code>。<br>
+          3. <strong>捕獲報錯自我修復 (Self-Correction Loop)</strong>：如果遇到語法錯誤或缺少套件，模型<strong>不向使用者喊痛</strong>，而是主動讀取報錯日誌（Traceback），修改代碼再次重試！<br>
+          4. <strong>客觀判定</strong>：唯有終端機回傳 <code>exit code 0</code>，才代表工單正式驗收完畢！這就是工程師信任它的核心原因。
+        </p>
+      </div>
+
+      <!-- 第三單元核心名詞生活百科 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📚 單元 03 專屬核心名詞生活百科</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">搞懂程式碼代理與電腦自動化的核心硬核元件：</p>
+      </div>
+
+      <!-- 重點名詞折疊抽屜開關 -->
+      <div class="drawer-toggle-bar" onclick="toggleTermDrawer('drawer3')">
+        <div class="drawer-toggle-title"><span>📁 核心名詞抽屜（點擊一鍵展開/收合詳細維度）</span></div>
+        <div class="drawer-btn" id="btn-drawer3">收合詳細 ▲</div>
+      </div>
+      <div id="drawer3" class="term-drawer-content">
+
+      <!-- 名詞 13: Tool Calling -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">13</span>
+            <span class="term-name-zh">工具呼叫</span>
+            <span class="term-name-en">Tool Calling / Function Calling</span>
+          </div>
+          <span class="term-analogy-badge">🛠️ 瑞士刀外掛裝備</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            模型不再只會閒聊，而是懂得挑選並調用計算機、搜尋引擎、資料庫等外部工具。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            Agent 能夠「採取行動、影響現實世界」的第一步關鍵超能力。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            主廚原本只會空口報菜名，現在給他一把菜刀、一口炒鍋和烤箱，他能親自動手做菜！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為是模型自己在電腦裡算微積分；其實是它把題目丟給 Python 計算機算好再拿回結果。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 14: MCP 協議 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">14</span>
+            <span class="term-name-zh">MCP 通用協議</span>
+            <span class="term-name-en">Model Context Protocol (MCP)</span>
+          </div>
+          <span class="term-analogy-badge">🔌 AI 工具界的 Type-C 萬用孔</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            一個開放標準，讓任何軟體和資料庫只要提供 MCP 接口，所有 AI Agent 都能秒速連接。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            大幅降低生態整合成本，讓 AI 與外部企業系統的插拔變得像插隨身碟一樣容易。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            USB-C 充電孔：以前每支手機都要專屬充電線，現在全世界統一用 Type-C，一條線通吃！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 MCP 是一個新的大語言模型；它只是一套「通訊協定規範」，不是模型本身。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 15: 確定性驗證 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">15</span>
+            <span class="term-name-zh">確定性驗證</span>
+            <span class="term-name-en">Deterministic Verification</span>
+          </div>
+          <span class="term-analogy-badge">⚖️ 不信口才只看驗收單</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            不依賴模型口頭吹噓「我做完了」，而是靠客觀的自動化測試指令（Exit code 0）來判定。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            防範 AI 虛假回報、偷工減料的最強品質防火牆。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            水電修好水管不能只聽師傅說「沒問題啦」，一定要親手打開水龍頭看漏不漏水才付錢！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 AI 說「已為您修改完成」就是真的完成了，很多時候它根本少改了一半！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 16: 自我修復迴圈 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">16</span>
+            <span class="term-name-zh">自省修復迴圈</span>
+            <span class="term-name-en">Self-Correction / Reflection Loop</span>
+          </div>
+          <span class="term-analogy-badge">🔄 跌倒自己看傷口包紮</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            程式碼運行報錯時，AI 自動閱讀錯誤日誌、重新分析原因、修改代碼再次嘗試的自主循環。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            讓 Agent 具備「自動化閉環韌性」，大幅降低人類工程師手動介入除錯的負擔。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            射箭脫靶了，射手自己看偏左還偏右，調整呼吸與角度再射一箭，直到正中紅心！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 AI 一次就能寫出完美無瑕的程式碼；事實上頂級工程師也靠反覆調試，AI 亦然。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 16-B: Agent Runtime -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">16-B</span>
+            <span class="term-name-zh">代理人執行環境</span>
+            <span class="term-name-en">Agent Runtime / Sandbox</span>
+          </div>
+          <span class="term-analogy-badge">🧪 施工工班的安全無塵操作室</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            專門提供給 AI Agent 執行代碼、讀寫檔案並與外界隔離的安全防護空間。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            保護主機作業系統不被未經授權的代碼破壞，提供乾淨無污染的運行平台。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            化學實驗室的防爆通風櫥：任憑裡面做劇烈化學反應，毒氣與火花絕不會噴到外面客廳！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 AI 是直接裸跑在個人電腦根目錄；負責任的 Code Agent 一定會在安全的 Runtime 沙盒中作業。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 16-C: 電腦操作自動化 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">16-C</span>
+            <span class="term-name-zh">電腦視覺操作</span>
+            <span class="term-name-en">Computer Use / OS Agent</span>
+          </div>
+          <span class="term-analogy-badge">🖱️ AI 坐在電腦前握住滑鼠鍵盤</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            AI 透過即時螢幕截圖辨識按鈕與輸入框，直接模擬滑鼠點擊與鍵盤打字。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            不需要任何專用 API，也能自動操作所有沒有開放程式接口的古老傳統軟體。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            遠端桌面助理：就像一位朋友透過 TeamViewer 連線到你電腦，幫你點開 Excel 複製貼上數據。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為它只是普通的按鍵精靈（巨集）；它是具備眼睛（視覺大模型）隨機應變即時辨識畫面的！
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- 互動 2: 網頁顧問 vs 施工隊對決模擬 -->
+      <div class="interactive-box">
+        <div class="interactive-header">
+          <div class="interactive-title">
+            <span>⚡ 實境對照：處理「批次分析 100 份報表並產出圖表」</span>
+          </div>
+          <span class="interactive-badge">雙線模擬</span>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <button class="btn-action" style="font-size: 1.05rem; padding: 0.75rem 2rem;" onclick="startDuelSimulation()">
+            🚀 點擊下達任務：同時指派給「網頁顧問」與「Antigravity 施工隊」！
+          </button>
+        </div>
+
+        <div class="duel-container">
+          <!-- 網頁對話式 -->
+          <div class="duel-card web">
+            <div class="duel-title">
+              <div class="duel-avatar" style="color: #2563eb;">💬</div>
+              <div>
+                <div>網頁對話式 (ChatGPT / Gemini Web)</div>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">像百貨諮詢台動嘴顧問</span>
+              </div>
+            </div>
+            <div class="duel-screen" id="webLog">
+              等待指派任務...<br>
+              請點擊上方按鈕開始模擬。
+            </div>
+            <div style="font-size: 0.85rem; color: #dc2626; font-weight: 700;" id="webStatus">
+              狀態：等待中
+            </div>
+          </div>
+
+          <!-- 程式碼代理施工隊 -->
+          <div class="duel-card agent">
+            <div class="duel-title">
+              <div class="duel-avatar" style="color: #059669;">🛠️</div>
+              <div>
+                <div>程式碼施工隊 (Antigravity / Codex / Claude Code)</div>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">帶工具箱進場的工程隊</span>
+              </div>
+            </div>
+            <div class="duel-screen" id="agentLog" style="color: #4ade80;">
+              [STANDBY] 終端機與檔案系統就緒...<br>
+              隨時準備調用工具執行。
+            </div>
+            <div style="font-size: 0.85rem; color: #16a34a; font-weight: 700;" id="agentStatus">
+              狀態：待命中
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第四單元：多 Agent 協作全功能應用如何規劃 -->
+    <section id="ch4" class="section-card">
+      <div class="section-header">
+        <span class="section-tag">單元 04 · 企業級架構思維</span>
+        <h2>
+          <span>🤝 多 Agent 協作全功能應用：如何規劃與落地？</span>
+        </h2>
+        <p class="section-desc">為什麼一個超強大模型還不夠？如何像組建高效跨國團隊一樣，把多個 Agent 串聯成強大生產流水線？</p>
+      </div>
+
+      <!-- ⚡ 重點速讀模式 (30 秒吸收精華) -->
+      <div class="adhd-banner">
+        <div class="adhd-banner-icon">⚡</div>
+        <div class="adhd-banner-content">
+          <div class="adhd-banner-title">重點速讀卡：單元 4 核心三秒悟透</div>
+          <div class="adhd-banner-text">
+            1. <strong>為什麼不能只靠一個 Agent</strong>：一人身兼總經理+寫代碼+美編會<strong>上下文過載當機</strong>，必須像公司一樣<strong>部門化分工</strong>。<br>
+            2. <strong>黃金鐵三角角色</strong>：<strong>Supervisor (專案工頭) + Worker (專精技師) + Critic (魔鬼品管反思)</strong>。<br>
+            3. <strong>保命防線</strong>：Agent 溝通用 <strong>嚴格 JSON Schema</strong>（不講廢話），加上<strong>熔斷器（防刷爆信用卡）</strong>與<strong>重大操作人類按鈕 (HITL)</strong>。
+          </div>
+        </div>
+      </div>
+
+      <!-- 四格漫畫：單元 04 專屬情境漫畫 (多 Agent 協作與落地) -->
+      <div class="comic-strip">
+        <div class="comic-header">
+          <div class="comic-header-left">
+            <span style="font-size: 1.6rem;">👥</span>
+            <span class="comic-title">情境四格漫畫：阿凱升職記——組建多 Agent 虛擬特遣隊</span>
+          </div>
+          <span class="comic-read-order">閱讀順序：❶ 起 ➔ ❷ 承 ➔ ❸ 轉 ➔ ❹ 合</span>
+        </div>
+        <div class="comic-grid">
+          <!-- panel 1 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag">❶ 起</span>
+              <span class="comic-panel-title">一人全包大崩潰</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#fef2f2"/>
+                <!-- 單一 Agent 身兼數職滿頭大汗 (中間) -->
+                <circle cx="120" cy="70" r="28" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 雙眼圈蚊香眼 -->
+                <ellipse cx="110" cy="65" rx="5" ry="5" fill="none" stroke="#dc2626" stroke-width="2"/>
+                <ellipse cx="130" cy="65" rx="5" ry="5" fill="none" stroke="#dc2626" stroke-width="2"/>
+                <path d="M112 82 Q120 75 128 82" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <!-- 身體與六隻亂舞的手臂 -->
+                <path d="M95 130 C95 105 145 105 145 130 Z" fill="#64748b" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 散落的工單標籤 -->
+                <rect x="25" y="25" width="55" height="20" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="52" y="38" font-size="7.5" font-weight="900" text-anchor="middle" fill="#991b1b">查最新文獻</text>
+
+                <rect x="160" y="25" width="55" height="20" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="187" y="38" font-size="7.5" font-weight="900" text-anchor="middle" fill="#991b1b">寫 Python 代碼</text>
+
+                <rect x="20" y="85" width="55" height="20" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="47" y="98" font-size="7.5" font-weight="900" text-anchor="middle" fill="#991b1b">法務合規審查</text>
+
+                <rect x="165" y="85" width="55" height="20" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="192" y="98" font-size="7.5" font-weight="900" text-anchor="middle" fill="#991b1b">美編排版畫圖</text>
+
+                <text x="120" y="25" font-size="11" font-weight="900" text-anchor="middle" fill="#dc2626">記憶爆炸！當機中！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">🤖 單體 AI</span>「要我一邊上網搜資料、一邊寫 Code 還要法務審查，我忘光了啦！」
+            </div>
+            <div class="comic-caption">📌 瓶頸：單一 Agent 負擔過多工具，上下文瞬間污染崩潰。</div>
+          </div>
+
+          <!-- panel 2 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#3b82f6;color:#fff;">❷ 承</span>
+              <span class="comic-panel-title">組建虛擬特遣隊</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdfa"/>
+                <!-- Supervisor (工頭) 居中發令 -->
+                <circle cx="120" cy="40" r="18" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+                <text x="120" y="44" font-size="12" text-anchor="middle">👔</text>
+                <text x="120" y="65" font-size="7.5" font-weight="900" text-anchor="middle" fill="#1e40af">Supervisor 總指揮</text>
+                <!-- 箭頭發派 -->
+                <path d="M105 45 L50 75" stroke="#3b82f6" stroke-width="2" stroke-dasharray="3,3"/>
+                <path d="M120 58 L120 75" stroke="#3b82f6" stroke-width="2" stroke-dasharray="3,3"/>
+                <path d="M135 45 L190 75" stroke="#3b82f6" stroke-width="2" stroke-dasharray="3,3"/>
+                <!-- 下游三大專業 Worker -->
+                <g transform="translate(25, 80)">
+                  <rect width="50" height="40" rx="6" fill="#ffffff" stroke="#0891b2" stroke-width="1.5"/>
+                  <text x="25" y="18" font-size="12" text-anchor="middle">🔍</text>
+                  <text x="25" y="32" font-size="7" font-weight="bold" text-anchor="middle" fill="#0891b2">資料搜尋員</text>
+                </g>
+
+                <g transform="translate(95, 80)">
+                  <rect width="50" height="40" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+                  <text x="25" y="18" font-size="12" text-anchor="middle">✍️</text>
+                  <text x="25" y="32" font-size="7" font-weight="bold" text-anchor="middle" fill="#16a34a">研報撰寫員</text>
+                </g>
+
+                <g transform="translate(165, 80)">
+                  <rect width="50" height="40" rx="6" fill="#ffffff" stroke="#d97706" stroke-width="1.5"/>
+                  <text x="25" y="18" font-size="12" text-anchor="middle">🛡️</text>
+                  <text x="25" y="32" font-size="7" font-weight="bold" text-anchor="middle" fill="#d97706">品質審查員</text>
+                </g>
+                <text x="120" y="135" font-size="7.5" font-weight="bold" text-anchor="middle" fill="#64748b">標準 JSON 工單公文交接 ➔ 零口語廢話</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👔 主管 Agent</span>「各就各位！主管拆單、搜尋員查文獻、撰寫員出稿，各司其職！」
+            </div>
+            <div class="comic-caption">📌 架構：關注點分離，將複雜任務拆解為專業小部門。</div>
+          </div>
+
+          <!-- panel 3 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#ef4444;color:#fff;">❸ 轉</span>
+              <span class="comic-panel-title">魔鬼品管退回改</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#fffbeb"/>
+                <!-- Critic 拿放大鏡 (左側) -->
+                <circle cx="60" cy="65" r="22" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 單邊眼鏡與嚴肅眉毛 -->
+                <circle cx="53" cy="60" r="5" fill="none" stroke="#d97706" stroke-width="2"/>
+                <path d="M48 54 L58 58" stroke="#1e293b" stroke-width="2"/>
+                <path d="M68 56 L76 60" stroke="#1e293b" stroke-width="2"/>
+                <path d="M54 74 L68 74" stroke="#1e293b" stroke-width="2"/>
+                <path d="M40 120 C40 95 80 95 80 120 Z" fill="#b45309" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 手拿蓋著紅章的退件 -->
+                <rect x="105" y="25" width="115" height="95" rx="6" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+                <text x="162" y="45" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#1e293b">研報初稿審核單</text>
+                <line x1="115" y1="55" x2="210" y2="55" stroke="#e2e8f0" stroke-width="1.5"/>
+                <text x="120" y="70" font-size="7.5" fill="#64748b">發現第 3 頁數據無引用來源</text>
+                <text x="120" y="85" font-size="7.5" fill="#64748b">疑似大模型文字接龍幻覺！</text>
+                <!-- 鮮紅退回印章 -->
+                <rect x="135" y="75" width="75" height="30" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="2" transform="rotate(-8 135 75)"/>
+                <text x="172" y="95" font-size="11" font-weight="900" fill="#dc2626" text-anchor="middle" transform="rotate(-8 172 95)">REJECTED 退件</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">🛡️ 審查員</span>「等等！這段數據沒有真實文獻引用，退回重改，休想混過去！」
+            </div>
+            <div class="comic-caption">📌 反思：Actor-Critic 雙盲驗證，主動扼殺幻覺與錯誤。</div>
+          </div>
+
+          <!-- panel 4 -->
+          <div class="comic-panel">
+            <div class="comic-panel-header">
+              <span class="comic-step-tag" style="background:#10b981;color:#fff;">❹ 合</span>
+              <span class="comic-panel-title">高枕無憂零事故</span>
+            </div>
+            <div class="comic-img-box">
+              <svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                <rect width="240" height="150" fill="#f0fdf4"/>
+                <!-- 安全護盾 (左側) -->
+                <path d="M60 25 L90 40 L90 85 Q90 115 60 130 Q30 115 30 85 L30 40 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/>
+                <path d="M48 75 L56 83 L74 62" stroke="#16a34a" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <text x="60" y="105" font-size="7.5" font-weight="900" text-anchor="middle" fill="#15803d">熔斷器就緒</text>
+                <!-- 阿凱在沙發上優雅喝咖啡按發射鈕 (右側) -->
+                <circle cx="150" cy="55" r="22" fill="#fed7aa" stroke="#1e293b" stroke-width="2.5"/>
+                <path d="M143 52 L147 52" stroke="#1e293b" stroke-width="2"/>
+                <path d="M153 52 L157 52" stroke="#1e293b" stroke-width="2"/>
+                <path d="M145 64 Q150 70 155 64" stroke="#1e293b" stroke-width="2" fill="none"/>
+                <path d="M130 115 C130 90 170 90 170 115 Z" fill="#10b981" stroke="#1e293b" stroke-width="2.5"/>
+                <!-- 人工確認核按鈕 (HITL) -->
+                <rect x="180" y="70" width="45" height="40" rx="6" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+                <circle cx="202" cy="85" r="10" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+                <text x="202" y="103" font-size="6.5" font-weight="900" fill="#ffffff" text-anchor="middle">HITL 確認</text>
+                <text x="150" y="24" font-size="11" font-weight="900" fill="#059669">零失誤完美交付！</text>
+              </svg>
+            </div>
+            <div class="comic-bubble">
+              <span class="comic-speaker">👦 阿凱</span>「有熔斷器防燒錢、關鍵動作我親手核准，多 Agent 自動化太安心了！」
+            </div>
+            <div class="comic-caption">📌 落地：熔斷器 + 人在迴圈 (HITL)，兼顧全自動與企業級安全！</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h3>🏢 為什麼需要「多 Agent 協作」？</h3>
+          <p>如果你讓同一個員工同時身兼：總經理、會計、寫程式、法務審查與美編，他一定會手忙腳亂、顧此失彼！</p>
+          <p style="margin-top: 0.5rem;"><strong>單一 Agent 的瓶頸</strong>：上下文記憶（Context）超載、容易忘記約束條件、錯誤連鎖放大。</p>
+          <p style="margin-top: 0.5rem;"><strong>多 Agent 的優勢</strong>：職能單純化（關注點分離）、權限最小化、容錯與自省校驗能力大幅提升！</p>
+        </div>
+        <div class="concept-card">
+          <h3>📐 三大主流協作模式</h3>
+          <ul style="padding-left: 1.25rem; font-size: 0.95rem; color: #475569; line-height: 1.7;">
+            <li><strong>主管分派型 (Supervisor-Worker)</strong>：由主管負責拆分大目標，分派工單給專業 Worker，最後驗收彙整。</li>
+            <li><strong>路由器調度型 (Router-Dispatcher)</strong>：如同智能總機，依問題意圖直接分派給最合適的專門專家。</li>
+            <li><strong>反思自省型 (Actor-Critic / Reflection)</strong>：一人負責起草初稿，另一人負責扮演挑剔審查員，持續迭代直到完美。</li>
+          </ul>
+        </div>
+        <div class="concept-card">
+          <h3>📋 規劃多 Agent 應用的 4 大黃金步驟</h3>
+          <ol style="padding-left: 1.25rem; font-size: 0.95rem; color: #475569; line-height: 1.7;">
+            <li><strong>明確定義終點交付物</strong>（例如：一份包含最新數據的分析報告 PDF）。</li>
+            <li><strong>劃分角色與最小工具授權</strong>（只給搜尋 Worker 網路權限，不給刪除硬碟權限）。</li>
+            <li><strong>規範標準資料流格式</strong>（嚴格使用 JSON Schema 傳遞資料，避免口語化產生歧義）。</li>
+            <li><strong>設計人工介入節點 (Human-in-the-Loop)</strong>：重大決策（如扣款、發布）必須停下來讓人按確認！</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 技術深潛：單一 Agent 為什麼會崩潰？ -->
+      <div class="deep-dive-box" style="background: linear-gradient(135deg, #31104b 0%, #4c1d95 100%); border-left-color: #c084fc;">
+        <div class="deep-dive-title">
+          <span>🧠 深度思考：給一個超聰明的大模型 50 個工具，為什麼還不如組建 3 個小 Agent？</span>
+        </div>
+        <p>
+          許多剛接觸 Agent 的人常犯一個嚴重錯誤：<strong>「把所有的工具、規則與任務全部塞給同一個 Agent」</strong>。<br>
+          在業界實務中，這種「萬能單體 Agent」會在任務稍微複雜時迅速崩潰，原因在於：<br><br>
+          1. <strong>上下文污染 (Context Dilution)</strong>：當搜尋結果、數據表格、歷史對話全部擠在同一個視窗，模型會產生「迷失在中間（Lost in the Middle）」現象，忘記核心目標。<br>
+          2. <strong>工具幻覺與衝突 (Tool Cluttering)</strong>：當工具超過 20 個，模型常常搞不清楚該呼叫哪一個，甚至把刪除檔案當成讀取檔案！<br>
+          3. <strong>資安權限失控 (Privilege Creep)</strong>：如果負責聯網搜尋的 Agent 同時擁有刪除本機硬碟的權限，一旦遭遇惡意「提示詞注入（Prompt Injection）」，整個電腦將門戶大開！<br><br>
+          👉 <strong>因此，多 Agent 系統不是趕時髦，而是如同現代企業「劃分部門、職能解耦、權限隔離」的必然工程實踐！</strong>
+        </p>
+      </div>
+
+      <!-- 四大協作拓撲架構剖析 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📐 業界主流四大多 Agent 協作拓撲架構 (Topologies)</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">根據不同業務複雜度，挑選最適合的工班組織型態：</p>
+      </div>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <h3 style="color: #4f46e5;">1. 主管分派型 (Supervisor-Worker)</h3>
+          <p><strong>架構</strong>：中央主管 Agent 負責維持全域狀態與大局觀，將大任務拆解成子工單分派給 Worker，並彙整成果。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #4338ca;"><strong>適用場景</strong>：跨領域複雜研究、專案開發、綜合研報撰寫。預測性高、除錯最容易！</p>
+        </div>
+        <div class="concept-card">
+          <h3 style="color: #06b6d4;">2. 線性接力型 (Sequential Pipeline)</h3>
+          <p><strong>架構</strong>：如同工廠流水線，Agent A 產出 ➔ 傳給 Agent B 處理 ➔ 傳給 Agent C 封裝。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #0891b2;"><strong>適用場景</strong>：數據清洗 ➔ 翻譯 ➔ 格式轉換。流程固定、零溝通損耗。</p>
+        </div>
+        <div class="concept-card">
+          <h3 style="color: #d97706;">3. 智能調度型 (Router-Dispatcher)</h3>
+          <p><strong>架構</strong>：前置 Router 進行語意意圖分類，如同智能總機，將問題瞬間分流至專門的小模型或專家 Agent。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #b45309;"><strong>適用場景</strong>：大型客服系統、多租戶企業門戶。反應極快、極致省 Token 成本。</p>
+        </div>
+        <div class="concept-card">
+          <h3 style="color: #10b981;">4. 自省對抗型 (Actor-Critic / Reflection)</h3>
+          <p><strong>架構</strong>：執行者（Actor）產出初稿，審查者（Critic）持放大鏡挑毛病，不合格退回重做，直到達標。</p>
+          <p style="margin-top: 0.5rem; font-size: 0.88rem; color: #047857;"><strong>適用場景</strong>：高危代碼生成、財務審計、法規遵循審查。品質最嚴苛、防幻覺最高！</p>
+        </div>
+      </div>
+
+      <!-- 落地規劃六步法 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>🛠️ 實戰必備：全功能多 Agent 應用落地「黃金六步規劃法」</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">想在公司或個人專案落地多 Agent，嚴格遵循這六步即可避開 90% 的暗坑：</p>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">
+            <span>第 1 步：定義最終交付成果與完成標準 (Definition of Done)</span>
+          </div>
+          <div class="timeline-desc">
+            不要一開始就建 Agent！先明確定義：這套系統最終要輸出什麼？（例如：一份格式嚴格的競品分析 PPTX 或經過測試的代碼庫）。沒有清晰的驗收標準，多 Agent 只會在群組裡互傳廢話。
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #06b6d4;"></div>
+          <div class="timeline-title">
+            <span>第 2 步：角色邊界切割與最小權限授權 (Least Privilege Principle)</span>
+          </div>
+          <div class="timeline-desc">
+            將大流程拆解為 2~4 個單一職責角色：如【情報蒐集員】、【分析計算員】、【品管核驗員】。嚴格遵守<strong>最小權限原則</strong>：蒐集員只有聯網搜尋權限，絕不給予本地硬碟刪除與金融支付權限！
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #8b5cf6;"></div>
+          <div class="timeline-title">
+            <span>第 3 步：定義結構化全域狀態樹 (State Schema & Typed Context)</span>
+          </div>
+          <div class="timeline-desc">
+            嚴禁讓 Agent 之間靠「自然語言閒聊」傳話（容易傳話走樣）！必須使用 <strong>JSON Schema</strong> 定義標準資料傳遞格式（如包含 <code>task_id</code>, <code>research_data</code>, <code>draft_content</code>, <code>verification_status</code> 等欄位）。
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #10b981;"></div>
+          <div class="timeline-title">
+            <span>第 4 步：工具接口標準化 (MCP Standard Tool Integration)</span>
+          </div>
+          <div class="timeline-desc">
+            透過 MCP 協議或標準 OpenAPI 規格，為各 Worker 掛載所需的專屬工具箱，讓工具輸入輸出格式清晰明瞭，便於替換與升級。
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #f59e0b;"></div>
+          <div class="timeline-title">
+            <span>第 5 步：反思校驗與熔斷防死循環機制 (Reflection & Circuit Breaker)</span>
+          </div>
+          <div class="timeline-desc">
+            設立獨立的 Critic 節點進行審查。同時<strong>務必加上最大重試上限（如 Max Iterations = 3）</strong>與熔斷器（Circuit Breaker），防止兩隻 Agent 互相挑刺陷入無限死循環燒光 Token 預算！
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color: #ef4444;"></div>
+          <div class="timeline-title">
+            <span>第 6 步：人工監督介入點 (Human-in-the-Loop) 與可觀測性日誌</span>
+          </div>
+          <div class="timeline-desc">
+            在「不可逆的高危動作」（發送正式 Email、銀行轉帳、刪除線上資料庫）前設置暫停中斷點，彈出確認按鈕讓人手動核准。並記錄完整的審計日誌（Audit Log），隨時可回溯追蹤每隻 Agent 的推論路徑。
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四單元核心名詞百科 -->
+      <div style="margin: 2.5rem 0 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <span>📚 單元 04 專屬核心名詞生活百科</span>
+        </h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin-top: 0.25rem;">搞懂多智能體系統最核心的組織架構名詞：</p>
+      </div>
+
+      <!-- 重點名詞折疊抽屜開關 -->
+      <div class="drawer-toggle-bar" onclick="toggleTermDrawer('drawer4')">
+        <div class="drawer-toggle-title"><span>📁 核心名詞抽屜（點擊一鍵展開/收合詳細維度）</span></div>
+        <div class="drawer-btn" id="btn-drawer4">收合詳細 ▲</div>
+      </div>
+      <div id="drawer4" class="term-drawer-content">
+
+      <!-- 名詞 17: Supervisor Agent -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">17</span>
+            <span class="term-name-zh">主管智能體</span>
+            <span class="term-name-en">Supervisor Agent</span>
+          </div>
+          <span class="term-analogy-badge">👔 統籌工班的專案總經理</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            負責綜觀全局、把大目標拆成工單、派發給打工人，並驗收整體成果的核心主管。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            維護全域狀態（Global State），維持任務方向不偏離軌道。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            裝潢工頭：自己不親自抹水泥或釘木板，但清楚水電、木工、油漆何時該進場驗收。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 Supervisor 會做所有事；其實優秀的主管從不越俎代庖，只負責調度分派！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 18: Router Agent -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">18</span>
+            <span class="term-name-zh">路由智能體</span>
+            <span class="term-name-en">Router Agent</span>
+          </div>
+          <span class="term-analogy-badge">🛎️ 醫院急診檢傷分類站</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            只負責快速判斷使用者的意圖，把需求直接轉給對應的專門專家，不參與後續繁雜執行。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            大幅節省計算開銷與延遲，避免把小問題丟給超昂貴的大模型處理。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            醫院門診大廳的分診台護理師：看病患症狀直接開單導引去骨科、小兒科或內科。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 Router 只是死板的關鍵字過濾；現代 Router 是具備語意理解能力的小模型（SLM）。
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 19: Worker Agent -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">19</span>
+            <span class="term-name-zh">工人智能體</span>
+            <span class="term-name-en">Worker Agent</span>
+          </div>
+          <span class="term-analogy-badge">🛠️ 術業有專攻的專業技師</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            專注於單一專業領域（如查資料、寫 SQL、畫圖表）的執行小幫手。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            多 Agent 架構中的具體產能來源，職能單純、出錯率低。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            水電工班裡的專業師傅：水電師傅專心拉線路，油漆師傅專心刷牆壁，各司其職。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 Worker 越全能越好；其實 Worker 職能越專精、工具越少，執行成功率越高！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 20: Reflection 反思機制 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">20</span>
+            <span class="term-name-zh">反思機制</span>
+            <span class="term-name-en">Reflection (Actor-Critic)</span>
+          </div>
+          <span class="term-analogy-badge">🧐 嚴格的魔鬼品管總監</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            讓一個專門扮演審查員的 Agent 來挑毛病，促使原產出者反覆修正，直到完全符合要求。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            消除幻覺、確保程式碼語法與業務合規的最強自我進化機制。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            出版社總編輯：作家寫完稿件必須交給總編輯嚴格校對錯別字與邏輯瑕疵，退回修改才能出版。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 AI 會自發性追求完美；沒有設計獨立 Critic 反思回路，模型通常都偷懶交差！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 21: Human-in-the-Loop -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">21</span>
+            <span class="term-name-zh">人在迴圈內</span>
+            <span class="term-name-en">Human-in-the-Loop (HITL)</span>
+          </div>
+          <span class="term-analogy-badge">🔴 戰鬥機飛行員的最終發射鈕</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            在全自動化流程中，遇到重大、不可逆或高風險節點時，強制暫停等待人類按下核准。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            企業把控法律責任、資金安全與最終決策權的最高安全閥。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            自駕車雖然能全自動跟車轉彎，但駕駛員手必須隨時放在方向盤上準備接管。
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為「全自動」就該完全沒人管；在現實商業世界，關鍵操作沒有人類簽字誰敢負法律責任？
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 22: 熔斷機制 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">22</span>
+            <span class="term-name-zh">熔斷器與終止條件</span>
+            <span class="term-name-en">Circuit Breaker & Break Conditions</span>
+          </div>
+          <span class="term-analogy-badge">⚡ 家裡的無熔絲安全開關</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            當 Agent 陷入死循環、重複呼叫工具或消耗過多 Token 時，強制跳閘跳出保護系統。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            保護荷包與伺服器資源，防止帳單爆表或系統無限卡死的保命符。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            用電過載時總電源開關自動跳電，防止電線過熱起火燒掉房子！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 Agent 自動化越久越好；如果不設熔斷器，兩隻 Agent 吵架可能一個晚上燒掉幾千美金！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 22-B: 狀態機工作流 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">22-B</span>
+            <span class="term-name-zh">狀態機工作流</span>
+            <span class="term-name-en">State Machine & Graph Workflow</span>
+          </div>
+          <span class="term-analogy-badge">🚦 十字路口紅綠燈與闖關地圖</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            規範任務目前處於哪一個階段、滿足什麼條件才能跳到下一關的嚴密流程地圖。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            防止 Agent 脫軌亂跑，讓複雜任務可控、可暫停、可回溯的核心技術骨架（如 LangGraph）。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            大富翁棋盤與十字路口：紅燈停、綠燈行；搜集到足夠資料才能前進到寫作格，未過審核必須退回草稿格！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為 Agent 協作全憑 AI 自主發揮；現實工業級系統都是由嚴密的狀態機在背後精準導引！
+          </div>
+        </div>
+      </div>
+
+      <!-- 名詞 22-C: 評測框架 -->
+      <div class="term-box">
+        <div class="term-header">
+          <div class="term-name-group">
+            <span class="term-num">22-C</span>
+            <span class="term-name-zh">評測框架</span>
+            <span class="term-name-en">Evals (Agent Evaluation)</span>
+          </div>
+          <span class="term-analogy-badge">📊 學校模擬考標準評分尺</span>
+        </div>
+        <div class="term-content-grid">
+          <div class="term-row">
+            <strong>A. 一句話白話解釋</strong>
+            準備 100 道標準考題與答案，自動測試 Agent 的正確率、耗時與花費，客觀評分。
+          </div>
+          <div class="term-row">
+            <strong>B. 在 AI 系統裡的角色</strong>
+            每次修改提示詞或換模型時，唯一能客觀證明「AI 到底變聰明還是變笨」的衡量儀表板。
+          </div>
+          <div class="term-row">
+            <strong>D. 生活比喻</strong>
+            高中學測模擬考：全體考生考同一張標準試卷，分數高低一目了然，不看運氣只看真本事！
+          </div>
+          <div class="term-row">
+            <strong>F. 小白最容易誤會</strong>
+            以為自己隨便聊兩句覺得「好像挺聰明」就是測好了；正式上線必須跑成百上千次自動化 Evals！
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <!-- 互動 3: 多 Agent 協作沙盒 -->
+      <div class="interactive-box">
+        <div class="interactive-header">
+          <div class="interactive-title">
+            <span>🕹️ 模擬工廠：多 Agent「產業趨勢研究報告」自動化流水線</span>
+          </div>
+          <span class="interactive-badge">協同作業</span>
+        </div>
+
+        <p style="color: #475569; font-size: 0.95rem; margin-bottom: 1.25rem;">
+          點擊下方「啟動全自動研究工班」，親眼見證主管、搜尋員、寫作員與品管審查員如何各司其職、流水線作業！
+        </p>
+
+        <div style="margin-bottom: 1rem;">
+          <button class="btn-action" id="startPipelineBtn" onclick="runMultiAgentPipeline()">
+            ▶ 啟動多 Agent 研發特遣隊！
+          </button>
+        </div>
+
+        <!-- 流水線節點 -->
+        <div class="agent-pipeline">
+          <div class="agent-node" id="nodeSupervisor">
+            <div class="node-icon">👔</div>
+            <div class="node-role">Supervisor Agent</div>
+            <div class="node-status" id="statusSupervisor">待命中</div>
+          </div>
+
+          <div class="agent-node" id="nodeSearcher">
+            <div class="node-icon">🔍</div>
+            <div class="node-role">Researcher Agent</div>
+            <div class="node-status" id="statusSearcher">待命中</div>
+          </div>
+
+          <div class="agent-node" id="nodeWriter">
+            <div class="node-icon">✍️</div>
+            <div class="node-role">Writer Agent</div>
+            <div class="node-status" id="statusWriter">待命中</div>
+          </div>
+
+          <div class="agent-node" id="nodeReviewer">
+            <div class="node-icon">🛡️</div>
+            <div class="node-role">Critic & Verifier</div>
+            <div class="node-status" id="statusReviewer">待命中</div>
+          </div>
+        </div>
+
+        <!-- 協作日誌輸出 -->
+        <div class="pipeline-log" id="pipelineLog">
+          [系統準備完成] 點擊上方按鈕開始模擬多 Agent 協同生產...
+        </div>
+      </div>
+    </section>
+
+    <!-- 第五單元：實戰隨堂測驗 -->
+    <section id="quiz" class="section-card">
+      <div class="section-header">
+        <span class="section-tag">單元 05 · 自我檢測與驗收</span>
+        <h2>
+          <span>🏆 實戰隨堂測驗：你真的懂 AI 了嗎？</span>
+        </h2>
+        <p class="section-desc">透過以下 3 題生活情境題，檢驗您是否已經掌握從文字接龍到多 Agent 的思維躍遷！</p>
+      </div>
+
+      <!-- 題目 1 -->
+      <div class="quiz-card">
+        <div class="quiz-question">Q1. 為什麼網頁版 ChatGPT 有時候會自信滿滿地回答出錯誤的歷史事件？</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q1-fb', '錯誤！大語言模型不是傳統百科資料庫。')">A. 因為資料庫主機太忙碌當機了</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q1-fb', '答對了！LLM 本質是依據機率進行文字接龍，若無外部真實資料參考，容易因機率組合出流暢卻捏造的句子（幻覺）。')">B. 因為大語言模型的本質是「算字詞機率接龍」，追求語法流暢而非絕對物理真實</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q1-fb', '錯誤！它沒有人的惡作劇情緒。')">C. 因為 AI 想要惡作劇捉弄使用者</button>
+        </div>
+        <div class="quiz-feedback" id="q1-fb"></div>
+      </div>
+
+      <!-- 題目 2 -->
+      <div class="quiz-card">
+        <div class="quiz-question">Q2. 你手邊有 500 份格式不統一的 Word 檔需要改檔名並統計關鍵字，哪種工具最適合？</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q2-fb', '網頁版無法直接存取你的本機磁碟，你需要手動一份份上傳 500 次，非常繁瑣！')">A. 打開網頁版 ChatGPT，手動一份份把文章複製貼上進去發問</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q2-fb', '答對了！程式碼代理（如 Antigravity / Claude Code）具備本機檔案讀寫與腳本執行能力，可批次全自動完成。')">B. 使用如 Antigravity 或 Claude Code 等程式碼代理施工隊，授權本機工具箱自動批次處理</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q2-fb', '太辛苦了！現代科技已經能將此重複流程全自動化。')">C. 完全不靠 AI，純手工連續加班三天一個個改名</button>
+        </div>
+        <div class="quiz-feedback" id="q2-fb"></div>
+      </div>
+
+      <!-- 題目 3 -->
+      <div class="quiz-card">
+        <div class="quiz-question">Q3. 在規劃「多 Agent 協作系統」時，以下哪一項做法是最佳實踐原則？</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q3-fb', '錯誤！這會讓單一 Agent 負擔過大且喪失多 Agent 分工與錯誤隔離的優勢。')">A. 把所有工具全部授權給同一個 Agent 讓它自由發揮</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q3-fb', '錯誤！純口語溝通容易產生歧義與解析錯誤，應使用 JSON Schema 等嚴格結構化格式。')">B. 讓各個 Agent 在聊天群組裡自由用口語聊天傳話，不做任何格式限制</button>
+          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q3-fb', '答對了！職能專業劃分、結構化傳遞與獨立客觀審查反思，是多 Agent 穩健落地的關鍵架構。')">C. 專業角色拆解（主管、工人、審查員），以結構化資料傳遞，並設有客觀驗證把關</button>
+        </div>
+        <div class="quiz-feedback" id="q3-fb"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 3rem;">
+    <p>🤖 AI 知識全景與實戰指南 · 為對話式 AI 使用者打開通往全自動化施工的大門</p>
+    <p style="margin-top: 0.35rem; font-size: 0.8rem;">本教材結合日常生活生動比喻、四格漫畫圖解與純單一檔案互動實驗室</p>
+  </footer>
+
+  <!-- 互動式 JavaScript 邏輯 -->
+  <script>
+    
+    /* 重點名詞抽屜開關控制 */
+    function toggleTermDrawer(drawerId) {
+      const drawer = document.getElementById(drawerId);
+      const btn = document.getElementById('btn-' + drawerId);
+      if (!drawer || !btn) return;
+      drawer.classList.toggle('term-drawer-collapsed');
+      if (drawer.classList.contains('term-drawer-collapsed')) {
+        btn.innerText = '展開詳細 ▼';
+      } else {
+        btn.innerText = '收合詳細 ▲';
+      }
+    }
+
+    /* ==========================================================
+       互動 1：文字接龍神經元模擬器 (多題庫 + 動態 Softmax)
+       ========================================================== */
+    const promptPresets = {
+      poem: {
+        initial: ["春眠", "不覺", "曉", "處處", "聞"],
+        vocab: [
+          { word: "啼鳥", logit: 3.5 },
+          { word: "叫聲", logit: 2.1 },
+          { word: "啼鳴", logit: 1.8 },
+          { word: "雨聲", logit: 1.2 },
+          { word: "雞鳴", logit: 0.6 },
+          { word: "風聲", logit: 0.3 }
+        ],
+        followUps: [
+          [
+            { word: "夜來", logit: 3.2 },
+            { word: "忽聞", logit: 2.0 },
+            { word: "不知", logit: 1.5 },
+            { word: "窗外", logit: 1.0 }
+          ],
+          [
+            { word: "風雨", logit: 3.6 },
+            { word: "雷電", logit: 1.8 },
+            { word: "花香", logit: 1.4 },
+            { word: "歌聲", logit: 0.9 }
+          ],
+          [
+            { word: "聲", logit: 3.8 },
+            { word: "響", logit: 2.2 },
+            { word: "動", logit: 1.2 }
+          ]
+        ]
+      },
+      ai: {
+        initial: ["人工", "智慧", "的", "核心", "是"],
+        vocab: [
+          { word: "機器學習", logit: 3.4 },
+          { word: "文字接龍", logit: 2.8 },
+          { word: "算力晶片", logit: 2.0 },
+          { word: "海量數據", logit: 1.9 },
+          { word: "神祕魔法", logit: 0.8 },
+          { word: "自由意志", logit: 0.2 }
+        ],
+        followUps: [
+          [
+            { word: "透過", logit: 3.3 },
+            { word: "依賴", logit: 2.5 },
+            { word: "使用", logit: 2.0 }
+          ],
+          [
+            { word: "機率統計", logit: 3.5 },
+            { word: "深度網絡", logit: 2.4 },
+            { word: "大量訓練", logit: 1.8 }
+          ],
+          [
+            { word: "預測未來", logit: 3.1 },
+            { word: "生成回答", logit: 3.0 },
+            { word: "自我進化", logit: 1.5 }
+          ]
+        ]
+      },
+      food: {
+        initial: ["今天", "晚餐", "我想", "吃"],
+        vocab: [
+          { word: "熱騰騰牛肉麵", logit: 3.3 },
+          { word: "日式炸豬排", logit: 2.9 },
+          { word: "健康輕食沙拉", logit: 2.2 },
+          { word: "香濃義大利麵", logit: 2.0 },
+          { word: "麻辣鴛鴦鍋", logit: 1.7 },
+          { word: "螺絲起子", logit: -0.5 }
+        ],
+        followUps: [
+          [
+            { word: "配上一杯", logit: 3.4 },
+            { word: "順便點一碗", logit: 2.6 },
+            { word: "還要加點", logit: 2.1 }
+          ],
+          [
+            { word: "冰珍珠奶茶", logit: 3.6 },
+            { word: "無糖綠茶", logit: 2.4 },
+            { word: "香濃玉米濃湯", logit: 1.9 }
+          ],
+          [
+            { word: "真是太幸福了！", logit: 3.8 },
+            { word: "犒賞辛苦的自己。", logit: 2.8 }
+          ]
+        ]
+      }
+    };
+
+    let currentPresetKey = "poem";
+    let initialTokens = [...promptPresets.poem.initial];
+    let currentTokens = [...initialTokens];
+    let temperature = 0.7;
+    let stepCount = 0;
+
+    function getActiveVocab() {
+      const preset = promptPresets[currentPresetKey];
+      if (stepCount === 0 || !preset.followUps) {
+        return preset.vocab;
+      }
+      const followIdx = Math.min(stepCount - 1, preset.followUps.length - 1);
+      return preset.followUps[followIdx] || preset.vocab;
+    }
+
+    function calculateProbabilities(temp) {
+      const vocab = getActiveVocab();
+      // logits / temp
+      const expScores = vocab.map(item => ({
+        word: item.word,
+        expVal: Math.exp(item.logit / Math.max(temp, 0.05))
+      }));
+      const totalExp = expScores.reduce((sum, item) => sum + item.expVal, 0);
+
+      return expScores.map(item => ({
+        word: item.word,
+        prob: Math.round((item.expVal / totalExp) * 1000) / 10
+      })).sort((a, b) => b.prob - a.prob);
+    }
+
+    function renderProbBars() {
+      const probs = calculateProbabilities(temperature);
+      const container = document.getElementById("probBars");
+      if (!container) return;
+      container.innerHTML = "";
+
+      probs.slice(0, 5).forEach(item => {
+        const row = document.createElement("div");
+        row.className = "prob-bar-row";
+        row.innerHTML = `
+          <div class="prob-word" style="width: auto; min-width: 80px; text-align: left;">${item.word}</div>
+          <div class="prob-track">
+            <div class="prob-fill" style="width: ${Math.max(item.prob, 3)}%;"></div>
+          </div>
+          <div class="prob-val">${item.prob}%</div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function updateTemperature(val) {
+      temperature = parseFloat(val);
+      const tempLabel = document.getElementById("tempVal");
+      if (tempLabel) tempLabel.innerText = temperature.toFixed(1);
+      renderProbBars();
+    }
+
+    function changePrompt(presetKey) {
+      if (!promptPresets[presetKey]) return;
+      currentPresetKey = presetKey;
+      stepCount = 0;
+      initialTokens = [...promptPresets[presetKey].initial];
+      currentTokens = [...initialTokens];
+      renderTokens();
+      renderProbBars();
+    }
+
+    function predictNextToken() {
+      const probs = calculateProbabilities(temperature);
+      if (!probs || probs.length === 0) return;
+
+      // 依照機率加權抽取
+      const rand = Math.random() * 100;
+      let cumulative = 0;
+      let selectedWord = probs[0].word;
+
+      for (let item of probs) {
+        cumulative += item.prob;
+        if (rand <= cumulative) {
+          selectedWord = item.word;
+          break;
+        }
+      }
+
+      currentTokens.push(selectedWord);
+      stepCount++;
+      renderTokens();
+      renderProbBars();
+
+      if (stepCount >= 4) {
+        setTimeout(() => {
+          alert("🎉 接龍成功連成完整文句！您可以點擊「選擇開頭句子」切換其他情境，或調高溫度試試看大模型會不會亂接！");
+        }, 300);
+      }
+    }
+
+    function renderTokens() {
+      const box = document.getElementById("tokenDisplayBox");
+      if (!box) return;
+      box.innerHTML = "";
+      currentTokens.forEach((tok, idx) => {
+        const span = document.createElement("span");
+        span.className = "token-item" + (idx >= initialTokens.length ? " predicted" : "");
+        span.innerText = tok;
+        box.appendChild(span);
+      });
+    }
+
+    function resetTokens() {
+      stepCount = 0;
+      currentTokens = [...initialTokens];
+      renderTokens();
+      renderProbBars();
+    }
+
+    // 初始化互動 1
+    renderTokens();
+    renderProbBars();
+
+
+    /* ==========================================================
+       互動 2：網頁顧問 vs 施工隊對決模擬
+       ========================================================== */
+    let duelTimer = null;
+    function startDuelSimulation() {
+      if (duelTimer) clearInterval(duelTimer);
+
+      const webLog = document.getElementById("webLog");
+      const agentLog = document.getElementById("agentLog");
+      const webStatus = document.getElementById("webStatus");
+      const agentStatus = document.getElementById("agentStatus");
+
+      webLog.innerHTML = "";
+      agentLog.innerHTML = "";
+      webStatus.innerText = "狀態：生成長文教學中...";
+      webStatus.style.color = "#d97706";
+      agentStatus.innerText = "狀態：施工隊啟動中...";
+      agentStatus.style.color = "#2563eb";
+
+      const webSteps = [
+        "🤖 [網頁顧問] 好的！處理 100 份報表非常容易。",
+        "📝 [網頁顧問] 建議您在電腦安裝 Python 3.11 環境。",
+        "📦 [網頁顧問] 接著請在命令列輸入：pip install pandas openpyxl matplotlib...",
+        "💻 [網頁顧問] 接著建立一個名為 process.py 的文字檔，把下面這 180 行代碼複製貼入：",
+        "📄 [代碼範例] import os, glob, pandas as pd...",
+        "⚠️ [網頁顧問] 提示：如果遇到路徑找不到，請手動確認各檔案目錄是否正確。",
+        "🛑 [網頁顧問] 完成代碼輸出！請您手動複製並在您的本機測試看看有沒有報錯。"
+      ];
+
+      const agentSteps = [
+        "⚡ [Antigravity] 偵測到使用者需求：批次分析 100 份本機報表並出圖。",
+        "📂 [Tool: list_dir] 掃描 ./data 目錄，成功辨識 100 個 xlsx 檔案。",
+        "🛠️ [Tool: write_file] 自動建立分析與匯總腳本 batch_analyzer.py",
+        "🚀 [Tool: run_command] 執行 python batch_analyzer.py 啟動平行運算處理...",
+        "📊 [Tool: 数据萃取] 讀取完成 100/100 份資料，數值計算完成，產出總計表。",
+        "📈 [Tool: 圖表繪製] 自動生成 summary_chart.png 與 HTML 視覺化報告。",
+        "🔍 [Tool: 自動驗證] 執行語法與資料完整度檢驗 -> Exit code: 0 (全部通過)！",
+        "✅ [交付完成] 成果已存至硬碟，用時 4.2 秒。您可以直接開啟報告！"
+      ];
+
+      let step = 0;
+      duelTimer = setInterval(() => {
+        if (step < webSteps.length) {
+          webLog.innerHTML += `<div>${webSteps[step]}</div>`;
+          webLog.scrollTop = webLog.scrollHeight;
+        } else {
+          webStatus.innerText = "狀態：給完建議，後續繁瑣手工仍需使用者自行完成 ⚠️";
+          webStatus.style.color = "#dc2626";
+        }
+
+        if (step < agentSteps.length) {
+          agentLog.innerHTML += `<div>${agentSteps[step]}</div>`;
+          agentLog.scrollTop = agentLog.scrollHeight;
+        } else {
+          agentStatus.innerText = "狀態：100% 全自動驗收交付完成 ✅ (Exit code 0)";
+          agentStatus.style.color = "#16a34a";
+        }
+
+        step++;
+        if (step >= Math.max(webSteps.length, agentSteps.length)) {
+          clearInterval(duelTimer);
+        }
+      }, 700);
+    }
+
+
+    /* ==========================================================
+       互動 3：多 Agent 協作沙盒流水線
+       ========================================================== */
+    let pipelineRunning = false;
+    function runMultiAgentPipeline() {
+      if (pipelineRunning) return;
+      pipelineRunning = true;
+
+      const btn = document.getElementById("startPipelineBtn");
+      btn.disabled = true;
+      btn.innerText = "⏳ 多 Agent 協作流水線運作中...";
+
+      const nodes = {
+        sup: document.getElementById("nodeSupervisor"),
+        sea: document.getElementById("nodeSearcher"),
+        wri: document.getElementById("nodeWriter"),
+        rev: document.getElementById("nodeReviewer")
+      };
+      const statuses = {
+        sup: document.getElementById("statusSupervisor"),
+        sea: document.getElementById("statusSearcher"),
+        wri: document.getElementById("statusWriter"),
+        rev: document.getElementById("statusReviewer")
+      };
+      const log = document.getElementById("pipelineLog");
+
+      // 重設狀態
+      Object.values(nodes).forEach(n => n.className = "agent-node");
+      Object.values(statuses).forEach(s => s.innerText = "待命中");
+      log.innerHTML = "<div>[協作任務發布] 使用者要求：『產出一份 2026 AI Agent 落地趨勢研報』</div>";
+
+      // 步驟 1: Supervisor 規劃與拆解
+      setTimeout(() => {
+        nodes.sup.className = "agent-node active";
+        statuses.sup.innerText = "拆解目標中...";
+        log.innerHTML += "<div>👔 [Supervisor] 分析需求，拆解出 3 項子工單：1. 聯網蒐集數據 2. 撰寫報告架構 3. 嚴格品質檢核。</div>";
+      }, 600);
+
+      // 步驟 2: Researcher 搜集資料
+      setTimeout(() => {
+        nodes.sup.className = "agent-node done";
+        statuses.sup.innerText = "已分派工單";
+        nodes.sea.className = "agent-node active";
+        statuses.sea.innerText = "聯網檢索中...";
+        log.innerHTML += "<div>🔍 [Researcher] 接收工單！調用 web_search 檢索 2026 年最新企業級 Agent 數據與實際落地案... 找到 12 篇權威文獻。</div>";
+      }, 1800);
+
+      // 步驟 3: Writer 起草報告
+      setTimeout(() => {
+        nodes.sea.className = "agent-node done";
+        statuses.sea.innerText = "資料已傳遞 (JSON)";
+        nodes.wri.className = "agent-node active";
+        statuses.wri.innerText = "結構化起草中...";
+        log.innerHTML += "<div>✍️ [Writer] 接收檢索數據 JSON，正在依據三幕劇結構編寫研報初稿與生活案例對照... 完成初稿。</div>";
+      }, 3000);
+
+      // 步驟 4: Reviewer 嚴格反思驗收 (Critic Loop)
+      setTimeout(() => {
+        nodes.wri.className = "agent-node done";
+        statuses.wri.innerText = "初稿已提交";
+        nodes.rev.className = "agent-node active";
+        statuses.rev.innerText = "驗證與反思校驗...";
+        log.innerHTML += "<div>🛡️ [Reviewer] 啟動反思機制 (Reflection)：檢查初稿數據來源是否真實？邏輯是否連貫？格式是否符合繁體中文規範？... 發現 1 處名詞定義需補充，自動通知修正！</div>";
+      }, 4200);
+
+      // 步驟 5: 驗收回報
+      setTimeout(() => {
+        nodes.rev.className = "agent-node done";
+        statuses.rev.innerText = "驗收通過 (Approved)";
+        log.innerHTML += "<div>🎉 [Supervisor] 全體工單皆已無誤驗收！研報已成功封裝交付。整個流水線零人工介入、零幻覺干擾！</div>";
+        btn.disabled = false;
+        btn.innerText = "▶ 再次啟動多 Agent 研發特遣隊！";
+        pipelineRunning = false;
+      }, 5500);
+    }
+
+
+    /* ==========================================================
+       互動 4：隨堂測驗評分機制
+       ========================================================== */
+    function checkQuiz(btn, isCorrect, feedbackId, explanation) {
+      const parent = btn.parentElement;
+      const allBtns = parent.querySelectorAll(".quiz-btn");
+      allBtns.forEach(b => {
+        b.disabled = true;
+        b.style.cursor = "default";
+      });
+
+      const feedback = document.getElementById(feedbackId);
+      feedback.style.display = "block";
+
+      if (isCorrect) {
+        btn.classList.add("correct");
+        feedback.style.background = "#dcfce7";
+        feedback.style.color = "#166534";
+        feedback.innerHTML = `<strong>🎉 正確！</strong> ${explanation}`;
+      } else {
+        btn.classList.add("wrong");
+        feedback.style.background = "#fee2e2";
+        feedback.style.color = "#991b1b";
+        feedback.innerHTML = `<strong>❌ 不太正確喔！</strong> ${explanation}`;
+      }
+    }
+  </script>
+</body>
+</html>

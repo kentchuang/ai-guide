@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 知識全景與實戰指南：從文字接龍到多 Agent 協作</title>
+  <title>AI 基礎觀念與實戰指南：從文字接龍到多 Agent 協作 (PPT 主題式簡報版)</title>
   <style>
+
     :root {
       --primary: #4f46e5;
       --primary-hover: #4338ca;
@@ -958,46 +959,1388 @@
     @media (max-width: 640px) {
       .comic-grid { grid-template-columns: 1fr; }
     }
+  
+    /* ==========================================================
+       🎯 閱讀前能力診斷測驗專用樣式 (Pre-Reading Quiz)
+       ========================================================== */
+    .pre-quiz-card {
+      background: #ffffff;
+      border: 3px solid #1e293b;
+      border-radius: 20px;
+      box-shadow: 6px 8px 0px #1e293b;
+      padding: 2.25rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+    .pre-quiz-header {
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0e7ff 100%);
+      border: 2px solid #334155;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .pre-quiz-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+    .pre-quiz-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pre-quiz-badge {
+      background: #f59e0b;
+      color: #1e293b;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      border: 1.5px solid #1e293b;
+      box-shadow: 2px 2px 0px #1e293b;
+    }
+    .pre-quiz-desc {
+      color: #334155;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .pre-quiz-levels-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .level-pill {
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #475569;
+      transition: all 0.2s;
+    }
+    .level-pill.active {
+      border-color: #1e293b;
+      color: #0f172a;
+      box-shadow: 2px 2px 0px #1e293b;
+      transform: translateY(-1px);
+    }
+
+    /* 進度條與題號跳轉矩陣 */
+    .quiz-progress-wrap {
+      margin-bottom: 1.25rem;
+    }
+    .quiz-progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 0.5rem;
+    }
+    .quiz-progress-bar-bg {
+      width: 100%;
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 2px solid #334155;
+    }
+    .quiz-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981 0%, #3b82f6 35%, #f59e0b 70%, #8b5cf6 100%);
+      width: 5%;
+      transition: width 0.35s ease;
+    }
+    .quiz-nav-dots {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 1rem 0 1.5rem;
+      justify-content: center;
+    }
+    .quiz-dot-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1.5px solid #334155;
+      background: #ffffff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .quiz-dot-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 2px 2px 0px #1e293b;
+    }
+    .quiz-dot-btn.current {
+      background: #4f46e5 !important;
+      color: white !important;
+      border-color: #1e293b;
+      box-shadow: 2px 3px 0px #1e293b;
+      transform: scale(1.08);
+    }
+    .quiz-dot-btn.answered-correct {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #16a34a;
+    }
+    .quiz-dot-btn.answered-wrong {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #dc2626;
+    }
+
+    /* 題目卡片本體 */
+    .quiz-question-box {
+      background: #f8fafc;
+      border: 2px solid #334155;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 3px 4px 0px #1e293b;
+    }
+    .quiz-q-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .quiz-q-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      color: white;
+      border: 1px solid #1e293b;
+    }
+    .quiz-q-unit-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .quiz-q-text {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.55;
+    }
+
+    /* 選項列表 */
+    .quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-option-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #1e293b;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+      box-shadow: 1px 2px 0px #e2e8f0;
+    }
+    .quiz-option-item:hover:not(:disabled) {
+      border-color: #4f46e5;
+      background: #f5f3ff;
+      transform: translateX(4px);
+      box-shadow: 2px 4px 0px #c7d2fe;
+    }
+    .quiz-opt-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      border: 1.5px solid #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .quiz-option-item.selected-correct {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #14532d !important;
+    }
+    .quiz-option-item.selected-correct .quiz-opt-letter {
+      background: #16a34a;
+      color: white;
+      border-color: #15803d;
+    }
+    .quiz-option-item.selected-wrong {
+      background: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #7f1d1d !important;
+    }
+    .quiz-option-item.selected-wrong .quiz-opt-letter {
+      background: #dc2626;
+      color: white;
+      border-color: #b91c1c;
+    }
+
+    /* 詳解回饋框 */
+    .quiz-explanation-box {
+      display: none;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid #334155;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      box-shadow: 3px 3px 0px #1e293b;
+    }
+    .quiz-explanation-box.correct {
+      display: block;
+      background: #f0fdf4;
+      border-color: #16a34a;
+      color: #14532d;
+    }
+    .quiz-explanation-box.wrong {
+      display: block;
+      background: #fff1f2;
+      border-color: #e11d48;
+      color: #881337;
+    }
+    .quiz-goto-unit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.85rem;
+      background: #3b82f6;
+      color: white;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #1e293b;
+      box-shadow: 2px 2px 0px #1e293b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-goto-unit-btn:hover {
+      background: #1d4ed8;
+      transform: translate(-1px, -1px);
+    }
+
+    /* 導航按鈕列 */
+    .quiz-controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 0.5rem;
+    }
+    .quiz-btn-action {
+      background: white;
+      border: 2px solid #1e293b;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px #1e293b;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quiz-btn-action:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #1e293b;
+    }
+    .quiz-btn-action:active:not(:disabled) {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px #1e293b;
+    }
+    .quiz-btn-action:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .quiz-btn-primary {
+      background: #4f46e5;
+      color: white;
+      border-color: #1e293b;
+    }
+    .quiz-btn-primary:hover:not(:disabled) {
+      background: #4338ca;
+    }
+    .quiz-btn-finish {
+      background: #10b981;
+      color: white;
+      border-color: #1e293b;
+    }
+    .quiz-btn-finish:hover:not(:disabled) {
+      background: #059669;
+    }
+
+    /* 成果報告專區 */
+    .quiz-report-modal {
+      display: none;
+      background: #ffffff;
+      border: 3px solid #1e293b;
+      border-radius: 18px;
+      box-shadow: 6px 8px 0px #1e293b;
+      padding: 2.25rem;
+      margin-top: 2rem;
+      animation: fadeInReport 0.4s ease;
+    }
+    @keyframes fadeInReport {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .report-score-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 1.75rem;
+      background: linear-gradient(135deg, #eef2ff 0%, #fdf4ff 100%);
+      border: 2px solid #334155;
+      border-radius: 14px;
+      margin-bottom: 1.5rem;
+      box-shadow: 3px 3px 0px #1e293b;
+    }
+    .report-score-num {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #4f46e5;
+      line-height: 1;
+    }
+    .report-title-badge {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dimension-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .dim-card {
+      background: #f8fafc;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 1.1rem;
+      box-shadow: 2px 2px 0px #334155;
+    }
+    .dim-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dim-bar-bg {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+      border: 1px solid #cbd5e1;
+    }
+    .dim-bar-fill {
+      height: 100%;
+      background: #3b82f6;
+      border-radius: 999px;
+      transition: width 0.5s ease;
+    }
+    .dim-advice {
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .learning-pathway-box {
+      background: #fefce8;
+      border: 2px dashed #ca8a04;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .pathway-title {
+      font-weight: 900;
+      color: #854d0e;
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pathway-desc {
+      font-size: 0.92rem;
+      color: #713f12;
+      line-height: 1.6;
+    }
+    .pathway-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+    .pathway-btn {
+      background: white;
+      border: 2px solid #854d0e;
+      color: #854d0e;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 3px 0px #854d0e;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pathway-btn:hover {
+      background: #fef08a;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 4px 0px #854d0e;
+    }
+    @keyframes highlightSection {
+      0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+      50% { box-shadow: 0 0 0 16px rgba(79, 70, 229, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
+    .section-highlight {
+      animation: highlightSection 1.4s ease 2;
+    }
+
+  
+
+    /* ====================================================
+       PPT 主題式簡報學習模式增強樣式 (Slide-Deck Mode)
+       ==================================================== */
+    
+    body.ppt-mode {
+      overflow-x: hidden;
+      background: #f1f5f9;
+    }
+
+    /* 學習地圖單一雙軌按鈕樣式 */
+    .map-primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px -4px rgba(79, 70, 229, 0.6) !important;
+      background: linear-gradient(135deg, #4338ca, #3730a3) !important;
+    }
+    .map-primary-btn:active {
+      transform: translateY(1px);
+    }
+    .map-secondary-btn:hover {
+      background: #f0fdf4 !important;
+      border-color: #059669 !important;
+      color: #059669 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.25) !important;
+    }
+    .map-secondary-btn:active {
+      transform: translateY(1px);
+    }
+    
+    .map-nav-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.1);
+      border-color: #cbd5e1 !important;
+    }
+    
+    .ppt-deck-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid #e2e8f0;
+      padding: 0.65rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .ppt-header-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .ppt-brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--primary);
+    }
+    .ppt-current-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .ppt-chapter-badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .ppt-title-display {
+      font-weight: 700;
+      color: #1e293b;
+      max-width: 380px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ppt-page-counter {
+      background: #1e293b;
+      color: white;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+    .ppt-tools-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ppt-btn-tool {
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .ppt-btn-tool:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .ppt-btn-tool.active-mode {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .ppt-progress-track {
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #e2e8f0;
+    }
+    .ppt-progress-bar {
+      height: 100%;
+      width: 6.66%;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .ppt-viewport {
+      max-width: 1200px;
+      margin: 1.5rem auto 5rem;
+      padding: 0 1rem;
+      min-height: calc(100vh - 180px);
+    }
+    
+    body.ppt-mode .ppt-slide {
+      display: none;
+    }
+    body.ppt-mode .ppt-slide.active {
+      display: block;
+      animation: pptSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    body.continuous-mode .ppt-slide {
+      display: block !important;
+      margin-bottom: 3.5rem;
+    }
+    body.continuous-mode .ppt-bottom-bar {
+      display: none !important;
+    }
+    
+    @keyframes pptSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.995);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .ppt-slide-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-bottom: none;
+      border-radius: 16px 16px 0 0;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.88rem;
+    }
+    .ppt-slide-header-bar .tag-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: #334155;
+    }
+    .ppt-slide-header-bar .tag-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .ppt-slide > .section-card,
+    .ppt-slide > header.hero {
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+      margin-top: 0 !important;
+    }
+    
+    .ppt-bottom-bar {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 95;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.6rem 1.4rem;
+      border-radius: 9999px;
+      box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: white;
+    }
+    .ppt-nav-btn {
+      background: white;
+      color: #0f172a;
+      border: none;
+      padding: 0.48rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .ppt-nav-btn:hover:not(:disabled) {
+      background: #6366f1;
+      color: white;
+      transform: translateY(-1px);
+    }
+    .ppt-nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .ppt-nav-meta {
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      min-width: 75px;
+      text-align: center;
+    }
+    .ppt-keyboard-hints {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-left: 1px solid #334155;
+      padding-left: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .ppt-keyboard-hints kbd {
+      background: rgba(255,255,255,0.15);
+      color: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+    
+    .ppt-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .ppt-drawer-overlay.open {
+      display: block;
+      opacity: 1;
+    }
+    .ppt-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 380px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #ffffff;
+      z-index: 201;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .ppt-drawer-overlay.open .ppt-drawer {
+      transform: translateX(0);
+    }
+    .ppt-drawer-header {
+      padding: 1.25rem;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ppt-drawer-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ppt-drawer-close {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ppt-drawer-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      list-style: none;
+    }
+    .ppt-drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s;
+    }
+    .ppt-drawer-item:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .ppt-drawer-item.active {
+      background: #e0e7ff;
+      border-color: #6366f1;
+      color: #3730a3;
+      font-weight: 800;
+    }
+    .ppt-drawer-item-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ppt-drawer-item.active .ppt-drawer-item-num {
+      background: #4f46e5;
+      color: white;
+    }
+    .ppt-drawer-item-text {
+      flex: 1;
+      font-size: 0.88rem;
+    }
+    .ppt-drawer-item-chap {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
   </style>
 </head>
-<body>
+<body class="ppt-mode">
 
-  <!-- 頂部導航 -->
-  <nav class="navbar">
-    <div class="logo">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/>
-        <path d="M9 21h6"/>
-      </svg>
-      <span>AI 知識全景與實戰指南</span>
+  <!-- PPT 簡報頂部導航條 -->
+  <header class="ppt-deck-header">
+    <div class="ppt-header-inner">
+      <div class="ppt-brand-area">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/>
+          <path d="M9 21h6"/>
+        </svg>
+        <span>AI 基礎觀念指南</span>
+      </div>
+      
+      <div class="ppt-current-info">
+        <span class="ppt-chapter-badge" id="pptCurrentChapter">導航總覽</span>
+        <span class="ppt-title-display" id="pptCurrentTitle">封面與學習地圖</span>
+        <span class="ppt-page-counter" id="pptCurrentCounter">1 / 15</span>
+      </div>
+      
+      <div class="ppt-tools-area">
+        <button class="ppt-btn-tool" id="pptBtnToggleDrawer" onclick="toggleDrawer()" title="開啟投影片大綱">
+          ☰ 目錄
+        </button>
+        <button class="ppt-btn-tool" id="pptBtnToggleMode" onclick="togglePresentationMode()" title="切換簡報/連續長圖">
+          🖥️ 簡報模式 (已開啟)
+        </button>
+        <button class="ppt-btn-tool" onclick="toggleFullscreen()" title="全螢幕展示 (F)">
+          ⛶ 全螢幕
+        </button>
+      </div>
     </div>
-    <ul class="nav-links">
-      <li><a href="#ch1">1. 文字接龍原理</a></li>
-      <li><a href="#ch2">2. 一問一答應用</a></li>
-      <li><a href="#ch3">3. 電腦工作施工隊</a></li>
-      <li><a href="#ch4">4. 多 Agent 協作規劃</a></li>
-      <li><a href="#quiz">5. 實戰隨堂測驗</a></li>
-    </ul>
-  </nav>
-
-  <!-- Hero 看板 -->
-  <header class="hero">
-    <div class="hero-badge">💡 初學者零門檻躍遷寶典 · ⚡ 重點速讀友善設計</div>
-    <h1>從「聊天打字」到「多 Agent 自動化施工隊」</h1>
-    <p>告別無聊又分散注意力的冗長文字！全單元穿插<strong>情境四格漫畫</strong>、<strong>30 秒專注速讀卡 (TL;DR)</strong> 與<strong>即時可點擊互動沙盒</strong>，用最生動有趣的方式帶你輕鬆看懂從文字接龍到多 Agent 施工隊的完整全貌！</p>
-    <div class="hero-tags">
-      <span class="hero-tag">🎨 4 組完整情境四格漫畫</span>
-      <span class="hero-tag">⚡ 重點速讀模式</span>
-      <span class="hero-tag">📁 核心名詞抽屜收合</span>
-      <span class="hero-tag">🛠️ 本機 Antigravity 施工隊</span>
-      <span class="hero-tag">🤝 多 Agent 組織分工</span>
+    <div class="ppt-progress-track">
+      <div class="ppt-progress-bar" id="pptProgressBar"></div>
     </div>
   </header>
 
-  <main class="container">
+  <!-- 側邊目錄抽屜 (Slide Drawer) -->
+  <div class="ppt-drawer-overlay" id="pptDrawerOverlay" onclick="closeDrawer()">
+    <div class="ppt-drawer" onclick="event.stopPropagation()">
+      <div class="ppt-drawer-header">
+        <div class="ppt-drawer-title">
+          <span>📚 15 張主題投影片目錄</span>
+        </div>
+        <button class="ppt-drawer-close" onclick="closeDrawer()">✕</button>
+      </div>
+      <ul class="ppt-drawer-list">
 
-    <!-- 第一單元：機器學習與文字接龍原理 -->
-    <section id="ch1" class="section-card">
+      <li class="ppt-drawer-item active" onclick="goToSlide(0); closeDrawer();">
+        <span class="ppt-drawer-item-num">1</span>
+        <div class="ppt-drawer-item-text">
+          <div>🌟 封面與學習地圖</div>
+          <div class="ppt-drawer-item-chap">導航總覽 · ⏱️ 1 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(1); closeDrawer();">
+        <span class="ppt-drawer-item-num">2</span>
+        <div class="ppt-drawer-item-text">
+          <div>🎯 🎯 閱讀前能力診斷測驗 (20題)</div>
+          <div class="ppt-drawer-item-chap">課前自我診斷 · ⏱️ 5 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(2); closeDrawer();">
+        <span class="ppt-drawer-item-num">3</span>
+        <div class="ppt-drawer-item-text">
+          <div>🧠 🧠 文字接龍大腦原理與四格漫畫</div>
+          <div class="ppt-drawer-item-chap">單元 01 · 核心觀念 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(3); closeDrawer();">
+        <span class="ppt-drawer-item-num">4</span>
+        <div class="ppt-drawer-item-text">
+          <div>🎮 🎮 機率沙盒與完整智能演進 6 大階梯</div>
+          <div class="ppt-drawer-item-chap">單元 01 · 實戰實驗 · ⏱️ 4 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(4); closeDrawer();">
+        <span class="ppt-drawer-item-num">5</span>
+        <div class="ppt-drawer-item-text">
+          <div>📚 📚 單元 01 核心名詞生活百科辭典</div>
+          <div class="ppt-drawer-item-chap">單元 01 · 知識辭海 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(5); closeDrawer();">
+        <span class="ppt-drawer-item-num">6</span>
+        <div class="ppt-drawer-item-text">
+          <div>💬 💬 對話式 AI 甜蜜點與提示詞 4 支柱</div>
+          <div class="ppt-drawer-item-chap">單元 02 · 核心觀念 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(6); closeDrawer();">
+        <span class="ppt-drawer-item-num">7</span>
+        <div class="ppt-drawer-item-text">
+          <div>🎯 🎯 提示詞三階演進與天花板突破</div>
+          <div class="ppt-drawer-item-chap">單元 02 · 實戰技巧 · ⏱️ 4 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(7); closeDrawer();">
+        <span class="ppt-drawer-item-num">8</span>
+        <div class="ppt-drawer-item-text">
+          <div>📚 📚 單元 02 核心名詞生活百科辭典</div>
+          <div class="ppt-drawer-item-chap">單元 02 · 知識辭海 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(8); closeDrawer();">
+        <span class="ppt-drawer-item-num">9</span>
+        <div class="ppt-drawer-item-text">
+          <div>🛠️ 🛠️ 程式碼施工隊概念與自動化大躍進</div>
+          <div class="ppt-drawer-item-chap">單元 03 · 核心觀念 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(9); closeDrawer();">
+        <span class="ppt-drawer-item-num">10</span>
+        <div class="ppt-drawer-item-text">
+          <div>⚡ ⚡ 代理人雙手雙腳進化史與本機工作流</div>
+          <div class="ppt-drawer-item-chap">單元 03 · 實戰應用 · ⏱️ 4 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(10); closeDrawer();">
+        <span class="ppt-drawer-item-num">11</span>
+        <div class="ppt-drawer-item-text">
+          <div>📚 📚 單元 03 核心名詞生活百科辭典</div>
+          <div class="ppt-drawer-item-chap">單元 03 · 知識辭海 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(11); closeDrawer();">
+        <span class="ppt-drawer-item-num">12</span>
+        <div class="ppt-drawer-item-text">
+          <div>🤝 🤝 多 Agent 協作架構與四大主流拓撲</div>
+          <div class="ppt-drawer-item-chap">單元 04 · 核心架構 · ⏱️ 4 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(12); closeDrawer();">
+        <span class="ppt-drawer-item-num">13</span>
+        <div class="ppt-drawer-item-text">
+          <div>📐 📐 全功能落地黃金六步法與管線模擬</div>
+          <div class="ppt-drawer-item-chap">單元 04 · 實戰落地 · ⏱️ 4 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(13); closeDrawer();">
+        <span class="ppt-drawer-item-num">14</span>
+        <div class="ppt-drawer-item-text">
+          <div>📚 📚 單元 04 核心名詞生活百科辭典</div>
+          <div class="ppt-drawer-item-chap">單元 04 · 知識辭海 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+
+      <li class="ppt-drawer-item " onclick="goToSlide(14); closeDrawer();">
+        <span class="ppt-drawer-item-num">15</span>
+        <div class="ppt-drawer-item-text">
+          <div>🎓 🎓 恭喜通關！結業總結與實戰指南</div>
+          <div class="ppt-drawer-item-chap">總結檢定 · ⏱️ 3 分鐘</div>
+        </div>
+      </li>
+    
+      </ul>
+    </div>
+  </div>
+
+  <!-- 主內容視圖 (Slide Viewport) -->
+  <main class="ppt-viewport">
+
+    <!-- PPT SLIDE 1 / 15: 封面與學習地圖 -->
+    <div class="ppt-slide active" id="slide-0" data-slide-index="0" data-title="封面與學習地圖" data-chapter="導航總覽">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🌟</span>
+          <span style="color: #4f46e5;">導航總覽</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>封面與學習地圖</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 1 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 1 / 15</span>
+        </div>
+      </div>
+      
+
+  <!-- 頂級純陳述式 Hero 看板 -->
+  <header class="hero" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #0e7490 100%); color: white; padding: 4.5rem 1.5rem 3.5rem; text-align: center; position: relative; border-radius: 20px; box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.35);">
+    <div style="max-width: 920px; margin: 0 auto;">
+      <!-- 頂部微光徽章 -->
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 0.4rem 1.25rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 0.04em; backdrop-filter: blur(8px); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+        <span>💡 初學者零門檻躍遷寶典</span>
+        <span style="opacity: 0.5;">·</span>
+        <span>⚡ 重點速讀友善設計</span>
+      </div>
+
+      <!-- 主標題 -->
+      <h1 style="font-size: 2.85rem; font-weight: 900; margin-bottom: 1.25rem; line-height: 1.25; letter-spacing: -0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.25);">
+        從「聊天打字」到「多 Agent 自動化施工隊」
+      </h1>
+
+      <!-- 副標題陳述 -->
+      <p style="font-size: 1.15rem; max-width: 780px; margin: 0 auto 2.5rem; opacity: 0.92; line-height: 1.75; font-weight: 400;">
+        告別無聊又分散注意力的冗長文字！全單元穿插<strong>情境四格漫畫</strong>、<strong>30 秒專注速讀卡 (TL;DR)</strong> 與<strong>即時可點擊互動沙盒</strong>，用最生動有趣的方式帶你輕鬆看懂從文字接龍到多 Agent 施工隊的完整全貌！
+      </p>
+
+      <!-- 特色亮點標籤列（純陳述亮點，整齊一行橫排，不再被按鈕擠壓換行） -->
+      <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.16);">
+        <span style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; display: inline-flex; align-items: center; gap: 6px;">
+          🎨 4 組完整情境四格漫畫
+        </span>
+        <span style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; display: inline-flex; align-items: center; gap: 6px;">
+          ⚡ 重點速讀模式
+        </span>
+        <span style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; display: inline-flex; align-items: center; gap: 6px;">
+          📁 核心名詞抽屜收合
+        </span>
+        <span style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; display: inline-flex; align-items: center; gap: 6px;">
+          🛠️ 本機 Antigravity 施工隊
+        </span>
+        <span style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; display: inline-flex; align-items: center; gap: 6px;">
+          🤝 多 Agent 組織分工
+        </span>
+      </div>
+    </div>
+  </header>
+
+<section class="section-card" style="margin-top: 2rem; text-align: center; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 2.75rem 2rem;">
+  <div style="margin-bottom: 2rem;">
+    <span style="background: #e0e7ff; color: #3730a3; padding: 4px 14px; border-radius: 999px; font-size: 0.88rem; font-weight: 800; display: inline-block; margin-bottom: 0.75rem;">🗺️ 基礎學習地圖</span>
+    <h2 style="font-size: 1.85rem; color: #1e293b; margin-bottom: 0.5rem; font-weight: 900;">主題式簡報路徑選擇</h2>
+    <p style="color: #64748b; max-width: 680px; margin: 0 auto; font-size: 1rem; line-height: 1.6;">
+      您可以選擇直接展開閱讀單元，或先花 3 分鐘進行 20 題能力位階自我診斷：
+    </p>
+  </div>
+
+  <!-- 全頁唯一的主操作按鈕組 (Single Dedicated CTA Group) -->
+  <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 18px; margin-bottom: 2.5rem;">
+    <button onclick="goToSlide(2)" class="map-primary-btn" style="background: linear-gradient(135deg, #4f46e5, #4338ca); color: #ffffff; border: none; padding: 0.95rem 2.2rem; border-radius: 14px; font-weight: 900; font-size: 1.08rem; cursor: pointer; box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.45); display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s ease;">
+      <span>📖 直接展開簡報學習（從單元 01 開始）</span>
+      <span style="font-size: 1.2rem;">➔</span>
+    </button>
+    <button onclick="goToSlide(1)" class="map-secondary-btn" style="background: #ffffff; color: #047857; border: 2px solid #10b981; padding: 0.95rem 2.2rem; border-radius: 14px; font-weight: 900; font-size: 1.08rem; cursor: pointer; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15); display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s ease;">
+      <span>🎯 先做課前診斷（20 題能力位階檢測）</span>
+      <span style="font-size: 1.2rem;">➔</span>
+    </button>
+  </div>
+
+  <!-- 6 個單元快速跳轉卡片網格 -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; text-align: left;">
+    <div onclick="goToSlide(1)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #10b981; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #047857; font-size: 1.05rem;">🎯 課前能力診斷</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 02</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">20 題能力階梯評定，即時診斷你的 AI 理解位階與雷達圖。</div>
+      <div style="color: #10b981; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">前往診斷 ➔</div>
+    </div>
+
+    <div onclick="goToSlide(2)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #4f46e5; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #3730a3; font-size: 1.05rem;">🧠 單元 01：文字接龍</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 03~05</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">揭開大腦本質，體驗文字機率預測沙盒與智能演進階梯。</div>
+      <div style="color: #4f46e5; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">進入單元 ➔</div>
+    </div>
+
+    <div onclick="goToSlide(5)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #06b6d4; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #0e7490; font-size: 1.05rem;">💬 單元 02：日常對話</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 06~08</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">掌握提示詞 4 支柱，解鎖思維鏈 (CoT) 與跨越對話天花板。</div>
+      <div style="color: #06b6d4; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">進入單元 ➔</div>
+    </div>
+
+    <div onclick="goToSlide(8)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #f59e0b; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #b45309; font-size: 1.05rem;">🛠️ 單元 03：終端施工隊</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 09~11</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">AI 長出雙手雙腳走入本地，Antigravity 終端全自動批次實戰。</div>
+      <div style="color: #f59e0b; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">進入單元 ➔</div>
+    </div>
+
+    <div onclick="goToSlide(11)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #8b5cf6; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #6d28d9; font-size: 1.05rem;">🤝 單元 04：多 Agent 協作</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 12~14</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">四大協作拓撲架構、黃金六步落地規劃法與即時模擬管線。</div>
+      <div style="color: #8b5cf6; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">進入單元 ➔</div>
+    </div>
+
+    <div onclick="goToSlide(14)" class="map-nav-card" style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 1.4rem; cursor: pointer; border-left: 5px solid #ec4899; transition: all 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-weight: 800; color: #be185d; font-size: 1.05rem;">🎓 結業總結清單</span>
+        <span style="font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 6px;">Slide 15</span>
+      </div>
+      <div style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 12px;">四階思維躍遷精華、實戰落地行動檢核清單與下一步指南。</div>
+      <div style="color: #ec4899; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">查看總結 ➔</div>
+    </div>
+  </div>
+</section>
+
+    </div>
+    
+
+    <!-- PPT SLIDE 2 / 15: 🎯 閱讀前能力診斷測驗 (20題) -->
+    <div class="ppt-slide " id="slide-1" data-slide-index="1" data-title="🎯 閱讀前能力診斷測驗 (20題)" data-chapter="課前自我診斷">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🎯</span>
+          <span style="color: #4f46e5;">課前自我診斷</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🎯 閱讀前能力診斷測驗 (20題)</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 5 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 2 / 15</span>
+        </div>
+      </div>
+      <section id="pre-quiz" class="section-card pre-quiz-card">
+      
+<div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 14px; padding: 0.85rem 1.4rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);">
+  <div style="color: #92400e; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 1.2rem;">💡</span>
+    <span>想要直接閱讀教學內容？您可以隨時跳過測驗直達單元一！</span>
+  </div>
+  <button onclick="goToSlide(2)" style="background: #4f46e5; color: white; border: none; padding: 0.55rem 1.2rem; border-radius: 10px; font-weight: 800; font-size: 0.9rem; cursor: pointer; box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3); display: inline-flex; align-items: center; gap: 5px; transition: transform 0.15s;">
+    👉 立即進入單元 01 學習 ➔
+  </button>
+</div>
+
+<div class="pre-quiz-header">
+        <div class="pre-quiz-header-top">
+          <div class="pre-quiz-title">
+            <span>🎯 閱讀前能力診斷測驗：測測你的 AI 理解位階！</span>
+          </div>
+          <span class="pre-quiz-badge">20 題由淺入深 · 即時診斷報告</span>
+        </div>
+        <p class="pre-quiz-desc">
+          在閱讀本書前，先花 3~5 分鐘進行自我檢測！本測驗涵蓋從<strong>「底層文字接龍」、「日常提示對話」、「終端本機施工隊」</strong>到<strong>「多 Agent 企業架構」</strong>四個維度。測驗完畢後將獲得個人化段位評定與精準章節閱讀導流！
+        </p>
+        <div class="pre-quiz-levels-bar">
+          <span class="level-pill" id="pill-lvl-1">🟢 Level 1: 基礎認知 (Q1~Q5)</span>
+          <span class="level-pill" id="pill-lvl-2">🟡 Level 2: 對話應用 (Q6~Q10)</span>
+          <span class="level-pill" id="pill-lvl-3">🟠 Level 3: 終端施工 (Q11~Q15)</span>
+          <span class="level-pill" id="pill-lvl-4">🔴 Level 4: 架構協作 (Q16~Q20)</span>
+        </div>
+      </div>
+
+      <!-- 進度條 -->
+      <div class="quiz-progress-wrap">
+        <div class="quiz-progress-meta">
+          <span id="quiz-progress-label">題目 1 / 20</span>
+          <span id="quiz-score-live">目前已答：0 題</span>
+        </div>
+        <div class="quiz-progress-bar-bg">
+          <div id="quiz-progress-fill" class="quiz-progress-bar-fill" style="width: 5%;"></div>
+        </div>
+      </div>
+
+      <!-- 題號快捷跳轉矩陣 -->
+      <div class="quiz-nav-dots" id="quiz-nav-dots">
+        <!-- 由 JS 動態生成 20 個按鈕 -->
+      </div>
+
+      <!-- 當前題目展示卡片 -->
+      <div class="quiz-question-box">
+        <div class="quiz-q-meta">
+          <span class="quiz-q-tag" id="q-level-tag" style="background:#10b981;">Level 1 · 基礎認知</span>
+          <span class="quiz-q-unit-tag" id="q-unit-tag">單元 01 · 核心大腦解密</span>
+        </div>
+        <div class="quiz-q-text" id="q-text">載入題目中...</div>
+      </div>
+
+      <!-- 選項列表 -->
+      <div class="quiz-options-list" id="quiz-options-container">
+        <!-- 由 JS 動態生成 -->
+      </div>
+
+      <!-- 答案詳解回饋盒 -->
+      <div class="quiz-explanation-box" id="quiz-explanation-box">
+        <div id="quiz-explanation-text"></div>
+        <div id="quiz-explanation-link-wrap"></div>
+      </div>
+
+      <!-- 控制列 -->
+      <div class="quiz-controls-row">
+        <button class="quiz-btn-action" id="btn-prev-q" onclick="navigateQuiz(-1)" disabled>
+          ⬅️ 上一題
+        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="quiz-btn-action" onclick="resetPreQuiz()" title="重新測驗">
+            🔄 重置作答
+          </button>
+          <button class="quiz-btn-action quiz-btn-finish" id="btn-show-report" onclick="generateReport()">
+            📊 產生成績與學習診斷
+          </button>
+        </div>
+        <button class="quiz-btn-action quiz-btn-primary" id="btn-next-q" onclick="navigateQuiz(1)">
+          下一題 ➡️
+        </button>
+      </div>
+
+      <!-- 測驗結果與診斷報告 (預設隱藏) -->
+      <div class="quiz-report-modal" id="quiz-report-modal">
+        <div class="report-score-banner">
+          <div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #475569; margin-bottom: 4px;">🎯 綜合評測總得分</div>
+            <div class="report-score-num"><span id="report-score-val">0</span> <span style="font-size: 1.4rem; color: #64748b;">/ 100</span></div>
+          </div>
+          <div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #475569; margin-bottom: 4px;">🏆 授予 AI 能力位階</div>
+            <div class="report-title-badge" id="report-rank-title">🌱 AI 探索新星</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 900; margin-bottom: 0.75rem; color: #0f172a;">📊 4 大維度能力分析雷達</h3>
+        <div class="dimension-grid">
+          <div class="dim-card">
+            <div class="dim-title">
+              <span>🧠 核心原理 (Q1~Q5)</span>
+              <span id="dim-score-1" style="color:#10b981;">0/25</span>
+            </div>
+            <div class="dim-bar-bg"><div class="dim-bar-fill" id="dim-bar-1" style="width:0%; background:#10b981;"></div></div>
+            <div class="dim-advice" id="dim-advice-1">對接龍本質與幻覺成因的認知深度。</div>
+          </div>
+          <div class="dim-card">
+            <div class="dim-title">
+              <span>💬 對話技巧 (Q6~Q10)</span>
+              <span id="dim-score-2" style="color:#3b82f6;">0/25</span>
+            </div>
+            <div class="dim-bar-bg"><div class="dim-bar-fill" id="dim-bar-2" style="width:0%; background:#3b82f6;"></div></div>
+            <div class="dim-advice" id="dim-advice-2">Prompt 結構、Few-Shot 與思維鏈掌握度。</div>
+          </div>
+          <div class="dim-card">
+            <div class="dim-title">
+              <span>🛠️ 終端自動化 (Q11~Q15)</span>
+              <span id="dim-score-3" style="color:#f59e0b;">0/25</span>
+            </div>
+            <div class="dim-bar-bg"><div class="dim-bar-fill" id="dim-bar-3" style="width:0%; background:#f59e0b;"></div></div>
+            <div class="dim-advice" id="dim-advice-3">施工隊 Agent、工具調用與 MCP 運作機制。</div>
+          </div>
+          <div class="dim-card">
+            <div class="dim-title">
+              <span>🤝 多代理架構 (Q16~Q20)</span>
+              <span id="dim-score-4" style="color:#8b5cf6;">0/25</span>
+            </div>
+            <div class="dim-bar-bg"><div class="dim-bar-fill" id="dim-bar-4" style="width:0%; background:#8b5cf6;"></div></div>
+            <div class="dim-advice" id="dim-advice-4">角色分工、記憶管理與死循環防護。</div>
+          </div>
+        </div>
+
+        <!-- 個性化學習路徑推薦 -->
+        <div class="learning-pathway-box">
+          <div class="pathway-title">💡 專屬智慧學習路線推薦</div>
+          <div class="pathway-desc" id="pathway-summary-text">
+            根據您的測驗結果，我們已為您梳理出最適合的深度研讀指南章節！
+          </div>
+          <div class="pathway-links" id="pathway-links-container">
+            <!-- 由 JS 動態生成前往各章節按鈕 -->
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <button class="quiz-btn-action quiz-btn-primary" onclick="scrollToTopQuiz()">
+            ⬆️ 回到頂部覆盤題目
+          </button>
+        </div>
+      </div>
+    </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 3 / 15: 🧠 文字接龍大腦原理與四格漫畫 -->
+    <div class="ppt-slide " id="slide-2" data-slide-index="2" data-title="🧠 文字接龍大腦原理與四格漫畫" data-chapter="單元 01 · 核心觀念">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🧠</span>
+          <span style="color: #4f46e5;">單元 01 · 核心觀念</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🧠 文字接龍大腦原理與四格漫畫</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 3 / 15</span>
+        </div>
+      </div>
+      <section id="ch1" class="section-card">
       <div class="section-header">
         <span class="section-tag">單元 01 · 核心大腦解密</span>
         <h2>
@@ -1202,7 +2545,25 @@
       </div>
 
       <!-- 核心概念演進時間軸 (完整 6 大階梯) -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 4 / 15: 🎮 機率沙盒與完整智能演進 6 大階梯 -->
+    <div class="ppt-slide " id="slide-3" data-slide-index="3" data-title="🎮 機率沙盒與完整智能演進 6 大階梯" data-chapter="單元 01 · 實戰實驗">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🎮</span>
+          <span style="color: #4f46e5;">單元 01 · 實戰實驗</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🎮 機率沙盒與完整智能演進 6 大階梯</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 4 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 4 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch1-sandbox"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📈 完整智能演進歷程：從 1950 算盤到 2026 文字接龍大師的 6 大階梯</span>
         </h3>
@@ -1308,7 +2669,25 @@
       </div>
 
       <!-- 核心名詞生活百科專欄 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 5 / 15: 📚 單元 01 核心名詞生活百科辭典 -->
+    <div class="ppt-slide " id="slide-4" data-slide-index="4" data-title="📚 單元 01 核心名詞生活百科辭典" data-chapter="單元 01 · 知識辭海">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>📚</span>
+          <span style="color: #4f46e5;">單元 01 · 知識辭海</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>📚 單元 01 核心名詞生活百科辭典</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 5 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch1-terms"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📚 單元 01 專屬核心名詞生活百科（初學者必備辭海）</span>
         </h3>
@@ -1342,11 +2721,11 @@
             所有數據處理、排序、模型運算背後的底層指揮指揮棒。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             煮滷肉：焯水去血 ➔ 炒糖色爆香 ➔ 倒醬油滷包 ➔ 小火燉煮。順序亂了全走味！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             誤以為演算法等於高深莫測的魔法，其實就是電腦遵循的標準工作流程。
           </div>
         </div>
@@ -1372,11 +2751,11 @@
             從經驗中不斷演化改善預測準確率的核心學習引擎。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             吃瓜大師不用量角器，看過吃過 10 萬顆瓜，一眼敲一下就知道甜不甜！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為電腦有人的理解力，其實電腦找到的是數字特徵相關性而非真正的哲學因果。
           </div>
         </div>
@@ -1402,11 +2781,11 @@
             看懂圖片、聽懂語音、理解語言的現代人工智慧底層主力骨架。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             工廠組裝流水線：第 1 站辨識螺絲釘，第 2 站組裝輪胎，最後一站驗收整部跑車！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為裡面真的有像人體細胞一樣的生物腦；其實全部是浮點數矩陣加權乘加。
           </div>
         </div>
@@ -1432,11 +2811,11 @@
             現代所有大語言模型（GPT、Gemini、Claude）共同的底層靈魂。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             讀懸疑小說時，看到第 300 頁凶器是一把雨傘，螢光筆立刻在第 5 頁出現的雨傘畫上紅線！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為它是一臺像變形金剛一樣的硬體機器；它是一種純軟體的演算法模型結構。
           </div>
         </div>
@@ -1462,11 +2841,11 @@
             把只會文字接龍的「野生狂暴模型」，調教成符合人類倫理道德的「貼心好秘書」。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             幼兒園老師發小紅花：小朋友答得有禮貌給貼紙獎勵，講粗話就扣分，逐漸學會懂事！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為模型天生就懂道德；若沒有 RLHF，原生模型接龍時會隨意噴出髒話或危險化學配方。
           </div>
         </div>
@@ -1492,11 +2871,11 @@
             所有計費（API 費用）、記憶長度限制（Context Window）的計量基準單位。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             像把一句話拆成一塊塊樂高積木塊，AI 是一塊一塊積木拼接接龍，不是整個句子瞬間噴出。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為「1 個 Token = 1 個字」，其實英文單詞常切成字根，中文通常一個字占 1~2 個 Token。
           </div>
         </div>
@@ -1522,11 +2901,11 @@
             讓電腦能做「語意搜尋」的靈魂！搜「感冒發燒」能自動找到「頭痛流鼻水」的段落。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             像美食地圖的經緯度：「牛肉麵」和「排骨飯」在小吃區（距離近），離「跑車」十萬八千里。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為只是按字面關鍵字搜尋，其實它是算數學幾何距離，哪怕沒寫同一個字也能認出意思相同！
           </div>
         </div>
@@ -1552,11 +2931,11 @@
             決定了你能一口氣丟幾萬字論文、或是能跟它聊多久不忘記前文的關鍵容量。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             辦公桌桌面：桌子越大能放越多參考文件；桌面滿了，最舊的文件就會被擠落掉到地上忘掉！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為視窗越大越好無極限，其實桌面上放太多厚重資料時，AI 也會「注意力發散（Needle In A Haystack）」。
           </div>
         </div>
@@ -1582,11 +2961,11 @@
             寫代碼、算帳設 0.0~0.2（保證精確一致）；寫科幻小說、行銷標語設 0.7~1.0（創意爆發）。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             喝咖啡提神程度：0 杯（嚴肅老會計，一板一眼）；3 杯（靈感藝術家，滿嘴奇思妙想）。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為溫度開到 1.5 會變聰明，其實太高會導致機率失控，胡言亂語甚至亂碼。
           </div>
         </div>
@@ -1612,11 +2991,11 @@
             文字接龍機制的先天副作用。必須搭配 RAG 知識庫或 Guardrails 護欄加以約束。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             面試者遇到不會的問題不敢承認「我不知道」，而是憑藉流利口條當場編造一套逼真謊言！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             誤以為是 AI「心存惡意」在騙人；其實它根本不知道自己在講假話，它只是按機率把詞接順。
           </div>
         </div>
@@ -1642,11 +3021,11 @@
             企業克服幻覺、導入內部知識庫的最強武器，讓 AI 回答自帶引文依據（Citation）。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             閉卷考試靠記憶容易記錯法條；開卷考試把最新民法典擺在桌上翻閱比對，100% 準確！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 RAG 是重新訓練模型，其實只是把查到的段落偷偷塞進 Prompt 前面當參考書！
           </div>
         </div>
@@ -1707,9 +3086,24 @@
         </div>
       </div>
     </section>
+    </div>
+    
 
-    <!-- 第二單元：一問一答日常應用 -->
-    <section id="ch2" class="section-card">
+    <!-- PPT SLIDE 6 / 15: 💬 對話式 AI 甜蜜點與提示詞 4 支柱 -->
+    <div class="ppt-slide " id="slide-5" data-slide-index="5" data-title="💬 對話式 AI 甜蜜點與提示詞 4 支柱" data-chapter="單元 02 · 核心觀念">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>💬</span>
+          <span style="color: #4f46e5;">單元 02 · 核心觀念</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>💬 對話式 AI 甜蜜點與提示詞 4 支柱</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 6 / 15</span>
+        </div>
+      </div>
+      <section id="ch2" class="section-card">
       <div class="section-header">
         <span class="section-tag">單元 02 · 動嘴聊天的日常境界</span>
         <h2>
@@ -1973,7 +3367,25 @@
       </div>
 
       <!-- 提示技術演進矩陣 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 7 / 15: 🎯 提示詞三階演進與天花板突破 -->
+    <div class="ppt-slide " id="slide-6" data-slide-index="6" data-title="🎯 提示詞三階演進與天花板突破" data-chapter="單元 02 · 實戰技巧">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🎯</span>
+          <span style="color: #4f46e5;">單元 02 · 實戰技巧</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🎯 提示詞三階演進與天花板突破</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 4 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 7 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch2-steps"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>🎯 從新手到高手的提示詞三階演進階梯</span>
         </h3>
@@ -1999,7 +3411,25 @@
       </div>
 
       <!-- 第二單元核心名詞百科 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 8 / 15: 📚 單元 02 核心名詞生活百科辭典 -->
+    <div class="ppt-slide " id="slide-7" data-slide-index="7" data-title="📚 單元 02 核心名詞生活百科辭典" data-chapter="單元 02 · 知識辭海">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>📚</span>
+          <span style="color: #4f46e5;">單元 02 · 知識辭海</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>📚 單元 02 核心名詞生活百科辭典</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 8 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch2-terms"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📚 單元 02 專屬核心名詞生活百科</span>
         </h3>
@@ -2033,11 +3463,11 @@
             輸入端的品質決定輸出端的上限（Garbage in, Garbage out 的解法）。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             跟裝潢師傅溝通：「幫我弄好看點」會慘不忍睹；「用日式無印風、淺橡木地板、暖白光」才會完美落地。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為提示詞是在「寫死代碼」；其實它是在高維機率空間裡下錨，框定接龍搜尋的範疇。
           </div>
         </div>
@@ -2063,11 +3493,11 @@
             決定 AI 的性格、職責邊界、安全防線以及禁止透露的機密。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             劇團導演在後台交代的演戲守則：「你等一下上台扮演嚴肅的法官，無論被告說什麼都不准笑！」
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為自己在網頁打的話是第一優先，其實 System Prompt 擁有更高權威，能拒絕回答危險問題。
           </div>
         </div>
@@ -2093,11 +3523,11 @@
             極致穩定輸出風格與格式的最簡單有效技巧，無需重新訓練模型。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             教新進員工填報銷單：講半小時規定不如直接拿三張前輩填好的範本給他照著抄！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為必須給幾千個例子；其實大模型理解力極強，給 2~3 個好例子就足夠了！
           </div>
         </div>
@@ -2123,11 +3553,11 @@
             解決多步驟邏輯題、數學應用題與複雜架構設計的必備咒語。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             小學生考數學大題：不能直接心算寫出一個數字（容易算錯），必須在草稿紙列出第 1 步、第 2 步、第 3 步！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 AI 會浪費時間說廢話；事實上正是因為它把中間推導過程接出來，最後的結論才能精準命中！
           </div>
         </div>
@@ -2153,11 +3583,11 @@
             AI 銜接傳統企業系統、資料庫或自動化流程的最關鍵橋樑。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             報稅或填戶籍謄本：規定每個格子填姓名、身分證號、生日，不能在上面寫心情散文！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為給人看的文字才親切；在程式自動化世界裡，標準的 JSON 才能被下游程式自動讀取！
           </div>
         </div>
@@ -2183,20 +3613,35 @@
             企業上線 AI 應用的合規守門員，避免品牌公關危機與資安漏洞。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             遊樂園雲霄飛車的安全壓桿：車子跑得再快，也能把乘客安全固定在軌道內不拋飛。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為模型自己懂得道德；其實模型什麼都敢算，完全靠外圍的 Guardrails 在硬性攔截！
           </div>
         </div>
       </div>
       </div>
     </section>
+    </div>
+    
 
-    <!-- 第三單元：電腦工作自動化與程式碼施工隊 -->
-    <section id="ch3" class="section-card">
+    <!-- PPT SLIDE 9 / 15: 🛠️ 程式碼施工隊概念與自動化大躍進 -->
+    <div class="ppt-slide " id="slide-8" data-slide-index="8" data-title="🛠️ 程式碼施工隊概念與自動化大躍進" data-chapter="單元 03 · 核心觀念">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🛠️</span>
+          <span style="color: #4f46e5;">單元 03 · 核心觀念</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🛠️ 程式碼施工隊概念與自動化大躍進</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 9 / 15</span>
+        </div>
+      </div>
+      <section id="ch3" class="section-card">
       <div class="section-header">
         <span class="section-tag">單元 03 · 走出瀏覽器的科技革命</span>
         <h2>
@@ -2367,7 +3812,25 @@
       </div>
 
       <!-- 演進時間軸：AI 如何走出瀏覽器長出手腳？ -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 10 / 15: ⚡ 代理人雙手雙腳進化史與本機工作流 -->
+    <div class="ppt-slide " id="slide-9" data-slide-index="9" data-title="⚡ 代理人雙手雙腳進化史與本機工作流" data-chapter="單元 03 · 實戰應用">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>⚡</span>
+          <span style="color: #4f46e5;">單元 03 · 實戰應用</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>⚡ 代理人雙手雙腳進化史與本機工作流</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 4 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 10 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch3-evolution"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📈 代理人進化史：AI 是如何「長出雙手雙腳」走出瀏覽器的？</span>
         </h3>
@@ -2447,7 +3910,25 @@
       </div>
 
       <!-- 第三單元核心名詞生活百科 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 11 / 15: 📚 單元 03 核心名詞生活百科辭典 -->
+    <div class="ppt-slide " id="slide-10" data-slide-index="10" data-title="📚 單元 03 核心名詞生活百科辭典" data-chapter="單元 03 · 知識辭海">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>📚</span>
+          <span style="color: #4f46e5;">單元 03 · 知識辭海</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>📚 單元 03 核心名詞生活百科辭典</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 11 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch3-terms"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📚 單元 03 專屬核心名詞生活百科</span>
         </h3>
@@ -2481,11 +3962,11 @@
             Agent 能夠「採取行動、影響現實世界」的第一步關鍵超能力。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             主廚原本只會空口報菜名，現在給他一把菜刀、一口炒鍋和烤箱，他能親自動手做菜！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為是模型自己在電腦裡算微積分；其實是它把題目丟給 Python 計算機算好再拿回結果。
           </div>
         </div>
@@ -2511,11 +3992,11 @@
             大幅降低生態整合成本，讓 AI 與外部企業系統的插拔變得像插隨身碟一樣容易。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             USB-C 充電孔：以前每支手機都要專屬充電線，現在全世界統一用 Type-C，一條線通吃！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 MCP 是一個新的大語言模型；它只是一套「通訊協定規範」，不是模型本身。
           </div>
         </div>
@@ -2541,11 +4022,11 @@
             防範 AI 虛假回報、偷工減料的最強品質防火牆。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             水電修好水管不能只聽師傅說「沒問題啦」，一定要親手打開水龍頭看漏不漏水才付錢！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 AI 說「已為您修改完成」就是真的完成了，很多時候它根本少改了一半！
           </div>
         </div>
@@ -2571,11 +4052,11 @@
             讓 Agent 具備「自動化閉環韌性」，大幅降低人類工程師手動介入除錯的負擔。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             射箭脫靶了，射手自己看偏左還偏右，調整呼吸與角度再射一箭，直到正中紅心！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 AI 一次就能寫出完美無瑕的程式碼；事實上頂級工程師也靠反覆調試，AI 亦然。
           </div>
         </div>
@@ -2601,11 +4082,11 @@
             保護主機作業系統不被未經授權的代碼破壞，提供乾淨無污染的運行平台。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             化學實驗室的防爆通風櫥：任憑裡面做劇烈化學反應，毒氣與火花絕不會噴到外面客廳！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 AI 是直接裸跑在個人電腦根目錄；負責任的 Code Agent 一定會在安全的 Runtime 沙盒中作業。
           </div>
         </div>
@@ -2631,11 +4112,11 @@
             不需要任何專用 API，也能自動操作所有沒有開放程式接口的古老傳統軟體。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             遠端桌面助理：就像一位朋友透過 TeamViewer 連線到你電腦，幫你點開 Excel 複製貼上數據。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為它只是普通的按鍵精靈（巨集）；它是具備眼睛（視覺大模型）隨機應變即時辨識畫面的！
           </div>
         </div>
@@ -2697,9 +4178,24 @@
         </div>
       </div>
     </section>
+    </div>
+    
 
-    <!-- 第四單元：多 Agent 協作全功能應用如何規劃 -->
-    <section id="ch4" class="section-card">
+    <!-- PPT SLIDE 12 / 15: 🤝 多 Agent 協作架構與四大主流拓撲 -->
+    <div class="ppt-slide " id="slide-11" data-slide-index="11" data-title="🤝 多 Agent 協作架構與四大主流拓撲" data-chapter="單元 04 · 核心架構">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🤝</span>
+          <span style="color: #4f46e5;">單元 04 · 核心架構</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🤝 多 Agent 協作架構與四大主流拓撲</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 4 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 12 / 15</span>
+        </div>
+      </div>
+      <section id="ch4" class="section-card">
       <div class="section-header">
         <span class="section-tag">單元 04 · 企業級架構思維</span>
         <h2>
@@ -2955,7 +4451,25 @@
       </div>
 
       <!-- 落地規劃六步法 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 13 / 15: 📐 全功能落地黃金六步法與管線模擬 -->
+    <div class="ppt-slide " id="slide-12" data-slide-index="12" data-title="📐 全功能落地黃金六步法與管線模擬" data-chapter="單元 04 · 實戰落地">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>📐</span>
+          <span style="color: #4f46e5;">單元 04 · 實戰落地</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>📐 全功能落地黃金六步法與管線模擬</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 4 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 13 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch4-pipeline"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>🛠️ 實戰必備：全功能多 Agent 應用落地「黃金六步規劃法」</span>
         </h3>
@@ -3025,7 +4539,25 @@
       </div>
 
       <!-- 第四單元核心名詞百科 -->
-      <div style="margin: 2.5rem 0 1.5rem;">
+      </section>
+    </div>
+    
+
+    <!-- PPT SLIDE 14 / 15: 📚 單元 04 核心名詞生活百科辭典 -->
+    <div class="ppt-slide " id="slide-13" data-slide-index="13" data-title="📚 單元 04 核心名詞生活百科辭典" data-chapter="單元 04 · 知識辭海">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>📚</span>
+          <span style="color: #4f46e5;">單元 04 · 知識辭海</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>📚 單元 04 核心名詞生活百科辭典</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 14 / 15</span>
+        </div>
+      </div>
+      <section class="section-card ppt-inner-card" id="sec-ch4-terms"><div style="margin: 2.5rem 0 1.5rem;">
         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
           <span>📚 單元 04 專屬核心名詞生活百科</span>
         </h3>
@@ -3059,11 +4591,11 @@
             維護全域狀態（Global State），維持任務方向不偏離軌道。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             裝潢工頭：自己不親自抹水泥或釘木板，但清楚水電、木工、油漆何時該進場驗收。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 Supervisor 會做所有事；其實優秀的主管從不越俎代庖，只負責調度分派！
           </div>
         </div>
@@ -3089,11 +4621,11 @@
             大幅節省計算開銷與延遲，避免把小問題丟給超昂貴的大模型處理。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             醫院門診大廳的分診台護理師：看病患症狀直接開單導引去骨科、小兒科或內科。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 Router 只是死板的關鍵字過濾；現代 Router 是具備語意理解能力的小模型（SLM）。
           </div>
         </div>
@@ -3119,11 +4651,11 @@
             多 Agent 架構中的具體產能來源，職能單純、出錯率低。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             水電工班裡的專業師傅：水電師傅專心拉線路，油漆師傅專心刷牆壁，各司其職。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 Worker 越全能越好；其實 Worker 職能越專精、工具越少，執行成功率越高！
           </div>
         </div>
@@ -3149,11 +4681,11 @@
             消除幻覺、確保程式碼語法與業務合規的最強自我進化機制。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             出版社總編輯：作家寫完稿件必須交給總編輯嚴格校對錯別字與邏輯瑕疵，退回修改才能出版。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 AI 會自發性追求完美；沒有設計獨立 Critic 反思回路，模型通常都偷懶交差！
           </div>
         </div>
@@ -3179,11 +4711,11 @@
             企業把控法律責任、資金安全與最終決策權的最高安全閥。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             自駕車雖然能全自動跟車轉彎，但駕駛員手必須隨時放在方向盤上準備接管。
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為「全自動」就該完全沒人管；在現實商業世界，關鍵操作沒有人類簽字誰敢負法律責任？
           </div>
         </div>
@@ -3209,11 +4741,11 @@
             保護荷包與伺服器資源，防止帳單爆表或系統無限卡死的保命符。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             用電過載時總電源開關自動跳電，防止電線過熱起火燒掉房子！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 Agent 自動化越久越好；如果不設熔斷器，兩隻 Agent 吵架可能一個晚上燒掉幾千美金！
           </div>
         </div>
@@ -3239,11 +4771,11 @@
             防止 Agent 脫軌亂跑，讓複雜任務可控、可暫停、可回溯的核心技術骨架（如 LangGraph）。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             大富翁棋盤與十字路口：紅燈停、綠燈行；搜集到足夠資料才能前進到寫作格，未過審核必須退回草稿格！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為 Agent 協作全憑 AI 自主發揮；現實工業級系統都是由嚴密的狀態機在背後精準導引！
           </div>
         </div>
@@ -3269,11 +4801,11 @@
             每次修改提示詞或換模型時，唯一能客觀證明「AI 到底變聰明還是變笨」的衡量儀表板。
           </div>
           <div class="term-row">
-            <strong>D. 生活比喻</strong>
+            <strong>C. 生活比喻</strong>
             高中學測模擬考：全體考生考同一張標準試卷，分數高低一目了然，不看運氣只看真本事！
           </div>
           <div class="term-row">
-            <strong>F. 小白最容易誤會</strong>
+            <strong>D. 初學者最易誤會</strong>
             以為自己隨便聊兩句覺得「好像挺聰明」就是測好了；正式上線必須跑成百上千次自動化 Evals！
           </div>
         </div>
@@ -3333,9 +4865,102 @@
         </div>
       </div>
     </section>
+    </div>
+    
 
-    <!-- 第五單元：實戰隨堂測驗 -->
-    <section id="quiz" class="section-card">
+    <!-- PPT SLIDE 15 / 15: 🎓 恭喜通關！結業總結與實戰指南 -->
+    <div class="ppt-slide " id="slide-14" data-slide-index="14" data-title="🎓 恭喜通關！結業總結與實戰指南" data-chapter="總結檢定">
+      <div class="ppt-slide-header-bar">
+        <div class="tag-left">
+          <span>🎓</span>
+          <span style="color: #4f46e5;">總結檢定</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span>🎓 恭喜通關！結業總結與實戰指南</span>
+        </div>
+        <div class="tag-right">
+          <span>⏱️ 3 分鐘</span>
+          <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 12px; font-weight: 700;">Slide 15 / 15</span>
+        </div>
+      </div>
+      
+<section id="quiz" class="section-card" style="padding: 2.5rem 2rem; border-radius: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+  <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+    <span class="section-tag" style="background: #fdf2f8; color: #be185d;">🎓 核心通關總驗收</span>
+    <h2 style="font-size: 2.1rem; color: #1e293b; margin: 0.75rem 0 0.5rem; font-weight: 900;">
+      <span>🏆 恭喜通關！AI 認知躍遷結業總結與實戰行動指南</span>
+    </h2>
+    <p class="section-desc" style="max-width: 780px; margin: 0 auto; color: #64748b; font-size: 1.05rem; line-height: 1.6;">
+      您已完整走過從<strong>「底層機率接龍」、「日常結構化對話」、「本地施工隊代理」</strong>到<strong>「企業級多 Agent 協作」</strong>的四階全貌！以下為您精煉出能直接帶走的落地清單。
+    </p>
+  </div>
+
+  <!-- 4 大思維躍遷精華總覽卡 (The 4 Big Shifts) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+    <div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 14px; padding: 1.4rem;">
+      <div style="font-size: 1.2rem; font-weight: 800; color: #1e40af; margin-bottom: 8px;">🧠 階梯 1：理解接龍</div>
+      <div style="font-size: 0.92rem; color: #334155; line-height: 1.6;">
+        <strong>核心心法：</strong>AI 是高維統計的「下一個字機率預測大師」。遇到幻覺不慌張，提供精準上下文就是它的定海神針。
+      </div>
+    </div>
+    <div style="background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 14px; padding: 1.4rem;">
+      <div style="font-size: 1.2rem; font-weight: 800; color: #166534; margin-bottom: 8px;">💬 階梯 2：駕馭對話</div>
+      <div style="font-size: 0.92rem; color: #334155; line-height: 1.6;">
+        <strong>核心心法：</strong>牢記<strong>提示詞四支柱 (Role, Context, Task, Limit)</strong>，從零樣本躍遷至思維鏈 (CoT)，讓回答品質直接翻倍。
+      </div>
+    </div>
+    <div style="background: #fffbeb; border: 2px solid #fde68a; border-radius: 14px; padding: 1.4rem;">
+      <div style="font-size: 1.2rem; font-weight: 800; color: #92400e; margin-bottom: 8px;">🛠️ 階梯 3：長出雙手雙腳</div>
+      <div style="font-size: 0.92rem; color: #334155; line-height: 1.6;">
+        <strong>核心心法：</strong>告別複製貼上的文字奴隸！走入本機終端機（如 Antigravity / Claude Code），授權本地工具全自動批次施工。
+      </div>
+    </div>
+    <div style="background: #faf5ff; border: 2px solid #e9d5ff; border-radius: 14px; padding: 1.4rem;">
+      <div style="font-size: 1.2rem; font-weight: 800; color: #6b21a8; margin-bottom: 8px;">🤝 階梯 4：多 Agent 組織</div>
+      <div style="font-size: 0.92rem; color: #334155; line-height: 1.6;">
+        <strong>核心心法：</strong>拆解關注點、拒絕全能巨體！使用主管派工、流水接力與審查員自省架構，以結構化資料打造穩健 AI 公司。
+      </div>
+    </div>
+  </div>
+
+  <!-- 帶得走的實戰落地行動檢核清單 (Cheat Sheet) -->
+  <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 1.75rem; margin-bottom: 2.5rem;">
+    <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+      <span>📋 AI 施工隊實戰落地行動檢核清單 (Action Checklist)</span>
+    </h3>
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; color: #334155; font-size: 0.95rem;">
+      <li style="display: flex; align-items: flex-start; gap: 10px;">
+        <span style="color: #10b981; font-weight: 900;">✓</span>
+        <span><strong>拒絕單純動嘴：</strong>能用終端工具批次處理的重複數位勞務，不開啟網頁複製貼上。</span>
+      </li>
+      <li style="display: flex; align-items: flex-start; gap: 10px;">
+        <span style="color: #10b981; font-weight: 900;">✓</span>
+        <span><strong>多 Agent 關注點隔離：</strong>複雜任務至少拆為「主管派單 ➔ 工人執行 ➔ 獨立客觀 QA 審核」三個職能。</span>
+      </li>
+      <li style="display: flex; align-items: flex-start; gap: 10px;">
+        <span style="color: #10b981; font-weight: 900;">✓</span>
+        <span><strong>客觀測試定勝負：</strong>驗收標準以自動化測試 (`exit code 0`) 或明確規格為準，不相信口頭宣稱「已完成」。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 下一步行動按鈕 -->
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <button onclick="goToSlide(0)" style="background: #1e293b; color: white; border: none; padding: 0.85rem 1.8rem; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
+      🔄 返回封面學習地圖
+    </button>
+    <button onclick="goToSlide(1)" style="margin-left: 12px; background: #10b981; color: white; border: none; padding: 0.85rem 1.8rem; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(16,185,129,0.2);">
+      🎯 重新進行 20 題能力評測
+    </button>
+  </div>
+
+  <!-- 折疊可選：原 3 題快速隨堂挑戰 (預設收合，不打擾總結吸收) -->
+  <div style="margin-top: 2rem; border-top: 2px dashed #cbd5e1; padding-top: 1.5rem;">
+    <button onclick="toggleFinalQuizDrawer()" id="btnFinalQuizToggle" style="width: 100%; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 0.9rem 1.4rem; font-weight: 800; font-size: 0.95rem; color: #475569; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.15s;">
+      <span>💡 想額外自我驗證？點此展開【3 題快速情境隨堂測驗】（選做）</span>
+      <span id="finalQuizArrow" style="color: #6366f1;">▼ 展開</span>
+    </button>
+    <div id="finalQuizDrawer" style="display: none; margin-top: 1.25rem; padding: 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px;">
+      
       <div class="section-header">
         <span class="section-tag">單元 05 · 自我檢測與驗收</span>
         <h2>
@@ -3376,17 +5001,35 @@
         </div>
         <div class="quiz-feedback" id="q3-fb"></div>
       </div>
-    </section>
+    
+    </div>
+  </div>
+</section>
 
+    </div>
+    
   </main>
 
-  <footer style="text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 2rem 0; border-top: 1px solid var(--border-color); margin-top: 3rem;">
-    <p>🤖 AI 知識全景與實戰指南 · 為對話式 AI 使用者打開通往全自動化施工的大門</p>
-    <p style="margin-top: 0.35rem; font-size: 0.8rem;">本教材結合日常生活生動比喻、四格漫畫圖解與純單一檔案互動實驗室</p>
+  <!-- 底部懸浮控制器 -->
+  <footer class="ppt-bottom-bar">
+    <button class="ppt-nav-btn" id="pptBtnPrev" onclick="prevSlide()" disabled>
+      ◀ 上一頁
+    </button>
+    <div class="ppt-nav-meta" id="pptBottomCounter">
+      1 / 15
+    </div>
+    <button class="ppt-nav-btn" id="pptBtnNext" onclick="nextSlide()">
+      下一頁 ▶
+    </button>
+    <div class="ppt-keyboard-hints">
+      <span>翻頁 <kbd>←</kbd> <kbd>→</kbd></span>
+      <span>模式 <kbd>M</kbd></span>
+      <span>目錄 <kbd>T</kbd></span>
+    </div>
   </footer>
 
-  <!-- 互動式 JavaScript 邏輯 -->
   <script>
+
     
     /* 重點名詞抽屜開關控制 */
     function toggleTermDrawer(drawerId) {
@@ -3781,6 +5424,841 @@
         feedback.innerHTML = `<strong>❌ 不太正確喔！</strong> ${explanation}`;
       }
     }
+  
+    /* ==========================================================
+       🎯 閱讀前能力診斷測驗資料與互動邏輯
+       ========================================================== */
+    const preQuizData = [
+  {
+    "id": 1,
+    "level": 1,
+    "levelName": "Level 1 · 生活基礎認知",
+    "levelColor": "#10b981",
+    "unit": "單元 01 · 核心大腦解密",
+    "unitId": "ch1",
+    "question": "阿公看到孫子在電腦前跟 ChatGPT 聊得不亦樂乎，以為 AI 肚子裡住著一個通曉古今的神仙。其實從科學角度來看，AI 生成回答的本質最像下列哪一種日常活動？",
+    "options": [
+      "百貨公司抽獎箱隨機摸彩拼運氣",
+      "像算命師看生辰八字隔空預知未來",
+      "看遍全天下圖書後的超級「文字接龍大師」（依據前面的字詞，計算機率猜下一個最順的字接下去）",
+      "從電腦硬碟的固定資料庫裡，把現成的文章剪下貼上"
+    ],
+    "answer": 2,
+    "explanation": "【生活妙喻：文字接龍大師】AI 既不是神仙，也不是剪貼簿。它就像一位讀遍天下所有圖書的文字接龍高手，根據你說的上半句話，不斷猜測『下一個最可能出現的字』，接成一段通順的回答！"
+  },
+  {
+    "id": 2,
+    "level": 1,
+    "levelName": "Level 1 · 生活基礎認知",
+    "levelColor": "#10b981",
+    "unit": "單元 01 · 核心大腦解密",
+    "unitId": "ch1",
+    "question": "小美請 AI 幫忙找長壽秘訣，AI 卻煞有其事地推薦了一位「活了 800 歲的古代老神醫」和一本從沒出版過的養生古書。AI 這種一本正經胡說八道（幻覺）的現象，最主要的原因是什麼？",
+    "options": [
+      "AI 就像一位「愛面子的說書人」，它的首要目標是把故事講得流暢動聽，但它自己無法出門查驗這是不是真實世界的事實",
+      "因為小美家裡的網路線接觸不良，傳輸時漏掉了幾個字",
+      "因為 AI 具備惡作劇個性，故意想捉弄人類長輩",
+      "因為電腦主機散熱不良中暑發燙當機了"
+    ],
+    "answer": 0,
+    "explanation": "【生活妙喻：愛面子的說書人】AI 的本質是追求句子『聽起來順暢合理』。如果遇到它沒看過的事情，它會像愛面子的說書人一樣，順著語感隨機編造出流暢卻完全虛構的名詞，這就是所謂的『AI 幻覺』！"
+  },
+  {
+    "id": 3,
+    "level": 1,
+    "levelName": "Level 1 · 生活基礎認知",
+    "levelColor": "#10b981",
+    "unit": "單元 01 · 核心大腦解密",
+    "unitId": "ch1",
+    "question": "水果攤老老闆挑西瓜從不看厚厚的物理課本，但他拍過摸過上萬顆西瓜，一聽清脆「咚咚」聲、摸摸果蒂，就能挑出沙甜多汁的好瓜。這種「餵給電腦成千上萬張照片範例，讓它自己摸索出特徵規律」的過程叫什麼？",
+    "options": [
+      "電腦硬碟格式化重組",
+      "防毒軟體防火牆更新",
+      "數位身分證線上認證",
+      "機器學習（像老農夫挑瓜一樣，從大量經驗範例中摸索規律）"
+    ],
+    "answer": 3,
+    "explanation": "【生活妙喻：老老闆拍西瓜摸規律】以前寫程式是把每條規矩硬性寫死；『機器學習』則是給電腦看成千上萬個真實範例（如西瓜照、孫子照片），讓電腦自己摸索出五官輪廓與聲音特徵的通用規律！"
+  },
+  {
+    "id": 4,
+    "level": 1,
+    "levelName": "Level 1 · 生活基礎認知",
+    "levelColor": "#10b981",
+    "unit": "單元 01 · 核心大腦解密",
+    "unitId": "ch1",
+    "question": "大管家有時候講話嚴肅拘謹、一板一眼；有時候卻像喝了兩杯熱咖啡，靈感爆發、妙語如珠。在跟 AI 互動時，如果我們把「溫度（Temperature）」調高，AI 說話會出現什麼變化？",
+    "options": [
+      "手機電池會瞬間發燙必須放進冰箱冷卻",
+      "AI 會越講越快，像按了兩倍速快轉鍵一樣急著說完",
+      "風格調酒旋鈕：從一板一眼的「嚴肅會計師」，變成喝了咖啡腦洞大開的「浪漫微醺點子王」，創意十足但偶爾較發散",
+      "AI 會把文字全部自動轉成外語火星文"
+    ],
+    "answer": 2,
+    "explanation": "【生活妙喻：風格調酒旋鈕】溫度參數就像熱情開關！「低溫」時 AI 只選最確定保守的字，像查法規的會計師；「高溫」時像喝了咖啡的微醺詩人，願意嘗試新奇有趣的詞，激發滿滿靈感！"
+  },
+  {
+    "id": 5,
+    "level": 1,
+    "levelName": "Level 1 · 生活基礎認知",
+    "levelColor": "#10b981",
+    "unit": "單元 01 · 核心大腦解密",
+    "unitId": "ch1",
+    "question": "老王在同一個對話框裡跟 AI 從早聊到晚，聊了幾百句話之後，AI 突然忘記老王一開始再三叮嚀「全家吃全素不能碰肉」的重要設定。在生活比喻中，這是因為碰到了什麼限制？",
+    "options": [
+      "教室黑板大小有限（上下文視窗滿了），字寫滿了只能把最上面的舊字擦掉，騰出空間寫新對話",
+      "AI 覺得老王太囉唆，故意裝傻不想理會",
+      "老王家的寬頻網路被電信公司強制降速",
+      "AI 的儲存硬碟被雷擊故障清空了"
+    ],
+    "answer": 0,
+    "explanation": "【生活妙喻：黑板大小有限】上下文視窗（Context Window）就像教室黑板。單次推論能同時看見的字數有限，當對話太長時，最上面的舊約定就會被擦掉，這時另開新對話框重新交代最乾淨！"
+  },
+  {
+    "id": 6,
+    "level": 2,
+    "levelName": "Level 2 · 動嘴吩咐日常應用",
+    "levelColor": "#3b82f6",
+    "unit": "單元 02 · 動嘴聊天的日常境界",
+    "unitId": "ch2",
+    "question": "在手機或網頁動動嘴巴聊天框中，把 AI 當作隨身文字秘書，以下哪一件事情是它最擅長的「拿手甜蜜差事」？",
+    "options": [
+      "隔空伸出機械手臂幫你把家裡散落滿地的衣服收進衣櫃",
+      "腦力激盪母親節賀卡金句、潤飾語氣委婉的里鄰協調信、將三頁長文新聞精簡成條列重點摘要",
+      "代替你去郵局排隊領取掛號信與老年年金",
+      "直接精準預測明天開獎的大樂透 6 個號碼保證中頭獎"
+    ],
+    "answer": 1,
+    "explanation": "【生活妙喻：百貨諮詢台好秘書】純對話式 AI 最擅長動嘴就能搞定的文字工作：激發靈感、潤飾語氣、長文挑重點與外文翻譯；但需要動手搬東西或預知未來的事情可難不倒它！"
+  },
+  {
+    "id": 7,
+    "level": 2,
+    "levelName": "Level 2 · 動嘴吩咐日常應用",
+    "levelColor": "#3b82f6",
+    "unit": "單元 02 · 動嘴聊天的日常境界",
+    "unitId": "ch2",
+    "question": "如果走進餐廳跟大廚說「隨便來點好吃的」，往往會端出不合胃口的菜。想要讓 AI 秘書交出最稱心如意的草稿，最聰明的「點菜吩咐方式」是？",
+    "options": [
+      "只打三個字「寫好看一點」，其他讓 AI 自己通靈猜測",
+      "一口氣把 10 件不相關的家庭瑣事混在同一句長句子裡交代",
+      "像看病講清楚症狀：【你是什麼專家角色】+【任務背景與對象】+【具體要做什麼】+【希望的格式與字數限制】",
+      "不管問什麼問題，都必須先背誦一萬字的禮貌問候語"
+    ],
+    "answer": 2,
+    "explanation": "【生活妙喻：看病說症狀與大廚點菜】跟 AI 對話就像點菜：交代清楚角色（如健康營養師）、情境對象（為高血壓長輩規劃）、具體任務（一週低鹽早餐菜單）與格式限制（條列三點），成果絕對合心意！"
+  },
+  {
+    "id": 8,
+    "level": 2,
+    "levelName": "Level 2 · 動嘴吩咐日常應用",
+    "levelColor": "#3b82f6",
+    "unit": "單元 02 · 動嘴聊天的日常境界",
+    "unitId": "ch2",
+    "question": "老點心師傅跟學徒講了一百遍「包子要有 18 摺」，學徒老是抓不準；但師傅親自捏 2 顆漂亮包子擺在桌上，學徒一看就依樣畫葫蘆捏得維妙維肖。在吩咐 AI 時先附上 1~2 個示範範例，這招為什麼特別神奇？",
+    "options": [
+      "這些範例會永久焊接在全世界 AI 伺服器的硬體晶片上",
+      "範例能讓使用者上網的手機網路月租費打對折",
+      "能夠瞬間關閉 AI 的道德審查與防詐騙機制",
+      "「看樣學樣照著捏」，與其用千言萬語抽象解釋規則，直接給出 2 盤做好的樣品，AI 能秒懂你期望的語氣與排版風格"
+    ],
+    "answer": 3,
+    "explanation": "【生活妙喻：小籠包試吃樣品 (Few-Shot)】俗話說『百聞不如一見』。少樣本提示（Few-Shot）就像把做好的樣品擺在桌上，AI 能精確模仿你的排版、語氣與歸納風格，溝通成功率高達 99%！"
+  },
+  {
+    "id": 9,
+    "level": 2,
+    "levelName": "Level 2 · 動嘴吩咐日常應用",
+    "levelColor": "#3b82f6",
+    "unit": "單元 02 · 動嘴聊天的日常境界",
+    "unitId": "ch2",
+    "question": "小學生遇到多步驟數學應用題時，逼他一秒心算往往容易算錯；但只要發給他一張草稿紙，讓他在紙上「一步一步寫下運算步驟」，算出來的答案就十拿九穩。在交代 AI 處理複雜問題時，加上哪一句話能達到這種神奇效果？",
+    "options": [
+      "「請一步一步推導思考，並把推理步驟詳細寫下來」（思維鏈 CoT 發張草稿紙）",
+      "「請在 0.01 秒之內立刻交出最後答案，不准猶豫」",
+      "「請不要思考，直接憑第一直覺隨機猜測結論」",
+      "「請把這段文字全部翻譯成古埃及象形文字」"
+    ],
+    "answer": 0,
+    "explanation": "【生活妙喻：小學生算數草稿紙 (CoT)】AI 是一字一字推測接龍的。如果不給它草稿紙，它只能憑空硬猜；加上『請一步一步思考』，等於讓它在回答中展開草稿演算，前一步推論成為後一步的墊腳石，準確率飆升！"
+  },
+  {
+    "id": 10,
+    "level": 2,
+    "levelName": "Level 2 · 動嘴吩咐日常應用",
+    "levelColor": "#3b82f6",
+    "unit": "單元 02 · 動嘴聊天的日常境界",
+    "unitId": "ch2",
+    "question": "把一本厚達 500 頁的社區大樓生活規約整本貼給 AI，問它「第 243 頁倒數第 3 行到底寫了什麼」，AI 卻經常找漏或看走眼。在生活常理中，這最像下列哪種現象？",
+    "options": [
+      "規約裡面的文字被電腦裡面的電子書蟲咬壞了",
+      "厚書像乾草堆，人的注意力通常只記得開頭前幾頁和結尾結論，夾在厚厚正中間的小紙條最容易被忽略看晃神（迷失在中間）",
+      "AI 嫌字太多在電腦裡面鬧脾氣抗議罷工",
+      "電腦螢幕解析度不足導致字體模糊看不清"
+    ],
+    "answer": 1,
+    "explanation": "【生活妙喻：厚字典中間夾小抄 (Lost in the Middle)】大模型的注意力也是有疲勞區的！面對海量長文本，它對開頭與結尾最敏銳，夾在正中間的細節容易被雜訊稀釋，因此找關鍵細節時『精準挑章節查閱（RAG）』比整本塞更可靠！"
+  },
+  {
+    "id": 11,
+    "level": 3,
+    "levelName": "Level 3 · 走出網頁施工工班",
+    "levelColor": "#f59e0b",
+    "unit": "單元 03 · 走出瀏覽器的科技革命",
+    "unitId": "ch3",
+    "question": "很多人以為 AI 永遠只能被關在網頁聊天框裡動嘴皮；但現在像 Antigravity、Claude Code 這種高階「本機施工隊代理」，跟純網頁對話框最本質的差別是什麼？",
+    "options": [
+      "施工隊模式只能在完全沒有安裝作業系統的空電腦上開機",
+      "網頁版像「動嘴顧問」只給建議、程式碼需人手動複製貼上；施工隊 AI 自帶水電工具箱，能親自進場讀寫檔案、修改程式碼並執行測試驗收",
+      "施工隊 AI 會自動把電腦裡所有檔案刪光光來換取運行速度",
+      "網頁對話框背後是真人輪流打字回覆，施工隊才是真正的電腦程式"
+    ],
+    "answer": 1,
+    "explanation": "【生活妙喻：動嘴顧問 vs 水電施工隊】網頁版 ChatGPT 是坐在百貨服務台的顧問（只動嘴，你還得自己回家修）；Antigravity 是自備扳手進你家施工的水電工班，能親自打開專案資料夾、新增檔案、修復程式碼並驗證成果！"
+  },
+  {
+    "id": 12,
+    "level": 3,
+    "levelName": "Level 3 · 走出網頁施工工班",
+    "levelColor": "#f59e0b",
+    "unit": "單元 03 · 走出瀏覽器的科技革命",
+    "unitId": "ch3",
+    "question": "主廚本身是一個人，他沒有把自己的手伸進火爐裡，但他會轉頭對助手說：「幫我打開氣炸鍋，設定 180 度烤 10 分鐘，烤好通知我」。AI 呼叫計算機、搜尋引擎或讀檔工具（Tool Use），底層最像怎樣的運作？",
+    "options": [
+      "AI 的電腦主機直接長出了實體機械手臂幫你按鍵盤按鈕",
+      "大廚動嘴下令，二廚跑腿按氣炸鍋：AI 輸出工具名稱與口令，外層軟體小管家幫它按下執行鍵，再把烤好的成果端回來給 AI 接續解讀",
+      "AI 透過超自然念力直接隔空操控廚房家電開關",
+      "AI 偷偷在家裡天花板安裝了隱形無人機幫忙做家事"
+    ],
+    "answer": 1,
+    "explanation": "【生活妙喻：大廚吩咐二廚用氣炸鍋 (Tool Use)】AI 大腦自己只會算文字機率，沒有手腳。但它可以『發送工單』說：請幫我跑計算機算 123×456，外層的軟體程式幫它算完把答案交回來，AI 就能準確把答案寫進報告裡！"
+  },
+  {
+    "id": 13,
+    "level": 3,
+    "levelName": "Level 3 · 走出網頁施工工班",
+    "levelColor": "#f59e0b",
+    "unit": "單元 03 · 走出瀏覽器的科技革命",
+    "unitId": "ch3",
+    "question": "以前出門旅行，不同牌子的手機要帶好幾種專用充電線；現在有了統一的 Type-C 插孔，一條線所有裝置隨插即用。近年科技界極為推崇的「MCP 協定」，在生活比喻中扮演什麼角色？",
+    "options": [
+      "因為它可以直接插進手機充電孔，讓手機充電速度瞬間快十倍",
+      "某家大公司限制只有自己品牌手機才能用的封閉私有高額收費專利線",
+      "一種在停電時能讓冰箱自動發電的緊急手搖把",
+      "開放通用的「萬用 Type-C 插孔標準」，讓所有 AI 助手都能用同一套規範隨插即用連接本機檔案、資料庫與外部工具"
+    ],
+    "answer": 3,
+    "explanation": "【生活妙喻：AI 時代的通用 Type-C (MCP)】以前每家 AI 都要替每種工具寫專用轉接頭，雜亂無章；MCP 定義了全天下通用的統一插座標準，任何工具只要符合 MCP 規格，所有 AI 助手插上就能立刻使用！"
+  },
+  {
+    "id": 14,
+    "level": 3,
+    "levelName": "Level 3 · 走出網頁施工工班",
+    "levelColor": "#f59e0b",
+    "unit": "單元 03 · 走出瀏覽器的科技革命",
+    "unitId": "ch3",
+    "question": "負責任的水電師傅修好水管後，一定會轉開水龍頭仔細檢查有沒有滲水；如果看到水滴出來，會立刻拿扳手鎖緊再試一次，直到一滴不漏才收工。一個成熟的「本機施工隊 AI」在執行指令遇到報錯時會怎麼做？",
+    "options": [
+      "假裝沒看見錯誤，把有漏洞的報告直接硬塞給使用者交差",
+      "生氣地把電腦硬碟整個格式化，把所有檔案消滅乾淨當沒發生過",
+      "立刻在螢幕上閃爍紅燈當機，並對著使用者大哭崩潰",
+      "像水電師傅通水抓漏，自動讀懂報錯原因，換好零件重新測試，直到完全亮起綠燈沒漏水才交付成果（閉環自我修復）"
+    ],
+    "answer": 3,
+    "explanation": "【生活妙喻：師傅驗收水管一滴不漏 (閉環修復)】合格的工班講求驗收！施工隊 Agent 執行完程式如果出錯，絕不會擺爛交差，而是像水電師傅一樣自動抓出日誌裡的毛病、重新修改代碼並再次測試，直到亮綠燈才交付！"
+  },
+  {
+    "id": 15,
+    "level": 3,
+    "levelName": "Level 3 · 走出網頁施工工班",
+    "levelColor": "#f59e0b",
+    "unit": "單元 03 · 走出瀏覽器的科技革命",
+    "unitId": "ch3",
+    "question": "請裝潢工班到家裡翻修，刷油漆、換水龍頭可以放心交給師傅做；但若師傅要敲掉一面結構牆或是更換大門門鎖，一定會拿同意書請屋主親自過目簽字。讓 AI 在電腦本機操作時，為什麼也要有「人機審核確認」？",
+    "options": [
+      "純粹為了故意刁難工班拖延工時好賺取加班費",
+      "像敲承重牆要屋主親自簽字：防止高危險動作（如誤刪整個硬碟檔案、洩漏密碼金鑰或推送未審檔案），確保主人數位資產絕對安全",
+      "因為勞基法規定 AI 在週末不能獨自加班工作",
+      "為了防止電腦螢幕因為運算太快而把桌子震壞"
+    ],
+    "answer": 1,
+    "explanation": "【生活妙喻：敲承重牆要屋主親自簽字 (人機審核)】AI 拿著施工工具效率極高，但終端命令破壞力也大。建立白名單沙盒與『重大動作由人類確認（Human-in-the-Loop）』，就像屋主為裝潢工程把關，兼顧自動化神速與絕對安全！"
+  },
+  {
+    "id": 16,
+    "level": 4,
+    "levelName": "Level 4 · 蓋大樓團隊協作架構",
+    "levelColor": "#8b5cf6",
+    "unit": "單元 04 · 企業級架構思維",
+    "unitId": "ch4",
+    "question": "開一間大餐廳，如果讓同一個人既當店長招待客人、又進廚房炒菜、又洗碗盤、還要兼做會計管帳，這家店很快就會大混亂甚至倒閉。為什麼做複雜大專案時，業界不建議只靠「單一一個巨型 AI」全包所有事？",
+    "options": [
+      "一人身兼多職會讓它的上下文記憶被大量無關雜事塞爆，導致注意力混亂、角色錯亂，最後把糖當鹽撒做出嚴重錯誤判斷",
+      "因為各大模型公司規定每個 AI 每天最多只能講 50 句話",
+      "因為單一個 AI 消耗的瓦斯與水電費比四個 AI 還貴",
+      "因為單一個 AI 絕對無法學會講繁體中文"
+    ],
+    "answer": 0,
+    "explanation": "【生活妙喻：一人身兼四職會累垮】就像一間公司不能只有一位員工包辦董事長、工程師、會計與清潔工。單一 AI 在長流程中會累積龐大無關歷史記憶，導致職責混淆、注意力衰退與嚴重幻覺，必須分工合作！"
+  },
+  {
+    "id": 17,
+    "level": 4,
+    "levelName": "Level 4 · 蓋大樓團隊協作架構",
+    "levelColor": "#8b5cf6",
+    "unit": "單元 04 · 企業級架構思維",
+    "unitId": "ch4",
+    "question": "蓋一棟穩固的大樓，工地裡最經典的「黃金鐵三角」工班分工，通常包含哪三種各司其職的核心角色？",
+    "options": [
+      "買菜阿姨、洗菜廚工、端菜服務生",
+      "大門保全、地下室收費員、中庭除草工",
+      "工頭、師傅、品檢員三權分立：規劃者工頭（制定藍圖拆工單）、專業施工師傅（專注敲打砌磚）、客觀品檢員（拿規矩尺挑毛病驗收）",
+      "演講主持人、台下拍手觀眾、拿相機攝影師"
+    ],
+    "answer": 2,
+    "explanation": "【生活妙喻：工頭、師傅與驗收員三權分立】成熟的多 Agent 系統講求角色分離：工頭（Planner）統籌全域派工，施工工人（Worker）在乾淨環境專注實作，驗收品管（Critic/Reviewer）站在客觀標準挑毛病，絕不『球員兼裁判』！"
+  },
+  {
+    "id": 18,
+    "level": 4,
+    "levelName": "Level 4 · 蓋大樓團隊協作架構",
+    "levelColor": "#8b5cf6",
+    "unit": "單元 04 · 企業級架構思維",
+    "unitId": "ch4",
+    "question": "廚房冰箱上貼著「今天晚餐要買蔥」的小黃便條紙，買完撕掉就扔；客廳書架上則妥善珍藏著記錄 30 年歷史的厚厚家族大相簿。多個 AI 團隊協作時，如何聰明管理記憶？",
+    "options": [
+      "把過去 30 年發生的每一句話全部印出來，逼每個工人每天隨身背在身上走動",
+      "完全不留任何紀錄，每個工人都當作患有永久失憶症",
+      "把所有日記直接用毛筆塗鴉在客廳牆壁與天花板上",
+      "手邊只在「冰箱門貼當天買菜便條紙（工作記憶乾淨敏捷）」，幾十年的家族相簿鎖進抽屜（長期庫），需要時才去抽查調閱"
+    ],
+    "answer": 3,
+    "explanation": "【生活妙喻：冰箱便條紙 vs 抽屜老相簿】高效的多代理協作遵循『最小資訊原則』：執行當前小任務只給乾淨的便利貼指示，厚重的歷史百科則存在長期檔案庫，需要時才精準檢索，省錢、快速又不會腦袋打結！"
+  },
+  {
+    "id": 19,
+    "level": 4,
+    "levelName": "Level 4 · 蓋大樓團隊協作架構",
+    "levelColor": "#8b5cf6",
+    "unit": "單元 04 · 企業級架構思維",
+    "unitId": "ch4",
+    "question": "就算學生記憶力超群、能把整套《大英百科全書》帶進考場，考試時若把兩萬頁書從頭翻到尾找答案，既浪費時間又容易眼花看漏。最聰明的做法是帶著索引卡，一秒翻出最關鍵的那 2 頁精華抄寫作答。這在 AI 技術中稱為什麼？",
+    "options": [
+      "電腦防藍光螢幕保護貼",
+      "桌上型電腦主機擴充散熱風扇",
+      "RAG（開卷考試翻出關鍵那一頁！圖書管理員先抽出最關鍵食譜遞給大廚，又快又省錢還黑紙白字有所依據）",
+      "智慧家庭自動除濕機設定"
+    ],
+    "answer": 2,
+    "explanation": "【生活妙喻：開卷考試翻出關鍵那一頁 (RAG)】百萬文字全塞進大腦不僅運算昂貴、反應緩慢，更容易看花眼。RAG 扮演神級圖書檢索員，在回答前先幫 AI 挑出最關鍵的 2 頁精華，快、準、省且絕不瞎掰！"
+  },
+  {
+    "id": 20,
+    "level": 4,
+    "levelName": "Level 4 · 蓋大樓團隊協作架構",
+    "levelColor": "#8b5cf6",
+    "unit": "單元 04 · 企業級架構思維",
+    "unitId": "ch4",
+    "question": "泥作師傅抹好水泥，驗收員嫌不平整退件；師傅重新抹了一次，驗收員還是不給過，兩人在工地吵得不可開交、沒完沒了。遇到這種互相踢皮球卡死的「死循環」，系統必須具備什麼保命開關？",
+    "options": [
+      "設定吵架上限（例如最多重試 3 次），卡關時立刻按響求助警報鈴，把爭議狀況整理好，呈報請真正的人類屋主專家出面裁決定案（熔斷防護）",
+      "放任兩個人在工地吵上一萬年，直到把工程款與雲端帳單徹底刷爆為止",
+      "偷偷買一把更大支的泥作鏟子，讓師傅繼續盲目重複抹上一千次",
+      "把整棟大樓的社區總變電箱開關直接永久拆除"
+    ],
+    "answer": 0,
+    "explanation": "【生活妙喻：師徒吵架按響警報鈴 (熔斷機制)】生產級的多 Agent 系統必須有煞車皮！設定最大重試次數與逾時中斷，一旦發生卡關死循環，立刻熔斷停止並升級呼叫人類專家（Escalate to Human），守護荷包與系統安全！"
+  }
+];
+
+    let currentQuizIndex = 0;
+    // 記錄每題使用者選擇的選項索引 (null 代表未答)
+    let userAnswers = new Array(preQuizData.length).fill(null);
+
+    // 平滑滾動到目標章節並給予醒目視覺提示
+    function scrollToSectionWithHighlight(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.remove('section-highlight');
+      // 強制觸發 reflow 讓動畫重新播放
+      void el.offsetWidth;
+      el.classList.add('section-highlight');
+    }
+
+    function initPreQuiz() {
+      renderNavDots();
+      loadQuestion(0);
+    }
+
+    function renderNavDots() {
+      const container = document.getElementById("quiz-nav-dots");
+      if (!container) return;
+      container.innerHTML = "";
+      preQuizData.forEach((q, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-dot-btn";
+        btn.id = `dot-q-${idx}`;
+        btn.innerText = idx + 1;
+        btn.onclick = () => loadQuestion(idx);
+        container.appendChild(btn);
+      });
+      updateNavDots();
+    }
+
+    function updateNavDots() {
+      preQuizData.forEach((q, idx) => {
+        const btn = document.getElementById(`dot-q-${idx}`);
+        if (!btn) return;
+        btn.className = "quiz-dot-btn";
+        if (idx === currentQuizIndex) {
+          btn.classList.add("current");
+        }
+        if (userAnswers[idx] !== null) {
+          if (userAnswers[idx] === q.answer) {
+            btn.classList.add("answered-correct");
+          } else {
+            btn.classList.add("answered-wrong");
+          }
+        }
+      });
+    }
+
+    function loadQuestion(index) {
+      if (index < 0 || index >= preQuizData.length) return;
+      currentQuizIndex = index;
+      const q = preQuizData[index];
+
+      // 更新頂部標籤與階段 Pill
+      document.getElementById("q-level-tag").innerText = q.levelName;
+      document.getElementById("q-level-tag").style.background = q.levelColor;
+      document.getElementById("q-unit-tag").innerText = q.unit;
+      document.getElementById("q-text").innerText = `Q${q.id}. ${q.question}`;
+
+      // 更新進度標記
+      document.getElementById("quiz-progress-label").innerText = `題目 ${index + 1} / ${preQuizData.length}`;
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      document.getElementById("quiz-score-live").innerText = `已作答：${answeredCount} / ${preQuizData.length} 題`;
+      const progressPercent = Math.round(((index + 1) / preQuizData.length) * 100);
+      document.getElementById("quiz-progress-fill").style.width = `${progressPercent}%`;
+
+      // 更新階段指示 Pill
+      [1, 2, 3, 4].forEach(lvl => {
+        const pill = document.getElementById(`pill-lvl-${lvl}`);
+        if (pill) {
+          if (q.level === lvl) {
+            pill.classList.add("active");
+          } else {
+            pill.classList.remove("active");
+          }
+        }
+      });
+
+      // 渲染選項
+      const optContainer = document.getElementById("quiz-options-container");
+      optContainer.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+      const isAnswered = userAnswers[index] !== null;
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-option-item";
+        btn.innerHTML = `<span class="quiz-opt-letter">${letters[optIdx]}</span> <span>${optText}</span>`;
+        
+        if (isAnswered) {
+          btn.disabled = true;
+          if (optIdx === q.answer) {
+            btn.classList.add("selected-correct");
+          }
+          if (userAnswers[index] === optIdx && optIdx !== q.answer) {
+            btn.classList.add("selected-wrong");
+          }
+        } else {
+          btn.onclick = () => selectOption(optIdx);
+        }
+        optContainer.appendChild(btn);
+      });
+
+      // 渲染詳解
+      const expBox = document.getElementById("quiz-explanation-box");
+      const expText = document.getElementById("quiz-explanation-text");
+      const expLink = document.getElementById("quiz-explanation-link-wrap");
+
+      if (isAnswered) {
+        const isCorrect = userAnswers[index] === q.answer;
+        expBox.className = `quiz-explanation-box ${isCorrect ? "correct" : "wrong"}`;
+        expText.innerHTML = `<strong>${isCorrect ? "🎉 答對了！" : "❌ 不太正確喔！"}</strong> ${q.explanation}`;
+        expLink.innerHTML = `<a class="quiz-goto-unit-btn" href="javascript:void(0)" onclick="scrollToSectionWithHighlight('${q.unitId}')">📖 前往【${q.unit}】深入研讀 ➔</a>`;
+      } else {
+        expBox.className = "quiz-explanation-box";
+        expBox.style.display = "none";
+      }
+
+      // 上下一題按鈕狀態
+      document.getElementById("btn-prev-q").disabled = (index === 0);
+      const nextBtn = document.getElementById("btn-next-q");
+      if (index === preQuizData.length - 1) {
+        nextBtn.innerText = "查看診斷報告 📊";
+        nextBtn.onclick = generateReport;
+      } else {
+        nextBtn.innerText = "下一題 ➡️";
+        nextBtn.onclick = () => navigateQuiz(1);
+      }
+
+      updateNavDots();
+    }
+
+    function selectOption(selectedIdx) {
+      userAnswers[currentQuizIndex] = selectedIdx;
+      loadQuestion(currentQuizIndex);
+    }
+
+    function navigateQuiz(step) {
+      const target = currentQuizIndex + step;
+      if (target >= 0 && target < preQuizData.length) {
+        loadQuestion(target);
+      }
+    }
+
+    function resetPreQuiz() {
+      if (confirm("確定要重置作答進度嗎？所有作答紀錄將被清除。")) {
+        userAnswers = new Array(preQuizData.length).fill(null);
+        document.getElementById("quiz-report-modal").style.display = "none";
+        loadQuestion(0);
+      }
+    }
+
+    function scrollToTopQuiz() {
+      document.getElementById("pre-quiz").scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function generateReport() {
+      const totalQuestions = preQuizData.length;
+      let correctCount = 0;
+      let dimScores = [0, 0, 0, 0]; // Level 1, 2, 3, 4 各 5 題，滿分各 25 分
+
+      preQuizData.forEach((q, i) => {
+        if (userAnswers[i] === q.answer) {
+          correctCount++;
+          dimScores[q.level - 1] += 5;
+        }
+      });
+
+      const totalScore = correctCount * 5;
+      document.getElementById("report-score-val").innerText = totalScore;
+
+      // 判定稱號
+      let rankTitle = "";
+      if (totalScore >= 95) {
+        rankTitle = "👑 全域 AI 系統架構宗師 (Master Architect)";
+      } else if (totalScore >= 80) {
+        rankTitle = "🤝 多 Agent 系統操盤手 (Agent Orchestrator)";
+      } else if (totalScore >= 60) {
+        rankTitle = "🛠️ 終端自動化施工工程師 (CLI Engineer)";
+      } else if (totalScore >= 40) {
+        rankTitle = "💬 提示工程進階實戰者 (Prompt Practitioner)";
+      } else {
+        rankTitle = "🌱 AI 生成與應用探索新星 (AI Explorer)";
+      }
+      document.getElementById("report-rank-title").innerText = rankTitle;
+
+      // 更新 4 大維度分數與進度條
+      dimScores.forEach((score, idx) => {
+        const num = idx + 1;
+        const scoreElem = document.getElementById(`dim-score-${num}`);
+        const barElem = document.getElementById(`dim-bar-${num}`);
+        if (scoreElem && barElem) {
+          scoreElem.innerText = `${score} / 25`;
+          barElem.style.width = `${(score / 25) * 100}%`;
+        }
+      });
+
+      // 產出學習路徑指引
+      const pathwaySummary = document.getElementById("pathway-summary-text");
+      const pathwayLinks = document.getElementById("pathway-links-container");
+      pathwayLinks.innerHTML = "";
+
+      let recommendUnits = [];
+      if (dimScores[0] < 20) recommendUnits.push({ id: "ch1", name: "單元 01 · 核心大腦解密", reason: "打穩文字接龍、Token 與幻覺基本功" });
+      if (dimScores[1] < 20) recommendUnits.push({ id: "ch2", name: "單元 02 · 動嘴聊天的日常境界", reason: "強化 Prompt 結構化與思維鏈提示心法" });
+      if (dimScores[2] < 20) recommendUnits.push({ id: "ch3", name: "單元 03 · 走出瀏覽器的科技革命", reason: "解鎖本地施工隊與 MCP 工具自動化" });
+      if (dimScores[3] < 20) recommendUnits.push({ id: "ch4", name: "單元 04 · 企業級架構思維", reason: "掌握多 Agent 協作流水線與收斂保護機制" });
+
+      if (recommendUnits.length === 0) {
+        pathwaySummary.innerText = "太厲害了！您的 AI 理解基礎非常扎實。建議您可以直接通讀全篇，重點關注實戰演練與四格情境漫畫，或作為團隊培訓指南！";
+        pathwayLinks.innerHTML = `
+          <a class="pathway-btn" href="javascript:void(0)" onclick="scrollToSectionWithHighlight('ch1')">🧠 單元 01 複習</a>
+          <a class="pathway-btn" href="javascript:void(0)" onclick="scrollToSectionWithHighlight('ch3')">🛠️ 單元 03 本機施工</a>
+          <a class="pathway-btn" href="javascript:void(0)" onclick="scrollToSectionWithHighlight('ch4')">🤝 單元 04 多 Agent</a>
+        `;
+      } else {
+        pathwaySummary.innerHTML = `針對您在本次測驗中表現較為薄弱的維度，建議在研讀時<strong>優先攻克以下單元</strong>：`;
+        recommendUnits.forEach(u => {
+          const btn = document.createElement("a");
+          btn.className = "pathway-btn";
+          btn.href = "javascript:void(0)";
+          btn.innerHTML = `👉 研讀【${u.name}】（${u.reason}）`;
+          btn.onclick = () => scrollToSectionWithHighlight(u.id);
+          pathwayLinks.appendChild(btn);
+        });
+      }
+
+      // 展開報告並平滑滾動至報告區
+      const reportModal = document.getElementById("quiz-report-modal");
+      reportModal.style.display = "block";
+      reportModal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // 頁面載入完成後自動初始化閱讀前測驗
+    window.addEventListener("DOMContentLoaded", () => {
+      initPreQuiz();
+    });
+
+  
+
+/* ====================================================
+   PPT 主題式簡報模式核心控制器 (Interactive Slide Deck)
+   ==================================================== */
+
+const TOTAL_SLIDES = 15;
+let currentSlideIndex = 0;
+let isPresentationMode = true;
+
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+  const savedSlide = localStorage.getItem('ai_guide_slide_index');
+  const savedMode = localStorage.getItem('ai_guide_view_mode');
+  
+  if (savedMode === 'continuous') {
+    setPresentationMode(false);
+  } else {
+    setPresentationMode(true);
+  }
+  
+  if (savedSlide !== null && !isNaN(parseInt(savedSlide))) {
+    const target = parseInt(savedSlide);
+    if (target >= 0 && target < TOTAL_SLIDES) {
+      goToSlide(target, false);
+    }
+  } else {
+    updateSlideDisplay();
+  }
+  
+  window.addEventListener('keydown', handleDeckKeyboard);
+});
+
+// 切換投影片
+function goToSlide(index, save = true) {
+  if (index < 0 || index >= TOTAL_SLIDES) return;
+  
+  const slides = document.querySelectorAll('.ppt-slide');
+  slides.forEach((sl, i) => {
+    if (i === index) {
+      sl.classList.add('active');
+    } else {
+      sl.classList.remove('active');
+    }
+  });
+  
+  currentSlideIndex = index;
+  if (save) {
+    localStorage.setItem('ai_guide_slide_index', index);
+  }
+  
+  updateSlideDisplay();
+  
+  if (isPresentationMode) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    const targetSlide = document.getElementById(`slide-${index}`);
+    if (targetSlide) {
+      targetSlide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+function nextSlide() {
+  if (currentSlideIndex < TOTAL_SLIDES - 1) {
+    goToSlide(currentSlideIndex + 1);
+  }
+}
+
+function prevSlide() {
+  if (currentSlideIndex > 0) {
+    goToSlide(currentSlideIndex - 1);
+  }
+}
+
+// 結尾可折疊隨堂測驗抽屜切換
+function toggleFinalQuizDrawer() {
+  const drawer = document.getElementById('finalQuizDrawer');
+  const arrow = document.getElementById('finalQuizArrow');
+  if (!drawer) return;
+  if (drawer.style.display === 'none' || drawer.style.display === '') {
+    drawer.style.display = 'block';
+    if (arrow) arrow.textContent = '▲ 收合';
+  } else {
+    drawer.style.display = 'none';
+    if (arrow) arrow.textContent = '▼ 展開';
+  }
+}
+
+// 更新頂部與底部資訊展示
+function updateSlideDisplay() {
+  const activeSlide = document.querySelector(`.ppt-slide[data-slide-index="${currentSlideIndex}"]`);
+  if (!activeSlide) return;
+  
+  const title = activeSlide.getAttribute('data-title') || '';
+  const chapter = activeSlide.getAttribute('data-chapter') || '';
+  
+  const titleDisplay = document.getElementById('pptCurrentTitle');
+  const chapterBadge = document.getElementById('pptCurrentChapter');
+  const pageCounter = document.getElementById('pptCurrentCounter');
+  const progressBar = document.getElementById('pptProgressBar');
+  
+  if (titleDisplay) titleDisplay.textContent = title;
+  if (chapterBadge) chapterBadge.textContent = chapter;
+  if (pageCounter) pageCounter.textContent = `${currentSlideIndex + 1} / ${TOTAL_SLIDES}`;
+  if (progressBar) {
+    const pct = ((currentSlideIndex + 1) / TOTAL_SLIDES) * 100;
+    progressBar.style.width = `${pct}%`;
+  }
+  
+  const bottomCounter = document.getElementById('pptBottomCounter');
+  const btnPrev = document.getElementById('pptBtnPrev');
+  const btnNext = document.getElementById('pptBtnNext');
+  
+  if (bottomCounter) bottomCounter.textContent = `${currentSlideIndex + 1} / ${TOTAL_SLIDES}`;
+  if (btnPrev) btnPrev.disabled = (currentSlideIndex === 0);
+  if (btnNext) btnNext.disabled = (currentSlideIndex === TOTAL_SLIDES - 1);
+  
+  const drawerItems = document.querySelectorAll('.ppt-drawer-item');
+  drawerItems.forEach((item, idx) => {
+    if (idx === currentSlideIndex) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+}
+
+// 模式切換：簡報模式 vs 長圖模式
+function setPresentationMode(enablePpt) {
+  isPresentationMode = enablePpt;
+  if (enablePpt) {
+    document.body.classList.remove('continuous-mode');
+    document.body.classList.add('ppt-mode');
+    localStorage.setItem('ai_guide_view_mode', 'ppt');
+    const btn = document.getElementById('pptBtnToggleMode');
+    if (btn) btn.innerHTML = '🖥️ 簡報模式 (已開啟)';
+    goToSlide(currentSlideIndex, false);
+  } else {
+    document.body.classList.remove('ppt-mode');
+    document.body.classList.add('continuous-mode');
+    localStorage.setItem('ai_guide_view_mode', 'continuous');
+    const btn = document.getElementById('pptBtnToggleMode');
+    if (btn) btn.innerHTML = '📜 長圖模式 (切換簡報)';
+    const targetSlide = document.getElementById(`slide-${currentSlideIndex}`);
+    if (targetSlide) {
+      targetSlide.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+}
+
+function togglePresentationMode() {
+  setPresentationMode(!isPresentationMode);
+}
+
+// 鍵盤操作支援
+function handleDeckKeyboard(e) {
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+    return;
+  }
+  
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+    if (e.key === ' ' && isPresentationMode) e.preventDefault();
+    nextSlide();
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    prevSlide();
+  } else if (e.key === 'm' || e.key === 'M') {
+    togglePresentationMode();
+  } else if (e.key === 't' || e.key === 'T') {
+    toggleDrawer();
+  } else if (e.key === 'f' || e.key === 'F') {
+    toggleFullscreen();
+  }
+}
+
+// 抽屜控制
+function toggleDrawer() {
+  const overlay = document.getElementById('pptDrawerOverlay');
+  if (overlay) {
+    overlay.classList.toggle('open');
+  }
+}
+
+function closeDrawer() {
+  const overlay = document.getElementById('pptDrawerOverlay');
+  if (overlay) {
+    overlay.classList.remove('open');
+  }
+}
+
+// 全螢幕切換
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.log('Fullscreen error:', err);
+    });
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+// 改造 scrollToSectionWithHighlight 以支援 PPT Slide 跳轉
+function scrollToSectionWithHighlight(sectionId) {
+  const anchorSlideMap = {
+    'pre-quiz': 1,
+    'ch1': 2,
+    'sec-ch1-sandbox': 3,
+    'sec-ch1-terms': 4,
+    'ch2': 5,
+    'sec-ch2-steps': 6,
+    'sec-ch2-terms': 7,
+    'ch3': 8,
+    'sec-ch3-evolution': 9,
+    'sec-ch3-terms': 10,
+    'ch4': 11,
+    'sec-ch4-pipeline': 12,
+    'sec-ch4-terms': 13,
+    'quiz': 14
+  };
+  
+  if (isPresentationMode && anchorSlideMap[sectionId] !== undefined) {
+    goToSlide(anchorSlideMap[sectionId]);
+    setTimeout(() => {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('section-highlight');
+        void el.offsetWidth;
+        el.classList.add('section-highlight');
+      }
+    }, 200);
+    return;
+  }
+  
+  const el = document.getElementById(sectionId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.classList.remove('section-highlight');
+    void el.offsetWidth;
+    el.classList.add('section-highlight');
+  }
+}
+
   </script>
 </body>
 </html>

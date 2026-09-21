@@ -1,0 +1,18 @@
+# 僅允許 ai_knowledge_guide_interactive.html、index.html 與 README.md，其餘檔案一律忽略
+images/
+*.md
+!README.md
+*.json
+*.py
+*.html
+!ai_knowledge_guide_interactive.html
+!index.html
+
+# 系統與環境暫存檔
+.agents/
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc

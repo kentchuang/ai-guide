@@ -945,6 +945,228 @@
       display: none;
     }
 
+    /* ==========================================================
+       🛠️ 網頁 AI vs 電腦 Agent 開放式實作任務專用樣式
+       ========================================================== */
+    .agent-task-container {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .agent-task-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.75rem;
+      overflow-x: auto;
+    }
+    .agent-task-tab {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .agent-task-tab:hover {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .agent-task-tab.active {
+      background: #4f46e5;
+      border-color: #4338ca;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(79,70,229,0.25);
+    }
+    .task-panel {
+      display: none;
+      animation: fadeInTask 0.25s ease;
+    }
+    .task-panel.active {
+      display: block;
+    }
+    @keyframes fadeInTask {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .task-badge-pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .task-scenario-box {
+      background: #f8fafc;
+      border-left: 4px solid #3b82f6;
+      padding: 1rem 1.25rem;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 1.25rem;
+      color: #334155;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .sample-data-card {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.88rem;
+      position: relative;
+    }
+    .sample-data-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 0.5rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .copy-sample-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-sample-btn:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+    .mode-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .mode-compare-grid { grid-template-columns: 1fr; }
+    }
+    .mode-col {
+      border-radius: 14px;
+      padding: 1.25rem;
+      border: 1.5px solid;
+    }
+    .mode-col-web {
+      background: #faf5ff;
+      border-color: #d8b4fe;
+    }
+    .mode-col-agent {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .mode-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mode-col-web .mode-title { color: #7e22ce; }
+    .mode-col-agent .mode-title { color: #15803d; }
+    .mode-step-list {
+      margin: 0;
+      padding-left: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+    .mode-step-list li {
+      margin-bottom: 0.4rem;
+    }
+    .prompt-snippet {
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: #0f172a;
+      font-family: inherit;
+    }
+    .self-check-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .self-check-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #334155;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    .check-item input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: #4f46e5;
+      transform: scale(1.15);
+      cursor: pointer;
+    }
+    .reveal-answer-btn {
+      width: 100%;
+      background: #f1f5f9;
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .reveal-answer-btn:hover {
+      background: #e2e8f0;
+      border-color: #64748b;
+    }
+    .reveal-answer-panel {
+      display: none;
+      margin-top: 1rem;
+      background: #ecfdf5;
+      border: 1.5px solid #6ee7b7;
+      border-radius: 12px;
+      padding: 1.25rem;
+      color: #064e3b;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
     /* 響應式適配 */
     @media (max-width: 1024px) {
       .comic-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
@@ -1698,6 +1920,10 @@
       letter-spacing: 0.05em;
       min-width: 75px;
       text-align: center;
+      white-space: nowrap;
+    }
+    .ppt-nav-btn {
+      white-space: nowrap;
     }
     .ppt-keyboard-hints {
       font-size: 0.75rem;
@@ -1713,6 +1939,168 @@
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 0.7rem;
+    }
+
+    /* ==========================================================
+       📱 行動端手機瀏覽器深度體驗優化 (Mobile UX & RWD)
+       ========================================================== */
+    @media (max-width: 768px) {
+      /* 1. 頂部導航欄緊湊化，徹底杜絕按鈕折行與豎排破版 */
+      .ppt-deck-header {
+        padding: 0.45rem 0.65rem;
+      }
+      .ppt-header-inner {
+        gap: 6px;
+      }
+      .ppt-brand-area {
+        gap: 6px;
+        font-size: 0.92rem;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+      .ppt-brand-area svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+      .ppt-brand-text {
+        font-size: 0.88rem;
+        white-space: nowrap;
+      }
+      
+      /* 手機上隱藏中間過長的文章標題，保留緊湊的章節徽章與進度指示 */
+      .ppt-current-info {
+        gap: 5px;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+      .ppt-title-display {
+        display: none !important;
+      }
+      .ppt-chapter-badge {
+        font-size: 0.74rem;
+        padding: 2px 7px;
+        max-width: 90px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ppt-page-counter {
+        font-size: 0.75rem;
+        padding: 2px 7px;
+        white-space: nowrap;
+      }
+
+      /* 工具按鈕精巧排列，絕不折行 */
+      .ppt-tools-area {
+        gap: 5px;
+        flex-shrink: 0;
+      }
+      .ppt-btn-tool {
+        padding: 4px 8px;
+        font-size: 0.78rem;
+        white-space: nowrap;
+        border-radius: 7px;
+        line-height: 1.25;
+      }
+      /* 手機端全螢幕按鈕隱藏，釋放極限寬度空間 */
+      .ppt-btn-fullscreen {
+        display: none !important;
+      }
+
+      /* 2. 視口與滾動預留安全距離，徹底解決底部控制器遮擋正文問題 */
+      .ppt-viewport {
+        margin: 0.75rem auto 6rem;
+        padding: 0 0.5rem 6.5rem;
+        min-height: calc(100vh - 120px);
+      }
+
+      /* 3. 底部懸浮控制器重塑為精巧膠囊 Dock */
+      .ppt-bottom-bar {
+        bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+        padding: 0.35rem 0.65rem;
+        gap: 8px;
+        border-radius: 9999px;
+        background: rgba(15, 23, 42, 0.90);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: calc(100vw - 1.5rem);
+      }
+      .ppt-nav-btn {
+        padding: 0.38rem 0.85rem;
+        font-size: 0.82rem;
+        border-radius: 999px;
+      }
+      .ppt-nav-meta {
+        font-size: 0.82rem;
+        min-width: 48px;
+      }
+      /* 手機觸控環境隱藏實體鍵盤提示 */
+      .ppt-keyboard-hints {
+        display: none !important;
+      }
+
+      /* 4. 投影片頂部小標題列斷字修復 */
+      .ppt-slide-header-bar {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.78rem;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .ppt-slide-header-bar .tag-left {
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .ppt-slide-header-bar .tag-right {
+        gap: 6px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+      }
+
+      /* 5. Hero 封面看板與標題響應式調諧（覆蓋 inline styles） */
+      header.hero {
+        padding: 2.25rem 1rem 1.75rem !important;
+        border-radius: 14px !important;
+      }
+      header.hero h1 {
+        font-size: 1.55rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 0.85rem !important;
+      }
+      header.hero p {
+        font-size: 0.92rem !important;
+        line-height: 1.65 !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .hero-top-badge {
+        font-size: 0.74rem !important;
+        padding: 0.25rem 0.75rem !important;
+        gap: 5px !important;
+      }
+      .section-card {
+        padding: 1.25rem 0.85rem !important;
+        border-radius: 14px !important;
+      }
+
+      /* 6. 側邊抽屜在手機上的舒適排版 */
+      .ppt-drawer {
+        width: 88vw;
+      }
+    }
+
+    @media (max-width: 520px) {
+      /* 在窄屏直式手機上，隱藏品牌名稱純文字，保留發光燈泡圖示，徹底杜絕擠壓換行 */
+      .ppt-brand-text {
+        display: none !important;
+      }
+      .ppt-brand-area svg {
+        width: 22px;
+        height: 22px;
+      }
+      .ppt-chapter-badge {
+        max-width: 80px;
+      }
     }
     
     .ppt-drawer-overlay {
@@ -1836,12 +2224,12 @@
   <!-- PPT 簡報頂部導航條 -->
   <header class="ppt-deck-header">
     <div class="ppt-header-inner">
-      <div class="ppt-brand-area">
+      <div class="ppt-brand-area" onclick="goToSlide(0)">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/>
           <path d="M9 21h6"/>
         </svg>
-        <span>AI 基礎觀念指南</span>
+        <span class="ppt-brand-text">AI 基礎觀念指南</span>
       </div>
       
       <div class="ppt-current-info">
@@ -1855,9 +2243,9 @@
           ☰ 目錄
         </button>
         <button class="ppt-btn-tool" id="pptBtnToggleMode" onclick="togglePresentationMode()" title="切換簡報/連續長圖">
-          🖥️ 簡報模式 (已開啟)
+          <span id="pptModeIcon">🖥️</span> <span id="pptModeText">簡報模式 (已開啟)</span>
         </button>
-        <button class="ppt-btn-tool" onclick="toggleFullscreen()" title="全螢幕展示 (F)">
+        <button class="ppt-btn-tool ppt-btn-fullscreen" onclick="toggleFullscreen()" title="全螢幕展示 (F)">
           ⛶ 全螢幕
         </button>
       </div>
@@ -4953,53 +5341,266 @@
     </button>
   </div>
 
-  <!-- 折疊可選：原 3 題快速隨堂挑戰 (預設收合，不打擾總結吸收) -->
+  <!-- 折疊可選：網頁 AI vs 電腦 Agent 實作任務挑戰 (預設收合) -->
   <div style="margin-top: 2rem; border-top: 2px dashed #cbd5e1; padding-top: 1.5rem;">
-    <button onclick="toggleFinalQuizDrawer()" id="btnFinalQuizToggle" style="width: 100%; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 0.9rem 1.4rem; font-weight: 800; font-size: 0.95rem; color: #475569; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.15s;">
-      <span>💡 想額外自我驗證？點此展開【3 題快速情境隨堂測驗】（選做）</span>
-      <span id="finalQuizArrow" style="color: #6366f1;">▼ 展開</span>
+    <button onclick="toggleFinalQuizDrawer()" id="btnFinalQuizToggle" style="width: 100%; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 0.95rem 1.4rem; font-weight: 800; font-size: 0.98rem; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 0.85rem;">動手做</span>
+        🛠️ 想動手實戰？點此展開【網頁 AI vs 電腦 Agent 差異實作任務】（開放式驗證）
+      </span>
+      <span id="finalQuizArrow" style="color: #6366f1; font-weight: 800;">▼ 展開</span>
     </button>
-    <div id="finalQuizDrawer" style="display: none; margin-top: 1.25rem; padding: 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px;">
+    <div id="finalQuizDrawer" style="display: none; margin-top: 1.25rem; padding: 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px;">
       
-      <div class="section-header">
-        <span class="section-tag">單元 05 · 自我檢測與驗收</span>
-        <h2>
-          <span>🏆 實戰隨堂測驗：你真的懂 AI 了嗎？</span>
+      <div class="section-header" style="margin-bottom: 1.5rem;">
+        <span class="section-tag">單元 05 · 實戰對決與能力驗收</span>
+        <h2 style="font-size: 1.5rem; margin-top: 0.4rem;">
+          <span>🏆 開放式實作挑戰：網頁 AI vs 電腦 Agent 誰更強？</span>
         </h2>
-        <p class="section-desc">透過以下 3 題生活情境題，檢驗您是否已經掌握從文字接龍到多 Agent 的思維躍遷！</p>
+        <p class="section-desc" style="font-size: 0.95rem; color: #64748b; margin-top: 0.5rem; line-height: 1.6;">
+          不考死背選擇題！請在您的電腦或瀏覽器中，動手操作以下 3 個日常生活情境任務。親身體驗「網頁對話框」與「電腦 Agent 施工隊（如 Antigravity / Claude Code / Codex）」在效率、本機檔案存取與自動化上的巨大分水嶺！
+        </p>
       </div>
 
-      <!-- 題目 1 -->
-      <div class="quiz-card">
-        <div class="quiz-question">Q1. 為什麼網頁版 ChatGPT 有時候會自信滿滿地回答出錯誤的歷史事件？</div>
-        <div class="quiz-options">
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q1-fb', '錯誤！大語言模型不是傳統百科資料庫。')">A. 因為資料庫主機太忙碌當機了</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q1-fb', '答對了！LLM 本質是依據機率進行文字接龍，若無外部真實資料參考，容易因機率組合出流暢卻捏造的句子（幻覺）。')">B. 因為大語言模型的本質是「算字詞機率接龍」，追求語法流暢而非絕對物理真實</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q1-fb', '錯誤！它沒有人的惡作劇情緒。')">C. 因為 AI 想要惡作劇捉弄使用者</button>
+      <div class="agent-task-container">
+        <!-- 任務切換 Tabs -->
+        <div class="agent-task-tabs">
+          <button class="agent-task-tab active" onclick="switchAgentTask(1, this)">
+            <span>🧾 任務 1</span> 發票收據一鍵對帳
+          </button>
+          <button class="agent-task-tab" onclick="switchAgentTask(2, this)">
+            <span>🚗 任務 2</span> 旅遊衝突與預算健檢
+          </button>
+          <button class="agent-task-tab" onclick="switchAgentTask(3, this)">
+            <span>📝 任務 3</span> 會議廢話過濾萃取
+          </button>
         </div>
-        <div class="quiz-feedback" id="q1-fb"></div>
-      </div>
 
-      <!-- 題目 2 -->
-      <div class="quiz-card">
-        <div class="quiz-question">Q2. 你手邊有 500 份格式不統一的 Word 檔需要改檔名並統計關鍵字，哪種工具最適合？</div>
-        <div class="quiz-options">
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q2-fb', '網頁版無法直接存取你的本機磁碟，你需要手動一份份上傳 500 次，非常繁瑣！')">A. 打開網頁版 ChatGPT，手動一份份把文章複製貼上進去發問</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q2-fb', '答對了！程式碼代理（如 Antigravity / Claude Code）具備本機檔案讀寫與腳本執行能力，可批次全自動完成。')">B. 使用如 Antigravity 或 Claude Code 等程式碼代理施工隊，授權本機工具箱自動批次處理</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q2-fb', '太辛苦了！現代科技已經能將此重複流程全自動化。')">C. 完全不靠 AI，純手工連續加班三天一個個改名</button>
-        </div>
-        <div class="quiz-feedback" id="q2-fb"></div>
-      </div>
+        <!-- ==================== 任務 1 面板 ==================== -->
+        <div id="task-panel-1" class="task-panel active">
+          <div>
+            <span class="task-badge-pill" style="background: #e0e7ff; color: #3730a3;">單元 02 + 05 · 本機檔案讀寫與工具箱自動落盤</span>
+            <h3 style="font-size: 1.2rem; color: #1e293b; margin: 0.3rem 0 0.75rem 0;">🧾 出差與採購發票：一鍵彙整對帳表</h3>
+          </div>
+          
+          <div class="task-scenario-box">
+            <strong>🎯 生活情境挑戰：</strong><br>
+            剛辦完家庭聚餐或部門採購，手邊有 3 張發票收據文字明細。你需要核算<strong>「總報銷金額是多少」</strong>，並產出一份標準格式的明細報表 <code>expense_report.txt</code>。
+          </div>
 
-      <!-- 題目 3 -->
-      <div class="quiz-card">
-        <div class="quiz-question">Q3. 在規劃「多 Agent 協作系統」時，以下哪一項做法是最佳實踐原則？</div>
-        <div class="quiz-options">
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q3-fb', '錯誤！這會讓單一 Agent 負擔過大且喪失多 Agent 分工與錯誤隔離的優勢。')">A. 把所有工具全部授權給同一個 Agent 讓它自由發揮</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, false, 'q3-fb', '錯誤！純口語溝通容易產生歧義與解析錯誤，應使用 JSON Schema 等嚴格結構化格式。')">B. 讓各個 Agent 在聊天群組裡自由用口語聊天傳話，不做任何格式限制</button>
-          <button class="quiz-btn" onclick="checkQuiz(this, true, 'q3-fb', '答對了！職能專業劃分、結構化傳遞與獨立客觀審查反思，是多 Agent 穩健落地的關鍵架構。')">C. 專業角色拆解（主管、工人、審查員），以結構化資料傳遞，並設有客觀驗證把關</button>
+          <div class="sample-data-card">
+            <div class="sample-data-header">
+              <span>📄 測試素材（可直接複製建立檔案或貼上發問）</span>
+              <button class="copy-sample-btn" onclick="copySampleData('sample-text-1', this)">📋 一鍵複製測試素材</button>
+            </div>
+            <pre id="sample-text-1" style="margin: 0; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5;">【發票 1】日期：2026-03-10 / 商店：博客來書店 / 品項：AI 實戰指南書籍 / 金額：NT$ 720 / 統編：已開
+【發票 2】日期：2026-03-12 / 商店：家樂福賣場 / 品項：辦公文具與咖啡豆 / 金額：NT$ 1,600 / 統編：無
+【發票 3】日期：2026-03-14 / 商店：鼎泰豐餐廳 / 品項：專案結案慶功聚餐 / 金額：NT$ 2,000 / 統編：已開</pre>
+          </div>
+
+          <!-- 雙模式對照網格 -->
+          <div class="mode-compare-grid">
+            <div class="mode-col mode-col-web">
+              <div class="mode-title">🌐 模式 A：網頁對話式 AI（ChatGPT / Claude.ai）</div>
+              <ol class="mode-step-list">
+                <li>將上方測試素材複製貼入網頁對話框。</li>
+                <li>輸入 Prompt：
+                  <div class="prompt-snippet">請幫我計算以上發票的總金額，並整理成清單。</div>
+                </li>
+                <li>AI 回覆文字後，<strong>你必須自己手動打開記事本或 Excel，手動複製貼上存檔為 expense_report.txt</strong>。如果有一百份發票，你就是手動複製貼上一百次的人肉搬運工！</li>
+              </ol>
+            </div>
+
+            <div class="mode-col mode-col-agent">
+              <div class="mode-title">💻 模式 B：電腦 Agent（Antigravity / Claude Code / Codex）</div>
+              <ol class="mode-step-list">
+                <li>將上方素材在工作資料夾存為 <code>receipts.txt</code>。</li>
+                <li>對 Agent 輸入一句話指令：
+                  <div class="prompt-snippet">請讀取 receipts.txt，計算總花費金額，並直接在當前資料夾輸出 expense_report.txt 報表。</div>
+                </li>
+                <li><strong>無需手動剪貼！</strong> Agent 自動調用檔案工具讀取、計算，並自主執行 <code>write_to_file</code> 直接在你的電腦建立實體檔案。</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- 自我檢核清單 -->
+          <div class="self-check-card">
+            <div class="self-check-title">📋 動手實作自我檢核（完成後請勾選）</div>
+            <label class="check-item"><input type="checkbox"> <span>我已在網頁對話框嘗試發問，體驗過「手動打開檔案 ➔ 複製貼上 ➔ 手動存檔」的剪貼簿繁瑣流程。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已對電腦 Agent 下達委派指令，親眼看見它「自動讀檔並直接在資料夾生成實體報表」。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已核對產出的總金額與檔案，數值完全符合。</span></label>
+          </div>
+
+          <!-- 展開核對答案按鈕 -->
+          <button class="reveal-answer-btn" onclick="toggleAnswerReveal('reveal-task-1', this)">
+            <span>🔍 點此展開【標準答案對帳與專家架構點評】</span>
+          </button>
+          <div id="reveal-task-1" class="reveal-answer-panel">
+            <h4 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1rem;">✅ 客觀標準答案對帳：</h4>
+            <ul style="margin: 0 0 1rem 0; padding-left: 1.25rem;">
+              <li><strong>總金額精確值</strong>：<strong><code>NT$ 4,320</code></strong>（720 + 1,600 + 2,000 = 4,320 元，數字分毫不差）。</li>
+              <li><strong>有開統編之總額</strong>：共 2 筆（博客來 720 + 鼎泰豐 2,000 = <strong>NT$ 2,720</strong>）。</li>
+              <li><strong>實體驗證</strong>：電腦 Agent 執行完後，資料夾中應直接出現名為 <code>expense_report.txt</code> 的新檔案。</li>
+            </ul>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.85rem; border: 1px dashed #34d399; color: #064e3b; font-size: 0.88rem;">
+              💡 <strong>專家思維復盤</strong>：網頁 AI 是「隔著玻璃聊天的諮詢顧問」，無法存取你的本地磁碟；而電腦 Agent 是「擁有檔案讀寫工具箱的實習秘書」，能自主閉環完成讀取與存檔，徹底解放人類剪貼簿時間。
+            </div>
+          </div>
         </div>
-        <div class="quiz-feedback" id="q3-fb"></div>
+
+        <!-- ==================== 任務 2 面板 ==================== -->
+        <div id="task-panel-2" class="task-panel">
+          <div>
+            <span class="task-badge-pill" style="background: #fef3c7; color: #92400e;">單元 01 + 04 · 多檔案交叉比對與邏輯約束</span>
+            <h3 style="font-size: 1.2rem; color: #1e293b; margin: 0.3rem 0 0.75rem 0;">🚗 家庭旅遊行程：時間衝突與預算健檢</h3>
+          </div>
+          
+          <div class="task-scenario-box">
+            <strong>🎯 生活情境挑戰：</strong><br>
+            全家週末要出遊花蓮，爸爸與媽媽各自寫了一份願望清單。你需要請 AI 擔任客觀公道伯，抓出<strong>「哪個時段兩人時間撞車了？」</strong>，並計算若全家總預算上限只有 10,000 元，<strong>「兩人總費用超標了多少？」</strong>，產出調解備忘錄 <code>travel_conflicts.txt</code>。
+          </div>
+
+          <div class="sample-data-card">
+            <div class="sample-data-header">
+              <span>📄 測試素材（包含爸爸與媽媽的願望清單）</span>
+              <button class="copy-sample-btn" onclick="copySampleData('sample-text-2', this)">📋 一鍵複製測試素材</button>
+            </div>
+            <pre id="sample-text-2" style="margin: 0; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5;">【爸爸的願望清單 - dad_wants.txt】
+週六 09:00~12:00 花蓮海線兜風 (油資: NT$ 1,200)
+週六 15:00~17:30 太魯閣砂卡礑步道健行 (門票與停車: NT$ 600)
+週日 10:00~14:00 泛舟極限冒險活動 (報名費: NT$ 4,500)
+
+【媽媽的願望清單 - mom_wants.txt】
+週六 12:30~14:30 網美海鮮餐廳午宴 (餐費: NT$ 2,500)
+週六 15:00~16:30 七星潭海景咖啡下午茶 (餐費: NT$ 1,500)
+週日 15:00~18:00 文創園區手作工坊與伴手禮 (費用: NT$ 2,500)
+【家庭總預算上限】：NT$ 10,000</pre>
+          </div>
+
+          <div class="mode-compare-grid">
+            <div class="mode-col mode-col-web">
+              <div class="mode-title">🌐 模式 A：網頁對話式 AI</div>
+              <ol class="mode-step-list">
+                <li>將兩份清單文字複製貼入對話框。</li>
+                <li>發問提問詞：
+                  <div class="prompt-snippet">請比對爸爸與媽媽的行程，指出時間衝突的活動，並計算總費用超出 10,000 元的部分是多少？</div>
+                </li>
+                <li>網頁 AI 雖然能找出衝突，但若文字更長，AI 常常會遺漏細節或因機率加總算錯金額（幻覺），且結論仍需手動複製整理。</li>
+              </ol>
+            </div>
+
+            <div class="mode-col mode-col-agent">
+              <div class="mode-title">💻 模式 B：電腦 Agent</div>
+              <ol class="mode-step-list">
+                <li>將資料分別存為 <code>dad_wants.txt</code> 與 <code>mom_wants.txt</code>。</li>
+                <li>對 Agent 下指令：
+                  <div class="prompt-snippet">請比對資料夾中的 dad_wants.txt 與 mom_wants.txt，抓出時間衝突點，計算超出 10,000 元預算的差額，並輸出 travel_conflicts.txt。</div>
+                </li>
+                <li>Agent 自動跨檔案閱讀、建立時間軸模型並執行精確數學計算，直接在本地儲存分析文件。</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="self-check-card">
+            <div class="self-check-title">📋 動手實作自我檢核（完成後請勾選）</div>
+            <label class="check-item"><input type="checkbox"> <span>我已在 AI 對話中測試行程比對，成功找到行程重疊的致命盲點。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已觀察到 Agent 能同時處理多份文字檔案的依賴關係，並精確計算預算差額。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已核對標準答案，確認衝突時段與超標金額分毫不差。</span></label>
+          </div>
+
+          <button class="reveal-answer-btn" onclick="toggleAnswerReveal('reveal-task-2', this)">
+            <span>🔍 點此展開【標準答案對帳與專家架構點評】</span>
+          </button>
+          <div id="reveal-task-2" class="reveal-answer-panel">
+            <h4 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1rem;">✅ 客觀標準答案對帳：</h4>
+            <ul style="margin: 0 0 1rem 0; padding-left: 1.25rem;">
+              <li><strong>唯一時間衝突時段</strong>：<strong><code>週六下午 15:00~16:30 / 17:30</code></strong>。爸爸要健行（太魯閣）、媽媽要喝咖啡（七星潭），兩地相距 20 多公里且車程超過 40 分鐘，物理上不可能同時參加！</li>
+              <li><strong>總花費金額</strong>：爸爸 6,300 元 + 媽媽 6,500 元 = <strong><code>NT$ 12,800</code></strong>。</li>
+              <li><strong>預算超標差額</strong>：12,800 - 10,000 = <strong><code>超標 NT$ 2,800</code></strong>。</li>
+            </ul>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.85rem; border: 1px dashed #34d399; color: #064e3b; font-size: 0.88rem;">
+              💡 <strong>專家思維復盤</strong>：LLM 本身不是計算機（接龍可能產生計算幻覺），但電腦 Agent 具備工具調用能力（可調用 Python 或算術環境），能確保跨檔案對照與金額計算兼具邏輯推理與 100% 數學精確度。
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== 任務 3 面板 ==================== -->
+        <div id="task-panel-3" class="task-panel">
+          <div>
+            <span class="task-badge-pill" style="background: #fee2e2; color: #991b1b;">單元 02 + 05 · 提示詞負向約束與結構化待辦落地</span>
+            <h3 style="font-size: 1.2rem; color: #1e293b; margin: 0.3rem 0 0.75rem 0;">📝 會議廢話過濾器：精準萃取 To-Do 清單</h3>
+          </div>
+          
+          <div class="task-scenario-box">
+            <strong>🎯 生活情境挑戰：</strong><br>
+            會議紀錄充斥了 70% 的抱怨、訂飲料與球賽閒聊。你需要請 AI 扮演無情過濾器，<strong>嚴格剔除所有無關閒聊</strong>，只萃取出「有明確負責人、任務內容、預計完成期限」的正經待辦事項，統計<strong>「共有幾項待辦」</strong>，並輸出為 <code>todo_list.md</code>。
+          </div>
+
+          <div class="sample-data-card">
+            <div class="sample-data-header">
+              <span>📄 測試素材（充斥閒聊的會議逐字紀錄）</span>
+              <button class="copy-sample-btn" onclick="copySampleData('sample-text-3', this)">📋 一鍵複製測試素材</button>
+            </div>
+            <pre id="sample-text-3" style="margin: 0; white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5;">會議時間：週一 09:30 部門晨會紀錄
+小張：大家早！今天天氣真好，樓下新開的無糖波霸鮮奶茶買一送一，等等中午有人要一起訂嗎？
+經理：先開會再訂飲料。針對 Q3 產品發表會，小張請在【本週三下班前】把競品分析簡報寄給我審查。
+小美：收到，那我負責聯絡場地廠商，我會在【下週二中午前】完成 3 家會議中心的報價比價表。
+小張：好喔，那我中午先幫大家登記鮮奶茶口味，大家私訊我。
+經理：還有，王副理剛出差回來，王副理請在【本週五前】完成出差費用核銷與客戶拜訪摘要報告。
+小李：對了，大家有看昨天的球賽嗎？最後那球三分真是太扯了！
+經理：好了不要閒聊，今天就這三件事，散會！</pre>
+          </div>
+
+          <div class="mode-compare-grid">
+            <div class="mode-col mode-col-web">
+              <div class="mode-title">🌐 模式 A：網頁對話式 AI</div>
+              <ol class="mode-step-list">
+                <li>貼上文字，若只給簡略提示詞：「請整理待辦事項」。</li>
+                <li>觀察網頁 AI 常把「小張訂波霸鮮奶茶」、「小李看球賽」也一起列入待辦中，你需要反覆追加 Prompt 要求它重新過濾。</li>
+                <li>手動複製 Markdown 結果，存進專案文件。</li>
+              </ol>
+            </div>
+
+            <div class="mode-col mode-col-agent">
+              <div class="mode-title">💻 模式 B：電腦 Agent</div>
+              <ol class="mode-step-list">
+                <li>將素材存為 <code>meeting_minutes.txt</code>。</li>
+                <li>對 Agent 下指令：
+                  <div class="prompt-snippet">請讀取 meeting_minutes.txt，嚴格過濾與工作無關之閒聊（如飲料、球賽），只萃取有負責人、任務與期限的有效工作，統計數量並直接存入 todo_list.md。</div>
+                </li>
+                <li>Agent 一步到位完成語意過濾與結構化萃取，直接在本地建立標準 Markdown 檔案。</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="self-check-card">
+            <div class="self-check-title">📋 動手實作自我檢核（完成後請勾選）</div>
+            <label class="check-item"><input type="checkbox"> <span>我已體會到「負向約束提示詞」的重要性，能成功過濾訂飲料與球賽雜訊。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已體會電腦 Agent 一鍵萃取並直接落地為本地 Markdown 檔案的高效。</span></label>
+            <label class="check-item"><input type="checkbox"> <span>我已核對待辦數量與三要素，完全符合標準。</span></label>
+          </div>
+
+          <button class="reveal-answer-btn" onclick="toggleAnswerReveal('reveal-task-3', this)">
+            <span>🔍 點此展開【標準答案對帳與專家架構點評】</span>
+          </button>
+          <div id="reveal-task-3" class="reveal-answer-panel">
+            <h4 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1rem;">✅ 客觀標準答案對帳：</h4>
+            <ul style="margin: 0 0 1rem 0; padding-left: 1.25rem;">
+              <li><strong>有效待辦總數</strong>：<strong><code>剛好 3 項</code></strong>（所有飲料登記、球賽討論皆被剔除）。</li>
+              <li><strong>三項有效任務核對</strong>：
+                <ol style="margin-top: 0.3rem;">
+                  <li><strong>小張</strong>：【本週三下班前】將競品分析簡報寄給經理審查。</li>
+                  <li><strong>小美</strong>：【下週二中午前】完成 3 家會議中心報價比價表。</li>
+                  <li><strong>王副理</strong>：【本週五前】完成出差費用核銷與客戶拜訪摘要報告。</li>
+                </ol>
+              </li>
+            </ul>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.85rem; border: 1px dashed #34d399; color: #064e3b; font-size: 0.88rem;">
+              💡 <strong>專家思維復盤</strong>：大語言模型天生具備強大的語意辨識能力，只要設定清晰的「過濾規則」，就能將雜亂廢話清洗成高價值的結構化資料；電腦 Agent 更能進一步自動建立工作清單甚至調用 API 安排排程。
+            </div>
+          </div>
+        </div>
+
       </div>
     
     </div>
@@ -6103,6 +6704,76 @@ function toggleFinalQuizDrawer() {
   }
 }
 
+// ==========================================================
+// 🛠️ 網頁 AI vs 電腦 Agent 實作任務抽屜互動控制
+// ==========================================================
+function switchAgentTask(taskNum, btn) {
+  const tabs = document.querySelectorAll('.agent-task-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const panels = document.querySelectorAll('.task-panel');
+  panels.forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(`task-panel-${taskNum}`);
+  if (target) target.classList.add('active');
+}
+
+function copySampleData(elementId, btn) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const text = el.innerText || el.textContent;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '✅ 已複製測試素材！';
+      btn.style.background = '#059669';
+      btn.style.borderColor = '#10b981';
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.style.background = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    }).catch(() => {
+      fallbackCopyText(text, btn);
+    });
+  } else {
+    fallbackCopyText(text, btn);
+  }
+}
+
+function fallbackCopyText(text, btn) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製測試素材！';
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+    }, 2000);
+  } catch (err) {
+    btn.innerHTML = '❌ 請手動選取複製';
+  }
+  document.body.removeChild(textarea);
+}
+
+function toggleAnswerReveal(panelId, btn) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  if (panel.style.display === 'block') {
+    panel.style.display = 'none';
+    btn.innerHTML = '<span>🔍 點此展開【標準答案對帳與專家架構點評】</span>';
+  } else {
+    panel.style.display = 'block';
+    btn.innerHTML = '<span>▲ 點此收合【標準答案對帳與專家架構點評】</span>';
+  }
+}
+
 // 更新頂部與底部資訊展示
 function updateSlideDisplay() {
   const activeSlide = document.querySelector(`.ppt-slide[data-slide-index="${currentSlideIndex}"]`);
@@ -6145,19 +6816,23 @@ function updateSlideDisplay() {
 // 模式切換：簡報模式 vs 長圖模式
 function setPresentationMode(enablePpt) {
   isPresentationMode = enablePpt;
+  const modeIcon = document.getElementById('pptModeIcon');
+  const modeText = document.getElementById('pptModeText');
+  const isMobile = window.innerWidth <= 768;
+
   if (enablePpt) {
     document.body.classList.remove('continuous-mode');
     document.body.classList.add('ppt-mode');
     localStorage.setItem('ai_guide_view_mode', 'ppt');
-    const btn = document.getElementById('pptBtnToggleMode');
-    if (btn) btn.innerHTML = '🖥️ 簡報模式 (已開啟)';
+    if (modeIcon) modeIcon.textContent = '🖥️';
+    if (modeText) modeText.textContent = isMobile ? '簡報' : '簡報模式 (已開啟)';
     goToSlide(currentSlideIndex, false);
   } else {
     document.body.classList.remove('ppt-mode');
     document.body.classList.add('continuous-mode');
     localStorage.setItem('ai_guide_view_mode', 'continuous');
-    const btn = document.getElementById('pptBtnToggleMode');
-    if (btn) btn.innerHTML = '📜 長圖模式 (切換簡報)';
+    if (modeIcon) modeIcon.textContent = '📜';
+    if (modeText) modeText.textContent = isMobile ? '長圖' : '長圖模式 (切換簡報)';
     const targetSlide = document.getElementById(`slide-${currentSlideIndex}`);
     if (targetSlide) {
       targetSlide.scrollIntoView({ behavior: 'smooth' });
@@ -6165,9 +6840,71 @@ function setPresentationMode(enablePpt) {
   }
 }
 
+// 監聽螢幕旋轉或尺寸改變，自動自適應按鈕標籤
+window.addEventListener('resize', () => {
+  const modeText = document.getElementById('pptModeText');
+  if (!modeText) return;
+  const isMobile = window.innerWidth <= 768;
+  if (isPresentationMode) {
+    modeText.textContent = isMobile ? '簡報' : '簡報模式 (已開啟)';
+  } else {
+    modeText.textContent = isMobile ? '長圖' : '長圖模式 (切換簡報)';
+  }
+});
+
 function togglePresentationMode() {
   setPresentationMode(!isPresentationMode);
 }
+
+// 📱 行動端左右滑動切換投影片手勢 (Touch Swipe Gestures)
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  if (e.touches && e.touches.length > 0) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: true });
+
+document.addEventListener('touchend', (e) => {
+  if (!isPresentationMode) return; // 僅在簡報模式下響應左右滑動
+  if (!e.changedTouches || e.changedTouches.length === 0) return;
+
+  // 避免在表單、按鈕、互動滑桿或抽屜內部滑動時觸發換頁
+  const target = e.target;
+  if (target.closest('button') ||
+      target.closest('a') ||
+      target.closest('input') ||
+      target.closest('textarea') ||
+      target.closest('select') ||
+      target.closest('.slider') ||
+      target.closest('.interactive-sandbox') ||
+      target.closest('.ppt-drawer') ||
+      target.closest('.ppt-bottom-bar')) {
+    return;
+  }
+
+  touchEndX = e.changedTouches[0].clientX;
+  touchEndY = e.changedTouches[0].clientY;
+
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+  const minSwipeDistance = 45; // 最小觸發滑動距離
+
+  // 水平滑動幅度須顯著大於垂直位移，避免使用者垂直閱讀捲動時誤觸
+  if (Math.abs(deltaX) > Math.abs(deltaY) * 1.35 && Math.abs(deltaX) > minSwipeDistance) {
+    if (deltaX < 0) {
+      // 往左滑動 -> 前進至下一張
+      nextSlide();
+    } else {
+      // 往右滑動 -> 返回上一張
+      prevSlide();
+    }
+  }
+}, { passive: true });
 
 // 鍵盤操作支援
 function handleDeckKeyboard(e) {

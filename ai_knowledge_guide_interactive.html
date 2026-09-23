@@ -23,6 +23,25 @@
       --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
       --shadow-comic: 4px 4px 0px #1e293b;
+      --font-scale: 1;
+    }
+
+    /* 根字級與長輩大字動態縮放系統 (Root Font Scaling for all rem units) */
+    html {
+      font-size: 16px;
+      --font-scale: 1;
+    }
+    html[data-font-size="standard"], body[data-font-size="standard"] {
+      font-size: 16px;
+      --font-scale: 1;
+    }
+    html[data-font-size="large"], body[data-font-size="large"] {
+      font-size: 19px;
+      --font-scale: 1.1875;
+    }
+    html[data-font-size="xlarge"], body[data-font-size="xlarge"] {
+      font-size: 22px;
+      --font-scale: 1.375;
     }
 
     * {
@@ -37,6 +56,7 @@
       color: var(--text-main);
       line-height: 1.65;
       padding-bottom: 60px;
+      font-size: calc(1rem * var(--font-scale, 1));
     }
 
     /* 頂部導航 */
@@ -1945,9 +1965,24 @@
        📱 行動端手機瀏覽器深度體驗優化 (Mobile UX & RWD)
        ========================================================== */
     @media (max-width: 768px) {
+      /* 手機端長輩友善根字級系統：改變 html 根字級讓全頁 rem 等比顯著放大 */
+      html {
+        font-size: 16px;
+      }
+      html[data-font-size="standard"], body[data-font-size="standard"] {
+        font-size: 15.5px !important;
+      }
+      html[data-font-size="large"], body[data-font-size="large"] {
+        font-size: 19.5px !important;
+      }
+      html[data-font-size="xlarge"], body[data-font-size="xlarge"] {
+        font-size: 23px !important;
+      }
+
       /* 1. 頂部導航欄緊湊化，徹底杜絕按鈕折行與豎排破版 */
       .ppt-deck-header {
         padding: 0.45rem 0.65rem;
+        font-size: 14px;
       }
       .ppt-header-inner {
         gap: 6px;
@@ -1997,8 +2032,9 @@
         flex-shrink: 0;
       }
       .ppt-btn-tool {
-        padding: 4px 8px;
-        font-size: 0.78rem;
+        min-height: 38px;
+        padding: 5px 9px;
+        font-size: 0.85rem;
         white-space: nowrap;
         border-radius: 7px;
         line-height: 1.25;
@@ -2028,13 +2064,15 @@
         max-width: calc(100vw - 1.5rem);
       }
       .ppt-nav-btn {
-        padding: 0.38rem 0.85rem;
-        font-size: 0.82rem;
+        min-height: 44px;
+        padding: 0.5rem 1.1rem;
+        font-size: calc(0.95rem * var(--font-scale, 1));
         border-radius: 999px;
       }
       .ppt-nav-meta {
-        font-size: 0.82rem;
-        min-width: 48px;
+        font-size: 0.95rem;
+        font-weight: 800;
+        min-width: 52px;
       }
       /* 手機觸控環境隱藏實體鍵盤提示 */
       .ppt-keyboard-hints {
@@ -2064,17 +2102,17 @@
         border-radius: 14px !important;
       }
       header.hero h1 {
-        font-size: 1.55rem !important;
+        font-size: 1.65rem !important;
         line-height: 1.35 !important;
         margin-bottom: 0.85rem !important;
       }
       header.hero p {
-        font-size: 0.92rem !important;
-        line-height: 1.65 !important;
+        font-size: 1.05rem !important;
+        line-height: 1.7 !important;
         margin-bottom: 1.5rem !important;
       }
       .hero-top-badge {
-        font-size: 0.74rem !important;
+        font-size: 0.8rem !important;
         padding: 0.25rem 0.75rem !important;
         gap: 5px !important;
       }
@@ -2082,10 +2120,104 @@
         padding: 1.25rem 0.85rem !important;
         border-radius: 14px !important;
       }
+      .map-primary-btn, .map-secondary-btn {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        justify-content: center;
+        padding: 0.85rem 1.25rem !important;
+        font-size: 1.05rem !important;
+        white-space: normal !important;
+        text-align: center;
+      }
 
       /* 6. 側邊抽屜在手機上的舒適排版 */
       .ppt-drawer {
         width: 88vw;
+      }
+
+      /* 7. 👴 長輩友善字體大小與手機跨裝置閱讀體驗優化 */
+      /* 漫畫對話氣泡：字體加大至 calc(1.05rem * var(--font-scale, 1))（約 17px~20px），行高 1.6，字重 600，加粗黑字易讀 */
+      .comic-bubble {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+        line-height: 1.6;
+        font-weight: 600;
+        color: #0f172a;
+      }
+      /* 漫畫發言者：加大至 calc(0.9rem * var(--font-scale, 1)) */
+      .comic-speaker {
+        font-size: calc(0.9rem * var(--font-scale, 1));
+      }
+      /* 漫畫標題：加大至 calc(1.05rem * var(--font-scale, 1)) */
+      .comic-panel-title {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+        white-space: normal;
+        line-height: 1.4;
+      }
+      /* 漫畫註解：加大至 calc(0.92rem * var(--font-scale, 1)) */
+      .comic-caption {
+        font-size: calc(0.92rem * var(--font-scale, 1));
+        line-height: 1.5;
+      }
+
+      /* 名詞百科：.term-name-zh (1.2rem+), .term-content-grid, .term-row (1.05rem+), .term-row strong (1.1rem+) */
+      .term-name-zh {
+        font-size: calc(1.2rem * var(--font-scale, 1));
+      }
+      .term-content-grid {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+      }
+      .term-row {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+        padding: 0.65rem 0.85rem;
+      }
+      .term-row strong {
+        font-size: calc(1.1rem * var(--font-scale, 1));
+      }
+
+      /* 深度解析：.deep-dive-box p (1.05rem+), .deep-dive-title (1.2rem+) */
+      .deep-dive-title {
+        font-size: calc(1.2rem * var(--font-scale, 1));
+      }
+      .deep-dive-box p {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+        line-height: 1.65;
+      }
+
+      /* 測驗區：.pre-quiz-card, .quiz-card */
+      .pre-quiz-card,
+      .quiz-card {
+        padding: 1.25rem 0.85rem;
+      }
+      /* 題目 .quiz-q-text: 加大至 calc(1.22rem * var(--font-scale, 1))，行高 1.6 */
+      .quiz-q-text {
+        font-size: calc(1.22rem * var(--font-scale, 1));
+        line-height: 1.6;
+      }
+      /* 選項 .quiz-option-item: 加大至 calc(1.08rem * var(--font-scale, 1))，min-height 52px，易於手指點擊不誤觸 */
+      .quiz-option-item {
+        font-size: calc(1.08rem * var(--font-scale, 1));
+        min-height: 52px;
+        padding: 0.85rem 1rem;
+      }
+      /* 選項標籤 .quiz-opt-letter: 寬高放大至 34px，字重 900 */
+      .quiz-opt-letter {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        font-weight: 900;
+        font-size: calc(1rem * var(--font-scale, 1));
+      }
+      /* 詳解回饋 .quiz-explanation-box: 提升至 calc(1.05rem * var(--font-scale, 1)) */
+      .quiz-explanation-box {
+        font-size: calc(1.05rem * var(--font-scale, 1));
+        line-height: 1.65;
+      }
+      /* 測驗操作按鈕 .quiz-btn-action: 提升至 calc(1rem * var(--font-scale, 1))，min-height 48px */
+      .quiz-btn-action {
+        font-size: calc(1rem * var(--font-scale, 1));
+        min-height: 48px;
+        padding: 0.65rem 1.25rem;
       }
     }
 
@@ -2099,7 +2231,13 @@
         height: 22px;
       }
       .ppt-chapter-badge {
-        max-width: 80px;
+        max-width: 72px;
+      }
+      .ppt-tools-area {
+        gap: 4px;
+      }
+      .ppt-btn-tool {
+        padding: 5px 7px;
       }
     }
     
@@ -2242,6 +2380,7 @@
         <button class="ppt-btn-tool" id="pptBtnToggleDrawer" onclick="toggleDrawer()" title="開啟投影片大綱">
           ☰ 目錄
         </button>
+        <button class="ppt-btn-tool" id="pptBtnFontSize" onclick="cycleFontSize()" title="切換長輩字體大小"><span id="pptFontSizeIcon">👓</span> <span id="pptFontSizeText">字體: 大</span></button>
         <button class="ppt-btn-tool" id="pptBtnToggleMode" onclick="togglePresentationMode()" title="切換簡報/連續長圖">
           <span id="pptModeIcon">🖥️</span> <span id="pptModeText">簡報模式 (已開啟)</span>
         </button>
@@ -6618,6 +6757,65 @@
   
 
 /* ====================================================
+   👴 長輩友善字體大小切換控制器 (Senior-Friendly Font Scaling)
+   ==================================================== */
+const FONT_SIZES = ['standard', 'large', 'xlarge'];
+const FONT_SIZE_LABELS = {
+  'standard': '字體: 標準',
+  'large': '字體: 大',
+  'xlarge': '字體: 特大'
+};
+
+let currentFontSize = 'standard';
+
+function initFontSize() {
+  const savedFontSize = localStorage.getItem('ai_guide_font_size');
+  if (savedFontSize && FONT_SIZES.includes(savedFontSize)) {
+    setFontSize(savedFontSize, false);
+  } else {
+    // 若尚未儲存過且螢幕寬度 <= 768px，預設主動啟用 'large'（長輩大字模式）
+    const defaultSize = (window.innerWidth <= 768) ? 'large' : 'standard';
+    setFontSize(defaultSize, false);
+  }
+}
+
+function setFontSize(size, save = true) {
+  if (!FONT_SIZES.includes(size)) return;
+  currentFontSize = size;
+  document.documentElement.setAttribute('data-font-size', size);
+  document.body.setAttribute('data-font-size', size);
+  
+  const textEl = document.getElementById('pptFontSizeText');
+  if (textEl) {
+    textEl.textContent = FONT_SIZE_LABELS[size] || '字體: 大';
+  }
+  
+  if (save) {
+    localStorage.setItem('ai_guide_font_size', size);
+  }
+}
+
+function cycleFontSize() {
+  // 循環順序：大 (large) -> 特大 (xlarge) -> 標準 (standard) -> 大 (large)
+  let nextSize = 'large';
+  if (currentFontSize === 'large') {
+    nextSize = 'xlarge';
+  } else if (currentFontSize === 'xlarge') {
+    nextSize = 'standard';
+  } else {
+    nextSize = 'large';
+  }
+  setFontSize(nextSize, true);
+}
+
+// 頁面載入時自動執行 initFontSize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initFontSize);
+} else {
+  initFontSize();
+}
+
+/* ====================================================
    PPT 主題式簡報模式核心控制器 (Interactive Slide Deck)
    ==================================================== */
 
@@ -6627,6 +6825,7 @@ let isPresentationMode = true;
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+  initFontSize();
   const savedSlide = localStorage.getItem('ai_guide_slide_index');
   const savedMode = localStorage.getItem('ai_guide_view_mode');
   

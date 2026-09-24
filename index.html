@@ -1337,6 +1337,14 @@
       box-shadow: 2px 3px 0px #1e293b;
       transform: scale(1.08);
     }
+    /* 作答中已填答：中性標示，無對錯劇透 */
+    .quiz-dot-btn.answered {
+      background: #e2e8f0;
+      color: #1e293b;
+      border-color: #64748b;
+      font-weight: 800;
+    }
+    /* 交卷後檢閱模式：才顯示對錯 */
     .quiz-dot-btn.answered-correct {
       background: #dcfce7;
       color: #15803d;
@@ -1381,6 +1389,16 @@
       color: #334155;
       border: 1px solid #cbd5e1;
     }
+    .quiz-review-badge {
+      display: none;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #d97706;
+    }
     .quiz-q-text {
       font-size: 1.22rem;
       font-weight: 800;
@@ -1411,16 +1429,17 @@
       text-align: left;
       width: 100%;
       box-shadow: 1px 2px 0px #e2e8f0;
+      user-select: none;
     }
     .quiz-option-item:hover:not(:disabled) {
       border-color: #4f46e5;
       background: #f5f3ff;
-      transform: translateX(4px);
+      transform: translateX(3px);
       box-shadow: 2px 4px 0px #c7d2fe;
     }
     .quiz-opt-letter {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       background: #f1f5f9;
       border: 1.5px solid #94a3b8;
@@ -1428,18 +1447,35 @@
       align-items: center;
       justify-content: center;
       font-weight: 900;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       flex-shrink: 0;
+      transition: all 0.2s;
     }
+
+    /* 作答中選中態：中性高亮，無對錯劇透 */
+    .quiz-option-item.is-selected {
+      background: #eef2ff !important;
+      border-color: #4f46e5 !important;
+      color: #1e1b4b !important;
+      box-shadow: 0 0 0 2px #4f46e5, 2px 3px 0px #312e81 !important;
+      font-weight: 700;
+    }
+    .quiz-option-item.is-selected .quiz-opt-letter {
+      background: #4f46e5 !important;
+      color: #ffffff !important;
+      border-color: #3730a3 !important;
+    }
+
+    /* 成果檢閱模式專用：公布對錯 */
     .quiz-option-item.selected-correct {
       background: #dcfce7 !important;
       border-color: #16a34a !important;
       color: #14532d !important;
     }
     .quiz-option-item.selected-correct .quiz-opt-letter {
-      background: #16a34a;
-      color: white;
-      border-color: #15803d;
+      background: #16a34a !important;
+      color: white !important;
+      border-color: #15803d !important;
     }
     .quiz-option-item.selected-wrong {
       background: #fee2e2 !important;
@@ -1447,9 +1483,9 @@
       color: #7f1d1d !important;
     }
     .quiz-option-item.selected-wrong .quiz-opt-letter {
-      background: #dc2626;
-      color: white;
-      border-color: #b91c1c;
+      background: #dc2626 !important;
+      color: white !important;
+      border-color: #b91c1c !important;
     }
 
     /* 詳解回饋框 */
@@ -1503,22 +1539,36 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       padding-top: 0.5rem;
+    }
+    .quiz-controls-group-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .quiz-controls-group-action {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
     }
     .quiz-btn-action {
       background: white;
       border: 2px solid #1e293b;
-      padding: 0.7rem 1.4rem;
+      padding: 0.7rem 1.25rem;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       box-shadow: 3px 3px 0px #1e293b;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
+      min-height: 44px;
     }
     .quiz-btn-action:hover:not(:disabled) {
       transform: translate(-1px, -1px);
@@ -1529,7 +1579,7 @@
       box-shadow: 1px 1px 0px #1e293b;
     }
     .quiz-btn-action:disabled {
-      opacity: 0.4;
+      opacity: 0.45;
       cursor: not-allowed;
       box-shadow: none;
     }
@@ -1548,6 +1598,58 @@
     }
     .quiz-btn-finish:hover:not(:disabled) {
       background: #059669;
+    }
+    .quiz-btn-clear {
+      background: #f8fafc;
+      color: #475569;
+      border-color: #64748b;
+    }
+    .quiz-btn-clear:hover:not(:disabled) {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* 手機與平板響應式排版增強 */
+    @media (max-width: 640px) {
+      .quiz-nav-dots {
+        gap: 5px;
+        margin: 0.75rem 0 1rem;
+      }
+      .quiz-dot-btn {
+        width: 31px;
+        height: 31px;
+        font-size: 0.78rem;
+        border-radius: 6px;
+      }
+      .quiz-question-box {
+        padding: 1.15rem;
+      }
+      .quiz-q-text {
+        font-size: 1.08rem;
+      }
+      .quiz-option-item {
+        padding: 0.85rem 1rem;
+        font-size: 0.92rem;
+        gap: 10px;
+      }
+      .quiz-controls-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .quiz-controls-group-nav,
+      .quiz-controls-group-action {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        width: 100%;
+        gap: 8px;
+      }
+      .quiz-btn-action {
+        width: 100%;
+        min-height: 46px;
+        padding: 0.65rem 0.75rem;
+        font-size: 0.88rem;
+      }
     }
 
     /* 成果報告專區 */
@@ -2750,6 +2852,7 @@
         <div class="quiz-q-meta">
           <span class="quiz-q-tag" id="q-level-tag" style="background:#10b981;">Level 1 · 基礎認知</span>
           <span class="quiz-q-unit-tag" id="q-unit-tag">單元 01 · 核心大腦解密</span>
+          <span class="quiz-review-badge" id="quiz-review-badge">🔍 診斷解析模式</span>
         </div>
         <div class="quiz-q-text" id="q-text">載入題目中...</div>
       </div>
@@ -2767,20 +2870,25 @@
 
       <!-- 控制列 -->
       <div class="quiz-controls-row">
-        <button class="quiz-btn-action" id="btn-prev-q" onclick="navigateQuiz(-1)" disabled>
-          ⬅️ 上一題
-        </button>
-        <div style="display: flex; gap: 8px;">
-          <button class="quiz-btn-action" onclick="resetPreQuiz()" title="重新測驗">
-            🔄 重置作答
+        <div class="quiz-controls-group-nav">
+          <button class="quiz-btn-action" id="btn-prev-q" onclick="navigateQuiz(-1)" disabled>
+            ⬅️ 上一題
+          </button>
+          <button class="quiz-btn-action quiz-btn-clear" id="btn-clear-q" onclick="clearCurrentAnswer()" disabled title="清除這題的作答重新選擇">
+            ↺ 重選本題
+          </button>
+          <button class="quiz-btn-action quiz-btn-primary" id="btn-next-q" onclick="navigateQuiz(1)">
+            下一題 ➡️
+          </button>
+        </div>
+        <div class="quiz-controls-group-action">
+          <button class="quiz-btn-action" onclick="resetPreQuiz()" title="重新測驗（清空所有題）">
+            🔄 全部重測
           </button>
           <button class="quiz-btn-action quiz-btn-finish" id="btn-show-report" onclick="generateReport()">
             📊 產生成績與學習診斷
           </button>
         </div>
-        <button class="quiz-btn-action quiz-btn-primary" id="btn-next-q" onclick="navigateQuiz(1)">
-          下一題 ➡️
-        </button>
       </div>
 
       <!-- 測驗結果與診斷報告 (預設隱藏) -->
@@ -2843,9 +2951,15 @@
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <button class="quiz-btn-action quiz-btn-primary" onclick="scrollToTopQuiz()">
-            ⬆️ 回到頂部覆盤題目
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 1.75rem; flex-wrap: wrap;">
+          <button class="quiz-btn-action quiz-btn-primary" onclick="reviewQuizDetails()" title="從第一題開始逐題檢視對錯與解析">
+            🔍 逐題檢閱對錯與詳解
+          </button>
+          <button class="quiz-btn-action" onclick="resetPreQuiz()" title="清空紀錄重新測驗">
+            🔄 重新測驗
+          </button>
+          <button class="quiz-btn-action quiz-btn-finish" onclick="goToSlide(2)" title="進入單元一學習">
+            👉 前往單元 01 開始研讀 ➔
           </button>
         </div>
       </div>
@@ -4172,7 +4286,7 @@
       <div class="section-header">
         <span class="section-tag">單元 03 · 走出瀏覽器的科技革命</span>
         <h2>
-          <span>🛠️ 程式碼施工隊：Claude Cowork / Codex / Antigravity 自動化大躍進</span>
+          <span>🛠️ 程式碼施工隊：Google Antigravity / Claude Code / Agentic Coding 自動化大躍進</span>
         </h2>
         <p class="section-desc">擺脫被困在網頁聊天框的束縛！當 AI 拿起扳手和終端機，它能直接走進你的本機環境幫你施工！</p>
       </div>
@@ -4183,7 +4297,7 @@
         <div class="adhd-banner-content">
           <div class="adhd-banner-title">重點速讀卡：單元 3 核心三秒悟透</div>
           <div class="adhd-banner-text">
-            1. <strong>從動嘴到動手</strong>：網頁 AI 只給代碼建議（顧問）；Antigravity / Codex 帶工具箱<strong>親自進場施工（工班）</strong>。<br>
+            1. <strong>從動嘴到動手</strong>：網頁 AI（如 Gemini / ChatGPT / Claude.ai）只給代碼建議（顧問）；Antigravity / Claude Code / ChatGPT Agent 帶工具箱<strong>親自進場施工（工班）</strong>。<br>
             2. <strong>超強保證</strong>：執行報錯不哭泣，<strong>自動看日誌自我修復</strong>，直到終端機回傳 <strong>Exit code: 0</strong> 才算通過驗收。<br>
             3. <strong>通用插孔 MCP</strong>：就像 <strong>Type-C 傳輸線</strong>，隨插即用秒接幾百種企業軟體與資料庫。
           </div>
@@ -4401,7 +4515,7 @@
         <div class="timeline-item">
           <div class="timeline-dot" style="border-color: #10b981;"></div>
           <div class="timeline-title">
-            <span>第 4 代：程式碼代理施工隊（Antigravity / Codex / Claude Code）</span>
+            <span>第 4 代：程式碼代理施工隊（Google Antigravity / Claude Code / Cursor）</span>
             <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 999px;">進場施工水電隊</span>
           </div>
           <div class="timeline-desc">
@@ -4421,8 +4535,46 @@
         </div>
       </div>
 
+      <!-- 📊 三大 AI 巨頭產品生態對照表 -->
+      <div style="background: #ffffff; border: 2px solid #334155; border-radius: 14px; padding: 1.5rem; margin-top: 2rem; box-shadow: 3px 4px 0px #1e293b;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;">
+          <h4 style="font-size: 1.18rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>📊 實戰全景：三大 AI 巨頭「網頁對話 vs 桌面／本地 Agent」官方產品對照</span>
+          </h4>
+          <span style="background: #e0e7ff; color: #3730a3; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">動嘴顧問 vs 動手施工</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem; text-align: left;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 2px solid #cbd5e1;">
+                <th style="padding: 10px 12px; font-weight: 800; color: #1e293b; width: 18%;">AI 品牌陣營</th>
+                <th style="padding: 10px 12px; font-weight: 800; color: #2563eb; width: 32%;">🌐 網頁對話版（動嘴日常助理）</th>
+                <th style="padding: 10px 12px; font-weight: 800; color: #059669; width: 50%;">💻 桌面應用與本地施工 Agent（動手自主工作流）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 12px; font-weight: 800; color: #0f172a;">🔵 Google</td>
+                <td style="padding: 12px; color: #334155;"><strong>Google Gemini</strong><br><span style="font-size: 0.8rem; color: #64748b;">gemini.google.com 日常對話</span></td>
+                <td style="padding: 12px; color: #334155;"><strong>Google Antigravity</strong>（Antigravity IDE / 2.0）<br><span style="font-size: 0.8rem; color: #64748b;">Agent-first 自主開發桌面平台，具備多 Agent 編排與確定性驗證。</span></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 12px; font-weight: 800; color: #0f172a;">🟠 Anthropic<br>(Claude)</td>
+                <td style="padding: 12px; color: #334155;"><strong>Claude</strong><br><span style="font-size: 0.8rem; color: #64748b;">claude.ai 長文寫作與 Artifacts</span></td>
+                <td style="padding: 12px; color: #334155;"><strong>Claude Desktop</strong>（MCP 本地插座）＋ <strong>Claude Code</strong><br><span style="font-size: 0.8rem; color: #64748b;">桌面端隨插即接本機工具；Claude Code 則是終端機自主編程施工隊。</span></td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: 800; color: #0f172a;">🟢 OpenAI<br>(ChatGPT)</td>
+                <td style="padding: 12px; color: #334155;"><strong>ChatGPT</strong><br><span style="font-size: 0.8rem; color: #64748b;">chatgpt.com 多模態與 o1/o3 推理</span></td>
+                <td style="padding: 12px; color: #334155;"><strong>ChatGPT Desktop App</strong>（內建 Agent Mode / Work with Apps）<br><span style="font-size: 0.8rem; color: #64748b;">具備電腦操作（CUA）與本機開發工具連動；專業程式端結合 Cursor。</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- 技術深潛：客觀確定性驗證與自我修復 -->
-      <div class="deep-dive-box" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); border-left-color: #34d399;">
+      <div class="deep-dive-box" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); border-left-color: #34d399; margin-top: 2rem;">
         <div class="deep-dive-title">
           <span>🛡️ 核心深潛：為什麼 Antigravity 施工隊比單純問 AI 寫 Code 靠譜 100 倍？</span>
         </div>
@@ -4690,7 +4842,7 @@
             <div class="duel-title">
               <div class="duel-avatar" style="color: #059669;">🛠️</div>
               <div>
-                <div>程式碼施工隊 (Antigravity / Codex / Claude Code)</div>
+                <div>程式碼施工隊 (Google Antigravity / Claude Code / ChatGPT Agent)</div>
                 <span style="font-size: 0.8rem; color: #64748b; font-weight: 500;">帶工具箱進場的工程隊</span>
               </div>
             </div>
@@ -5497,7 +5649,7 @@
           <span>🏆 開放式實作挑戰：網頁 AI vs 電腦 Agent 誰更強？</span>
         </h2>
         <p class="section-desc" style="font-size: 0.95rem; color: #64748b; margin-top: 0.5rem; line-height: 1.6;">
-          不考死背選擇題！請在您的電腦或瀏覽器中，動手操作以下 3 個日常生活情境任務。親身體驗「網頁對話框」與「電腦 Agent 施工隊（如 Antigravity / Claude Code / Codex）」在效率、本機檔案存取與自動化上的巨大分水嶺！
+          不考死背選擇題！請在您的電腦或瀏覽器中，動手操作以下 3 個日常生活情境任務。親身體驗「網頁對話框」與「電腦 Agent 施工隊（如 Google Antigravity / Claude Code / ChatGPT Agent）」在效率、本機檔案存取與自動化上的巨大分水嶺！
         </p>
       </div>
 
@@ -5551,7 +5703,7 @@
             </div>
 
             <div class="mode-col mode-col-agent">
-              <div class="mode-title">💻 模式 B：電腦 Agent（Antigravity / Claude Code / Codex）</div>
+              <div class="mode-title">💻 模式 B：電腦 Agent（Google Antigravity / Claude Code / ChatGPT Desktop）</div>
               <ol class="mode-step-list">
                 <li>將上方素材在工作資料夾存為 <code>receipts.txt</code>。</li>
                 <li>對 Agent 輸入一句話指令：
@@ -6178,12 +6330,12 @@
     "unitId": "ch1",
     "question": "阿公看到孫子在電腦前跟 ChatGPT 聊得不亦樂乎，以為 AI 肚子裡住著一個通曉古今的神仙。其實從科學角度來看，AI 生成回答的本質最像下列哪一種日常活動？",
     "options": [
-      "百貨公司抽獎箱隨機摸彩拼運氣",
-      "像算命師看生辰八字隔空預知未來",
-      "看遍全天下圖書後的超級「文字接龍大師」（依據前面的字詞，計算機率猜下一個最順的字接下去）",
-      "從電腦硬碟的固定資料庫裡，把現成的文章剪下貼上"
+      "圖書館員在書架上找出整本現成文章，原封不動影印出來",
+      "熟讀萬卷書的高手，根據上文隨時猜測下一個最順暢的字",
+      "擁有獨立靈魂與感受力的人類，在心中產生情緒後抒發",
+      "像收音機轉到特定廣播頻道，把遠方的廣播聲音直接播出來"
     ],
-    "answer": 2,
+    "answer": 1,
     "explanation": "【生活妙喻：文字接龍大師】AI 既不是神仙，也不是剪貼簿。它就像一位讀遍天下所有圖書的文字接龍高手，根據你說的上半句話，不斷猜測『下一個最可能出現的字』，接成一段通順的回答！"
   },
   {
@@ -6195,10 +6347,10 @@
     "unitId": "ch1",
     "question": "小美請 AI 幫忙找長壽秘訣，AI 卻煞有其事地推薦了一位「活了 800 歲的古代老神醫」和一本從沒出版過的養生古書。AI 這種一本正經胡說八道（幻覺）的現象，最主要的原因是什麼？",
     "options": [
-      "AI 就像一位「愛面子的說書人」，它的首要目標是把故事講得流暢動聽，但它自己無法出門查驗這是不是真實世界的事實",
-      "因為小美家裡的網路線接觸不良，傳輸時漏掉了幾個字",
-      "因為 AI 具備惡作劇個性，故意想捉弄人類長輩",
-      "因為電腦主機散熱不良中暑發燙當機了"
+      "它只管把話說得流暢動聽，但自己無法去查證是不是真的",
+      "電腦內部網路線訊號中斷，導致傳遞過來的文字缺漏字詞",
+      "它具備喜歡惡作劇的人性，故意說謊來捉弄提問的使用者",
+      "電腦主機運算時溫度過高，為了散熱而胡亂拼湊回答文字"
     ],
     "answer": 0,
     "explanation": "【生活妙喻：愛面子的說書人】AI 的本質是追求句子『聽起來順暢合理』。如果遇到它沒看過的事情，它會像愛面子的說書人一樣，順著語感隨機編造出流暢卻完全虛構的名詞，這就是所謂的『AI 幻覺』！"
@@ -6210,15 +6362,15 @@
     "levelColor": "#10b981",
     "unit": "單元 01 · 核心大腦解密",
     "unitId": "ch1",
-    "question": "水果攤老老闆挑西瓜從不看厚厚的物理課本，但他拍過摸過上萬顆西瓜，一聽清脆「咚咚」聲、摸摸果蒂，就能挑出沙甜多汁的好瓜。這種「餵給電腦成千上萬張照片範例，讓它自己摸索出特徵規律」的過程叫什麼？",
+    "question": "水果攤老老闆挑西瓜從不看厚厚的物理課本，但他拍過摸過上萬顆西瓜，一聽清脆「咚咚」聲、摸摸果蒂，就能挑出沙甜多汁的好瓜。這種不靠死背規則、而是靠看大量真實範例摸索出直覺的學習方式，最接近下列哪一種概念？",
     "options": [
-      "電腦硬碟格式化重組",
-      "防毒軟體防火牆更新",
-      "數位身分證線上認證",
-      "機器學習（像老農夫挑瓜一樣，從大量經驗範例中摸索規律）"
+      "請老師傅把幾萬條死板規矩一字不漏寫進厚厚的工作手冊",
+      "給實習生看成千上萬個真實成功案例，讓他自己體會訣竅",
+      "把電腦裡舊的檔案全部刪除乾淨，騰出大量儲存空間重來",
+      "幫電腦加裝特殊的放大鏡鏡頭，讓它看清楚細微顏色斑點"
     ],
-    "answer": 3,
-    "explanation": "【生活妙喻：老老闆拍西瓜摸規律】以前寫程式是把每條規矩硬性寫死；『機器學習』則是給電腦看成千上萬個真實範例（如西瓜照、孫子照片），讓電腦自己摸索出五官輪廓與聲音特徵的通用規律！"
+    "answer": 1,
+    "explanation": "【生活妙喻：老老闆拍西瓜摸規律 (機器學習)】以前寫程式是把每條規矩硬性寫死；『機器學習』則是給電腦看成千上萬個真實範例（如西瓜照、水果聲音），讓電腦自己摸索出特徵與通用規律！"
   },
   {
     "id": 4,
@@ -6229,12 +6381,12 @@
     "unitId": "ch1",
     "question": "大管家有時候講話嚴肅拘謹、一板一眼；有時候卻像喝了兩杯熱咖啡，靈感爆發、妙語如珠。在跟 AI 互動時，如果我們把「溫度（Temperature）」調高，AI 說話會出現什麼變化？",
     "options": [
-      "手機電池會瞬間發燙必須放進冰箱冷卻",
-      "AI 會越講越快，像按了兩倍速快轉鍵一樣急著說完",
-      "風格調酒旋鈕：從一板一眼的「嚴肅會計師」，變成喝了咖啡腦洞大開的「浪漫微醺點子王」，創意十足但偶爾較發散",
-      "AI 會把文字全部自動轉成外語火星文"
+      "講話速度加快兩倍，像按了快轉鍵一樣急著把話一口氣說完",
+      "說話變得非常保守嚴謹，只挑選最安全、絕對不犯錯的字詞",
+      "電腦螢幕會自動調高亮度，讓文字顯示得更加鮮豔且刺眼",
+      "靈感大爆發像個浪漫詩人，用詞更加大膽新奇且富有創意"
     ],
-    "answer": 2,
+    "answer": 3,
     "explanation": "【生活妙喻：風格調酒旋鈕】溫度參數就像熱情開關！「低溫」時 AI 只選最確定保守的字，像查法規的會計師；「高溫」時像喝了咖啡的微醺詩人，願意嘗試新奇有趣的詞，激發滿滿靈感！"
   },
   {
@@ -6246,13 +6398,13 @@
     "unitId": "ch1",
     "question": "老王在同一個對話框裡跟 AI 從早聊到晚，聊了幾百句話之後，AI 突然忘記老王一開始再三叮嚀「全家吃全素不能碰肉」的重要設定。在生活比喻中，這是因為碰到了什麼限制？",
     "options": [
-      "教室黑板大小有限（上下文視窗滿了），字寫滿了只能把最上面的舊字擦掉，騰出空間寫新對話",
-      "AI 覺得老王太囉唆，故意裝傻不想理會",
-      "老王家的寬頻網路被電信公司強制降速",
-      "AI 的儲存硬碟被雷擊故障清空了"
+      "像教室黑板空間有限，寫滿了就必須把最前面的舊字擦掉",
+      "雲端伺服器在晚上會定時停電，導致白天的所有記憶被洗掉",
+      "系統覺得使用者講太多話太囉唆，故意裝傻不再遵守約定",
+      "電腦硬碟被病毒感染，導致早上儲存的檔案遭到徹底損壞"
     ],
     "answer": 0,
-    "explanation": "【生活妙喻：黑板大小有限】上下文視窗（Context Window）就像教室黑板。單次推論能同時看見的字數有限，當對話太長時，最上面的舊約定就會被擦掉，這時另開新對話框重新交代最乾淨！"
+    "explanation": "【生活妙喻：黑板大小有限 (上下文視窗)】上下文視窗（Context Window）就像教室黑板。單次推論能同時看見的字數有限，當對話太長時，最上面的舊約定就會被擦掉，這時另開新對話框重新交代最乾淨！"
   },
   {
     "id": 6,
@@ -6263,12 +6415,12 @@
     "unitId": "ch2",
     "question": "在手機或網頁動動嘴巴聊天框中，把 AI 當作隨身文字秘書，以下哪一件事情是它最擅長的「拿手甜蜜差事」？",
     "options": [
-      "隔空伸出機械手臂幫你把家裡散落滿地的衣服收進衣櫃",
-      "腦力激盪母親節賀卡金句、潤飾語氣委婉的里鄰協調信、將三頁長文新聞精簡成條列重點摘要",
-      "代替你去郵局排隊領取掛號信與老年年金",
-      "直接精準預測明天開獎的大樂透 6 個號碼保證中頭獎"
+      "替你自動整理出差採購發票，直接在電腦桌面建立實體報表檔案",
+      "隔空遙控你家裡的吸塵器和洗衣機，趁你不在家時把家務做好",
+      "幫忙潤飾委婉的信件草稿、提煉長文重點，並腦力激盪創意點子",
+      "預測下期樂透彩券的開獎號碼，並保證買了之後一定能中大獎"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "【生活妙喻：百貨諮詢台好秘書】純對話式 AI 最擅長動嘴就能搞定的文字工作：激發靈感、潤飾語氣、長文挑重點與外文翻譯；但需要動手搬東西或預知未來的事情可難不倒它！"
   },
   {
@@ -6278,15 +6430,15 @@
     "levelColor": "#3b82f6",
     "unit": "單元 02 · 動嘴聊天的日常境界",
     "unitId": "ch2",
-    "question": "如果走進餐廳跟大廚說「隨便來點好吃的」，往往會端出不合胃口的菜。想要讓 AI 秘書交出最稱心如意的草稿，最聰明的「點菜吩咐方式」是？",
+    "question": "跟大夫看病不能只說「我不舒服」，必須清楚講出哪裡痛、痛了幾天。在撰寫 Prompt（提示詞）時，以下哪一種架構最能讓 AI 一秒精準聽懂、給出高品質回答？",
     "options": [
-      "只打三個字「寫好看一點」，其他讓 AI 自己通靈猜測",
-      "一口氣把 10 件不相關的家庭瑣事混在同一句長句子裡交代",
-      "像看病講清楚症狀：【你是什麼專家角色】+【任務背景與對象】+【具體要做什麼】+【希望的格式與字數限制】",
-      "不管問什麼問題，都必須先背誦一萬字的禮貌問候語"
+      "只輸入兩三個關鍵字，剩下的細節完全讓對方自己猜測發揮",
+      "一口氣將五件完全不相關的家庭工作瑣事混在同一句話裡交代",
+      "每次問問題之前都先寫一千字的禮貌問候信，表示發問的誠意",
+      "講清楚扮演角色、任務背景、具體要做什麼以及要求格式"
     ],
-    "answer": 2,
-    "explanation": "【生活妙喻：看病說症狀與大廚點菜】跟 AI 對話就像點菜：交代清楚角色（如健康營養師）、情境對象（為高血壓長輩規劃）、具體任務（一週低鹽早餐菜單）與格式限制（條列三點），成果絕對合心意！"
+    "answer": 3,
+    "explanation": "【生活妙喻：提示詞四支柱】優質提示詞就像看病問診：角色（Role）+ 背景（Context）+ 任務（Task）+ 約束限制（Limit）。條件講得越具體清楚，AI 就越不會胡亂猜測通靈！"
   },
   {
     "id": 8,
@@ -6295,15 +6447,15 @@
     "levelColor": "#3b82f6",
     "unit": "單元 02 · 動嘴聊天的日常境界",
     "unitId": "ch2",
-    "question": "老點心師傅跟學徒講了一百遍「包子要有 18 摺」，學徒老是抓不準；但師傅親自捏 2 顆漂亮包子擺在桌上，學徒一看就依樣畫葫蘆捏得維妙維肖。在吩咐 AI 時先附上 1~2 個示範範例，這招為什麼特別神奇？",
+    "question": "老點心師傅跟學徒講了一百遍「包子要有 18 摺」，學徒老是抓不準；但師傅親自捏 2 顆漂亮包子放在面前，學徒看了一眼馬上照著捏出來。這在給 AI 下指令時說明了什麼道理？",
     "options": [
-      "這些範例會永久焊接在全世界 AI 伺服器的硬體晶片上",
-      "範例能讓使用者上網的手機網路月租費打對折",
-      "能夠瞬間關閉 AI 的道德審查與防詐騙機制",
-      "「看樣學樣照著捏」，與其用千言萬語抽象解釋規則，直接給出 2 盤做好的樣品，AI 能秒懂你期望的語氣與排版風格"
+      "提供現成樣品讓對方直接照著模仿，能秒懂期望的風格與排版",
+      "樣品會永久存放在伺服器裡，以後全世界的使用者都能看到",
+      "範例能讓使用者上網的網路傳輸費用打折，節省大量通訊成本",
+      "給出範例能強迫電腦把運算速度提升十倍，不必等待處理時間"
     ],
-    "answer": 3,
-    "explanation": "【生活妙喻：小籠包試吃樣品 (Few-Shot)】俗話說『百聞不如一見』。少樣本提示（Few-Shot）就像把做好的樣品擺在桌上，AI 能精確模仿你的排版、語氣與歸納風格，溝通成功率高達 99%！"
+    "answer": 0,
+    "explanation": "【生活妙喻：少樣本提示 Few-Shot】千言萬語不如給 2 個樣品！『少樣本提示（Few-Shot Prompting）』就是先給模型看一到三個現成的範例，模型便能秒懂你期待的排版、語氣與資料格式！"
   },
   {
     "id": 9,
@@ -6312,15 +6464,15 @@
     "levelColor": "#3b82f6",
     "unit": "單元 02 · 動嘴聊天的日常境界",
     "unitId": "ch2",
-    "question": "小學生遇到多步驟數學應用題時，逼他一秒心算往往容易算錯；但只要發給他一張草稿紙，讓他在紙上「一步一步寫下運算步驟」，算出來的答案就十拿九穩。在交代 AI 處理複雜問題時，加上哪一句話能達到這種神奇效果？",
+    "question": "小學生遇到多步驟數學應用題時，逼他一秒心算往往容易算錯；但只要發給他一張草稿紙，讓他在紙上「先把第一步算出來，再算第二步」，準確率就能大幅提升。想讓 AI 解決複雜邏輯問題，最有效的方法是什麼？",
     "options": [
-      "「請一步一步推導思考，並把推理步驟詳細寫下來」（思維鏈 CoT 發張草稿紙）",
-      "「請在 0.01 秒之內立刻交出最後答案，不准猶豫」",
-      "「請不要思考，直接憑第一直覺隨機猜測結論」",
-      "「請把這段文字全部翻譯成古埃及象形文字」"
+      "請對方在紙上把推理思考步驟一步一步寫下來，再給出最後結論",
+      "要求對方必須在一秒鐘之內立刻給出最終答案，不能有任何猶豫",
+      "要求對方不要動腦思考，直接憑第一直覺隨便猜測一個數字答案",
+      "要求對方先把題目整段翻譯成外國語言，看會不會變得比較簡單"
     ],
     "answer": 0,
-    "explanation": "【生活妙喻：小學生算數草稿紙 (CoT)】AI 是一字一字推測接龍的。如果不給它草稿紙，它只能憑空硬猜；加上『請一步一步思考』，等於讓它在回答中展開草稿演算，前一步推論成為後一步的墊腳石，準確率飆升！"
+    "explanation": "【生活妙喻：思維鏈 CoT 發張草稿紙】逼 AI 立刻給答案容易翻車！只要加一句『請一步一步思考（Chain of Thought, CoT）』，給模型一張虛擬草稿紙展開推理過程，複雜邏輯與算術的正確率就會直線飆升！"
   },
   {
     "id": 10,
@@ -6329,15 +6481,15 @@
     "levelColor": "#3b82f6",
     "unit": "單元 02 · 動嘴聊天的日常境界",
     "unitId": "ch2",
-    "question": "把一本厚達 500 頁的社區大樓生活規約整本貼給 AI，問它「第 243 頁倒數第 3 行到底寫了什麼」，AI 卻經常找漏或看走眼。在生活常理中，這最像下列哪種現象？",
+    "question": "把一本厚達 500 頁的社區大樓生活規約整本貼給 AI，問它「第 243 頁倒數第 3 行寫了什麼」，AI 卻常常找漏或看走眼。這種「夾在中間容易被忽視」的現象，最符合哪種情況？",
     "options": [
-      "規約裡面的文字被電腦裡面的電子書蟲咬壞了",
-      "厚書像乾草堆，人的注意力通常只記得開頭前幾頁和結尾結論，夾在厚厚正中間的小紙條最容易被忽略看晃神（迷失在中間）",
-      "AI 嫌字太多在電腦裡面鬧脾氣抗議罷工",
-      "電腦螢幕解析度不足導致字體模糊看不清"
+      "就像人讀厚書容易疲憊，注意力多放在頭尾，正中間最容易被忽略",
+      "書本頁數太多把硬碟塞爆，導致夾在中間那幾頁的字體直接消失",
+      "系統在閱讀時習慣隨機跳頁，只會挑選單數頁碼來閱讀裡面的文字",
+      "夾在中間的紙張通常紙質比較差，掃描成電腦文字時容易反光模糊"
     ],
-    "answer": 1,
-    "explanation": "【生活妙喻：厚字典中間夾小抄 (Lost in the Middle)】大模型的注意力也是有疲勞區的！面對海量長文本，它對開頭與結尾最敏銳，夾在正中間的細節容易被雜訊稀釋，因此找關鍵細節時『精準挑章節查閱（RAG）』比整本塞更可靠！"
+    "answer": 0,
+    "explanation": "【生活妙喻：迷失在中間 (Lost in the Middle)】大模型像讀書疲倦的人類，注意力通常聚焦在『最前面的開頭』與『最後面的結尾』。夾在厚書中間的關鍵字很容易被滑過去，重要資訊最好放在開頭或結尾重申！"
   },
   {
     "id": 11,
@@ -6346,15 +6498,15 @@
     "levelColor": "#f59e0b",
     "unit": "單元 03 · 走出瀏覽器的科技革命",
     "unitId": "ch3",
-    "question": "很多人以為 AI 永遠只能被關在網頁聊天框裡動嘴皮；但現在像 Antigravity、Claude Code 這種高階「本機施工隊代理」，跟純網頁對話框最本質的差別是什麼？",
+    "question": "很多人以為 AI 永遠只能被關在網頁聊天框裡動嘴皮；但現在像 Google Antigravity、Claude Code 這種高階「本機施工隊代理」，跟純網頁對話框最本質的差別是什麼？",
     "options": [
-      "施工隊模式只能在完全沒有安裝作業系統的空電腦上開機",
-      "網頁版像「動嘴顧問」只給建議、程式碼需人手動複製貼上；施工隊 AI 自帶水電工具箱，能親自進場讀寫檔案、修改程式碼並執行測試驗收",
-      "施工隊 AI 會自動把電腦裡所有檔案刪光光來換取運行速度",
-      "網頁對話框背後是真人輪流打字回覆，施工隊才是真正的電腦程式"
+      "網頁版背後是真人輪班打字，施工隊模式才是真正的電腦在回答",
+      "網頁版像顧問只動嘴給建議，施工隊能親自動手在電腦讀寫檔案改代碼",
+      "施工隊模式只能在完全沒有安裝作業系統的空電腦上透過光碟開機",
+      "網頁版只能顯示黑白文字，施工隊模式具備把螢幕解析度提升到最高的能力"
     ],
     "answer": 1,
-    "explanation": "【生活妙喻：動嘴顧問 vs 水電施工隊】網頁版 ChatGPT 是坐在百貨服務台的顧問（只動嘴，你還得自己回家修）；Antigravity 是自備扳手進你家施工的水電工班，能親自打開專案資料夾、新增檔案、修復程式碼並驗證成果！"
+    "explanation": "【生活妙喻：動嘴顧問 vs 水電施工隊】網頁版 ChatGPT 是坐在百貨服務台的顧問（只動嘴，你還得自己回家修）；Antigravity 是自備扳手進你家施工的水電工，能親自改代碼、跑測試、排查錯誤，直到驗收通過！"
   },
   {
     "id": 12,
@@ -6363,15 +6515,15 @@
     "levelColor": "#f59e0b",
     "unit": "單元 03 · 走出瀏覽器的科技革命",
     "unitId": "ch3",
-    "question": "主廚本身是一個人，他沒有把自己的手伸進火爐裡，但他會轉頭對助手說：「幫我打開氣炸鍋，設定 180 度烤 10 分鐘，烤好通知我」。AI 呼叫計算機、搜尋引擎或讀檔工具（Tool Use），底層最像怎樣的運作？",
+    "question": "主廚本身是一個人，他沒有把自己的手伸進火爐裡，但他會轉頭對助手說：「幫我打開氣炸鍋，設定 180 度烤 10 分鐘！」這在 AI 運作裡相當於什麼模式？",
     "options": [
-      "AI 的電腦主機直接長出了實體機械手臂幫你按鍵盤按鈕",
-      "大廚動嘴下令，二廚跑腿按氣炸鍋：AI 輸出工具名稱與口令，外層軟體小管家幫它按下執行鍵，再把烤好的成果端回來給 AI 接續解讀",
-      "AI 透過超自然念力直接隔空操控廚房家電開關",
-      "AI 偷偷在家裡天花板安裝了隱形無人機幫忙做家事"
+      "電腦主機突然長出真實的機械手臂，親自伸進廚房幫忙料理食物",
+      "靠著超自然的念力直接穿透牆壁，隔空開啟家電設備的電源開關",
+      "軟體早已把天下所有菜餚做好的味道寫死在硬碟裡，直接拿出來背誦",
+      "像主廚動嘴交代任務，交給旁邊專屬的小幫手代為按開關並回報成果"
     ],
-    "answer": 1,
-    "explanation": "【生活妙喻：大廚吩咐二廚用氣炸鍋 (Tool Use)】AI 大腦自己只會算文字機率，沒有手腳。但它可以『發送工單』說：請幫我跑計算機算 123×456，外層的軟體程式幫它算完把答案交回來，AI 就能準確把答案寫進報告裡！"
+    "answer": 3,
+    "explanation": "【生活妙喻：工具呼叫 (Tool / Function Calling)】大廚動嘴下令，二廚跑腿按開關！AI 模型本體只會吐出文字，但它能吐出標準工具指令（如調用計算機、打 API），外層軟體幫它跑完後再把結果端回來給它！"
   },
   {
     "id": 13,
@@ -6380,15 +6532,15 @@
     "levelColor": "#f59e0b",
     "unit": "單元 03 · 走出瀏覽器的科技革命",
     "unitId": "ch3",
-    "question": "以前出門旅行，不同牌子的手機要帶好幾種專用充電線；現在有了統一的 Type-C 插孔，一條線所有裝置隨插即用。近年科技界極為推崇的「MCP 協定」，在生活比喻中扮演什麼角色？",
+    "question": "以前出門旅行，不同牌子的手機要帶好幾種專用充電線；現在有了統一的 Type-C 插孔，一條線就能充手機、筆電、相機。在 AI 世界裡，外掛工具也統一標準，帶來什麼好處？",
     "options": [
-      "因為它可以直接插進手機充電孔，讓手機充電速度瞬間快十倍",
-      "某家大公司限制只有自己品牌手機才能用的封閉私有高額收費專利線",
-      "一種在停電時能讓冰箱自動發電的緊急手搖把",
-      "開放通用的「萬用 Type-C 插孔標準」，讓所有 AI 助手都能用同一套規範隨插即用連接本機檔案、資料庫與外部工具"
+      "只有特定幾家高價品牌的手機才能使用，限制一般使用者連線",
+      "停電的時候可以把傳輸線當作發電機的手搖把，替電腦緊急供電",
+      "就像通用的插孔規範，讓各家 AI 都能隨插即用連接不同軟體與資料",
+      "能夠讓電腦機殼內部的散熱風扇轉速提高十倍，防止主機發燙當機"
     ],
-    "answer": 3,
-    "explanation": "【生活妙喻：AI 時代的通用 Type-C (MCP)】以前每家 AI 都要替每種工具寫專用轉接頭，雜亂無章；MCP 定義了全天下通用的統一插座標準，任何工具只要符合 MCP 規格，所有 AI 助手插上就能立刻使用！"
+    "answer": 2,
+    "explanation": "【生活妙喻：AI 的 Type-C 萬用孔 (MCP)】Model Context Protocol (MCP) 是開放通訊協定。就像 Type-C 統一了充電孔，MCP 讓任何 AI 助手都能隨插即用連接你電腦裡的 SQLite 資料庫、Git 倉庫或本機終端！"
   },
   {
     "id": 14,
@@ -6399,13 +6551,13 @@
     "unitId": "ch3",
     "question": "負責任的水電師傅修好水管後，一定會轉開水龍頭仔細檢查有沒有滲水；如果看到水滴出來，會立刻拿扳手鎖緊再試一次，直到一滴不漏才收工。一個成熟的「本機施工隊 AI」在執行指令遇到報錯時會怎麼做？",
     "options": [
-      "假裝沒看見錯誤，把有漏洞的報告直接硬塞給使用者交差",
-      "生氣地把電腦硬碟整個格式化，把所有檔案消滅乾淨當沒發生過",
-      "立刻在螢幕上閃爍紅燈當機，並對著使用者大哭崩潰",
-      "像水電師傅通水抓漏，自動讀懂報錯原因，換好零件重新測試，直到完全亮起綠燈沒漏水才交付成果（閉環自我修復）"
+      "自動讀懂報錯日誌原因，換好代碼重新測試，直到亮綠燈通過才收工",
+      "假裝沒看見錯誤訊息，把沒寫好的半成品直接硬塞給使用者交差了事",
+      "將發生錯誤的段落直接塗黑隱藏，假裝整個程式已經完美執行成功",
+      "憤怒地把整台電腦硬碟完全清除重組，把所有資料刪除當作沒這回事"
     ],
-    "answer": 3,
-    "explanation": "【生活妙喻：師傅驗收水管一滴不漏 (閉環修復)】合格的工班講求驗收！施工隊 Agent 執行完程式如果出錯，絕不會擺爛交差，而是像水電師傅一樣自動抓出日誌裡的毛病、重新修改代碼並再次測試，直到亮綠燈才交付！"
+    "answer": 0,
+    "explanation": "【生活妙喻：水電通水抓漏 (自省修復迴圈)】合格的工班講求驗收！施工隊 Agent 執行完程式如果出錯，絕不會擺爛交差，而是像水電師傅一樣自動抓出日誌裡的毛病、重新修改代碼並再次測試，直到亮綠燈才交付！"
   },
   {
     "id": 15,
@@ -6416,10 +6568,10 @@
     "unitId": "ch3",
     "question": "請裝潢工班到家裡翻修，刷油漆、換水龍頭可以放心交給師傅做；但若師傅要敲掉一面結構牆或是更換大門門鎖，一定會拿同意書請屋主親自過目簽字。讓 AI 在電腦本機操作時，為什麼也要有「人機審核確認」？",
     "options": [
-      "純粹為了故意刁難工班拖延工時好賺取加班費",
-      "像敲承重牆要屋主親自簽字：防止高危險動作（如誤刪整個硬碟檔案、洩漏密碼金鑰或推送未審檔案），確保主人數位資產絕對安全",
-      "因為勞基法規定 AI 在週末不能獨自加班工作",
-      "為了防止電腦螢幕因為運算太快而把桌子震壞"
+      "純粹為了拖延施工時間，好讓外包團隊能夠多申報幾天額外的加班費用",
+      "在執行刪除重要資料、發送隱私文件等高風險動作時，確保由人類最後把關",
+      "根據勞基法規定，電腦程式在例假日與夜間不能獨自啟動無人值守作業",
+      "為了防止電腦處理器在全速運轉時震動太劇烈，把辦公桌上的水杯震倒"
     ],
     "answer": 1,
     "explanation": "【生活妙喻：敲承重牆要屋主親自簽字 (人機審核)】AI 拿著施工工具效率極高，但終端命令破壞力也大。建立白名單沙盒與『重大動作由人類確認（Human-in-the-Loop）』，就像屋主為裝潢工程把關，兼顧自動化神速與絕對安全！"
@@ -6433,12 +6585,12 @@
     "unitId": "ch4",
     "question": "開一間大餐廳，如果讓同一個人既當店長招待客人、又進廚房炒菜、又洗碗盤、還要兼做會計管帳，這家店很快就會大混亂甚至倒閉。為什麼做複雜大專案時，業界不建議只靠「單一一個巨型 AI」全包所有事？",
     "options": [
-      "一人身兼多職會讓它的上下文記憶被大量無關雜事塞爆，導致注意力混亂、角色錯亂，最後把糖當鹽撒做出嚴重錯誤判斷",
-      "因為各大模型公司規定每個 AI 每天最多只能講 50 句話",
-      "因為單一個 AI 消耗的瓦斯與水電費比四個 AI 還貴",
-      "因為單一個 AI 絕對無法學會講繁體中文"
+      "雲端大公司規定每個 AI 每天最多只能講五十句話，超過會被扣款",
+      "單獨一個 AI 所耗費的網路傳輸費，比同時請四個 AI 一起做還要昂貴",
+      "單一的電腦程式無法在同一個螢幕畫面上同時切換兩種不同的字體顏色",
+      "一個人要做太多瑣碎雜事會注意力分散、角色錯亂，最後把糖當鹽撒"
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "【生活妙喻：一人身兼四職會累垮】就像一間公司不能只有一位員工包辦董事長、工程師、會計與清潔工。單一 AI 在長流程中會累積龐大無關歷史記憶，導致職責混淆、注意力衰退與嚴重幻覺，必須分工合作！"
   },
   {
@@ -6450,10 +6602,10 @@
     "unitId": "ch4",
     "question": "蓋一棟穩固的大樓，工地裡最經典的「黃金鐵三角」工班分工，通常包含哪三種各司其職的核心角色？",
     "options": [
-      "買菜阿姨、洗菜廚工、端菜服務生",
-      "大門保全、地下室收費員、中庭除草工",
-      "工頭、師傅、品檢員三權分立：規劃者工頭（制定藍圖拆工單）、專業施工師傅（專注敲打砌磚）、客觀品檢員（拿規矩尺挑毛病驗收）",
-      "演講主持人、台下拍手觀眾、拿相機攝影師"
+      "負責招待客人的迎賓員、負責收錢的結帳員、負責騎車的外送司機",
+      "舞台上講話的主持人、台下用力拍手的觀眾、拿相機拍照的攝影師",
+      "負責規劃出圖的工頭、專注砌磚施工的師傅、拿尺嚴格挑毛病的驗收員",
+      "大樓巡邏的保全員、地下室車道引導員、修剪花木的園藝除草師"
     ],
     "answer": 2,
     "explanation": "【生活妙喻：工頭、師傅與驗收員三權分立】成熟的多 Agent 系統講求角色分離：工頭（Planner）統籌全域派工，施工工人（Worker）在乾淨環境專注實作，驗收品管（Critic/Reviewer）站在客觀標準挑毛病，絕不『球員兼裁判』！"
@@ -6467,12 +6619,12 @@
     "unitId": "ch4",
     "question": "廚房冰箱上貼著「今天晚餐要買蔥」的小黃便條紙，買完撕掉就扔；客廳書架上則妥善珍藏著記錄 30 年歷史的厚厚家族大相簿。多個 AI 團隊協作時，如何聰明管理記憶？",
     "options": [
-      "把過去 30 年發生的每一句話全部印出來，逼每個工人每天隨身背在身上走動",
-      "完全不留任何紀錄，每個工人都當作患有永久失憶症",
-      "把所有日記直接用毛筆塗鴉在客廳牆壁與天花板上",
-      "手邊只在「冰箱門貼當天買菜便條紙（工作記憶乾淨敏捷）」，幾十年的家族相簿鎖進抽屜（長期庫），需要時才去抽查調閱"
+      "逼每個員工每天出門都把過去三十年的全部日記背在身上隨身攜帶",
+      "每天上班都當作第一天失憶，完全不留任何備忘錄全部重新摸索",
+      "手邊只留當天乾淨的代辦便條紙，厚重的歷史資料收進抽屜需要時才調閱",
+      "把所有工作紀錄直接用奇異筆寫在辦公室的大門和天花板上不准擦拭"
     ],
-    "answer": 3,
+    "answer": 2,
     "explanation": "【生活妙喻：冰箱便條紙 vs 抽屜老相簿】高效的多代理協作遵循『最小資訊原則』：執行當前小任務只給乾淨的便利貼指示，厚重的歷史百科則存在長期檔案庫，需要時才精準檢索，省錢、快速又不會腦袋打結！"
   },
   {
@@ -6482,15 +6634,15 @@
     "levelColor": "#8b5cf6",
     "unit": "單元 04 · 企業級架構思維",
     "unitId": "ch4",
-    "question": "就算學生記憶力超群、能把整套《大英百科全書》帶進考場，考試時若把兩萬頁書從頭翻到尾找答案，既浪費時間又容易眼花看漏。最聰明的做法是帶著索引卡，一秒翻出最關鍵的那 2 頁精華抄寫作答。這在 AI 技術中稱為什麼？",
+    "question": "就算學生記憶力超群、能把整套《大英百科全書》帶進考場，考試時若把兩萬頁書從頭翻到尾找答案，既浪費時間又容易眼花看漏。考試時最聰明、最省力的作答方式是什麼？",
     "options": [
-      "電腦防藍光螢幕保護貼",
-      "桌上型電腦主機擴充散熱風扇",
-      "RAG（開卷考試翻出關鍵那一頁！圖書管理員先抽出最關鍵食譜遞給大廚，又快又省錢還黑紙白字有所依據）",
-      "智慧家庭自動除濕機設定"
+      "把兩萬頁百科全書強行一字不漏死背進腦袋，考試時憑死記硬背作答",
+      "考試前先翻出最關鍵的兩頁精華講義帶在手邊，看著正確依據參考作答",
+      "規定每次回答問題只能寫五個字以內，以此強迫自己省略所有細節",
+      "考試時把考卷上的字體全部縮小十倍，以為這樣就能看得比較快"
     ],
-    "answer": 2,
-    "explanation": "【生活妙喻：開卷考試翻出關鍵那一頁 (RAG)】百萬文字全塞進大腦不僅運算昂貴、反應緩慢，更容易看花眼。RAG 扮演神級圖書檢索員，在回答前先幫 AI 挑出最關鍵的 2 頁精華，快、準、省且絕不瞎掰！"
+    "answer": 1,
+    "explanation": "【生活妙喻：開卷考試翻出關鍵那一頁 (RAG)】百萬文字全塞進大腦不僅運算昂貴、反應緩慢，更容易看花眼。這在 AI 技術中叫做 RAG，扮演神級圖書檢索員，在回答前先幫 AI 挑出最關鍵的 2 頁精華，快、準、省且絕不瞎掰！"
   },
   {
     "id": 20,
@@ -6501,12 +6653,12 @@
     "unitId": "ch4",
     "question": "泥作師傅抹好水泥，驗收員嫌不平整退件；師傅重新抹了一次，驗收員還是不給過，兩人在工地吵得不可開交、沒完沒了。遇到這種互相踢皮球卡死的「死循環」，系統必須具備什麼保命開關？",
     "options": [
-      "設定吵架上限（例如最多重試 3 次），卡關時立刻按響求助警報鈴，把爭議狀況整理好，呈報請真正的人類屋主專家出面裁決定案（熔斷防護）",
-      "放任兩個人在工地吵上一萬年，直到把工程款與雲端帳單徹底刷爆為止",
-      "偷偷買一把更大支的泥作鏟子，讓師傅繼續盲目重複抹上一千次",
-      "把整棟大樓的社區總變電箱開關直接永久拆除"
+      "關閉工地的所有時鐘，放任兩個人在工地吵上一整年直到把工程款花光",
+      "規定最多吵架重試三次，卡關時立刻響起警報鈴，請真正的人類屋主出面定案",
+      "偷偷買一把更大支的鏟子給師傅，讓他固執地在同一個地方塗抹一萬次",
+      "一旦發現意見不合，直接把整棟大樓的總電源開關拉下強制全區大停電"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "【生活妙喻：師徒吵架按響警報鈴 (熔斷機制)】生產級的多 Agent 系統必須有煞車皮！設定最大重試次數與逾時中斷，一旦發生卡關死循環，立刻熔斷停止並升級呼叫人類專家（Escalate to Human），守護荷包與系統安全！"
   }
 ];
@@ -6514,6 +6666,8 @@
     let currentQuizIndex = 0;
     // 記錄每題使用者選擇的選項索引 (null 代表未答)
     let userAnswers = new Array(preQuizData.length).fill(null);
+    // 記錄是否已經提交測驗查看報告（交卷後進入檢閱解析模式）
+    let quizSubmitted = false;
 
     // 平滑滾動到目標章節並給予醒目視覺提示
     function scrollToSectionWithHighlight(sectionId) {
@@ -6527,6 +6681,7 @@
     }
 
     function initPreQuiz() {
+      quizSubmitted = false;
       renderNavDots();
       loadQuestion(0);
     }
@@ -6540,6 +6695,7 @@
         btn.className = "quiz-dot-btn";
         btn.id = `dot-q-${idx}`;
         btn.innerText = idx + 1;
+        btn.setAttribute("title", `第 ${idx + 1} 題`);
         btn.onclick = () => loadQuestion(idx);
         container.appendChild(btn);
       });
@@ -6555,10 +6711,16 @@
           btn.classList.add("current");
         }
         if (userAnswers[idx] !== null) {
-          if (userAnswers[idx] === q.answer) {
-            btn.classList.add("answered-correct");
+          if (quizSubmitted) {
+            // 交卷後才標記答對 (綠) 或答錯 (紅)
+            if (userAnswers[idx] === q.answer) {
+              btn.classList.add("answered-correct");
+            } else {
+              btn.classList.add("answered-wrong");
+            }
           } else {
-            btn.classList.add("answered-wrong");
+            // 作答中：僅顯示中性已作答樣式，不劇透答案對錯
+            btn.classList.add("answered");
           }
         }
       });
@@ -6574,6 +6736,12 @@
       document.getElementById("q-level-tag").style.background = q.levelColor;
       document.getElementById("q-unit-tag").innerText = q.unit;
       document.getElementById("q-text").innerText = `Q${q.id}. ${q.question}`;
+
+      // 檢閱模式標記徽章顯示
+      const reviewBadge = document.getElementById("quiz-review-badge");
+      if (reviewBadge) {
+        reviewBadge.style.display = quizSubmitted ? "inline-block" : "none";
+      }
 
       // 更新進度標記
       document.getElementById("quiz-progress-label").innerText = `題目 ${index + 1} / ${preQuizData.length}`;
@@ -6598,47 +6766,61 @@
       const optContainer = document.getElementById("quiz-options-container");
       optContainer.innerHTML = "";
       const letters = ["A", "B", "C", "D"];
-      const isAnswered = userAnswers[index] !== null;
+      const currentAnswer = userAnswers[index];
 
       q.options.forEach((optText, optIdx) => {
         const btn = document.createElement("button");
         btn.className = "quiz-option-item";
         btn.innerHTML = `<span class="quiz-opt-letter">${letters[optIdx]}</span> <span>${optText}</span>`;
         
-        if (isAnswered) {
+        if (quizSubmitted) {
+          // 【交卷檢閱模式】：鎖定按鈕，顯示標準答案與答錯紅綠色
           btn.disabled = true;
           if (optIdx === q.answer) {
             btn.classList.add("selected-correct");
           }
-          if (userAnswers[index] === optIdx && optIdx !== q.answer) {
+          if (currentAnswer === optIdx && optIdx !== q.answer) {
             btn.classList.add("selected-wrong");
           }
         } else {
+          // 【作答進行中】：不劇透、不鎖定！可任意重選與切換選項
+          if (currentAnswer === optIdx) {
+            btn.classList.add("is-selected");
+          }
           btn.onclick = () => selectOption(optIdx);
         }
         optContainer.appendChild(btn);
       });
 
-      // 渲染詳解
+      // 渲染詳解（僅交卷後才展示詳解，作答中完全隱藏）
       const expBox = document.getElementById("quiz-explanation-box");
       const expText = document.getElementById("quiz-explanation-text");
       const expLink = document.getElementById("quiz-explanation-link-wrap");
 
-      if (isAnswered) {
+      if (quizSubmitted) {
         const isCorrect = userAnswers[index] === q.answer;
+        expBox.style.display = "block";
         expBox.className = `quiz-explanation-box ${isCorrect ? "correct" : "wrong"}`;
-        expText.innerHTML = `<strong>${isCorrect ? "🎉 答對了！" : "❌ 不太正確喔！"}</strong> ${q.explanation}`;
+        expText.innerHTML = `<strong>${isCorrect ? "🎉 恭喜答對！" : "❌ 這題答錯囉！"}</strong> ${q.explanation}`;
         expLink.innerHTML = `<a class="quiz-goto-unit-btn" href="javascript:void(0)" onclick="scrollToSectionWithHighlight('${q.unitId}')">📖 前往【${q.unit}】深入研讀 ➔</a>`;
       } else {
         expBox.className = "quiz-explanation-box";
         expBox.style.display = "none";
       }
 
-      // 上下一題按鈕狀態
+      // 控制按鈕狀態
       document.getElementById("btn-prev-q").disabled = (index === 0);
+      
+      // 單題清除重選按鈕：作答中且該題已有選取答案時可用，交卷後鎖定
+      const clearBtn = document.getElementById("btn-clear-q");
+      if (clearBtn) {
+        clearBtn.disabled = quizSubmitted || (currentAnswer === null);
+      }
+
+      // 下一步 / 查看報告按鈕
       const nextBtn = document.getElementById("btn-next-q");
       if (index === preQuizData.length - 1) {
-        nextBtn.innerText = "查看診斷報告 📊";
+        nextBtn.innerText = quizSubmitted ? "回到診斷報告 📊" : "查看診斷報告 📊";
         nextBtn.onclick = generateReport;
       } else {
         nextBtn.innerText = "下一題 ➡️";
@@ -6648,8 +6830,17 @@
       updateNavDots();
     }
 
+    // 選取選項（作答中：隨時可自由換選，即時記錄）
     function selectOption(selectedIdx) {
+      if (quizSubmitted) return;
       userAnswers[currentQuizIndex] = selectedIdx;
+      loadQuestion(currentQuizIndex);
+    }
+
+    // 清除本題作答（單題重選，不影響其他題）
+    function clearCurrentAnswer() {
+      if (quizSubmitted) return;
+      userAnswers[currentQuizIndex] = null;
       loadQuestion(currentQuizIndex);
     }
 
@@ -6660,11 +6851,15 @@
       }
     }
 
+    // 重置整個測驗
     function resetPreQuiz() {
-      if (confirm("確定要重置作答進度嗎？所有作答紀錄將被清除。")) {
+      if (confirm("確定要重新測驗嗎？所有作答紀錄將被清空，重頭開始。")) {
         userAnswers = new Array(preQuizData.length).fill(null);
-        document.getElementById("quiz-report-modal").style.display = "none";
+        quizSubmitted = false;
+        const reportModal = document.getElementById("quiz-report-modal");
+        if (reportModal) reportModal.style.display = "none";
         loadQuestion(0);
+        scrollToTopQuiz();
       }
     }
 
@@ -6674,6 +6869,17 @@
 
     function generateReport() {
       const totalQuestions = preQuizData.length;
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+
+      // 如果尚未交卷且有未作答題目，友善提醒
+      if (!quizSubmitted && answeredCount < totalQuestions) {
+        const unansweredCount = totalQuestions - answeredCount;
+        if (!confirm(`您還有 ${unansweredCount} 題尚未作答，確定要現在交卷並產生成績與診斷報告嗎？\n（未作答之題目將以 0 分計）`)) {
+          return;
+        }
+      }
+
+      quizSubmitted = true;
       let correctCount = 0;
       let dimScores = [0, 0, 0, 0]; // Level 1, 2, 3, 4 各 5 題，滿分各 25 分
 
@@ -6743,10 +6949,19 @@
         });
       }
 
+      // 重新載入當前題目以套用檢閱模式外觀與詳解
+      loadQuestion(currentQuizIndex);
+
       // 展開報告並平滑滾動至報告區
       const reportModal = document.getElementById("quiz-report-modal");
       reportModal.style.display = "block";
       reportModal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // 從頭逐題檢閱詳解與標準答案
+    function reviewQuizDetails() {
+      loadQuestion(0);
+      scrollToTopQuiz();
     }
 
     // 頁面載入完成後自動初始化閱讀前測驗

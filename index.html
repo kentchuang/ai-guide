@@ -2885,8 +2885,8 @@
           <button class="quiz-btn-action" onclick="resetPreQuiz()" title="重新測驗（清空所有題）">
             🔄 全部重測
           </button>
-          <button class="quiz-btn-action quiz-btn-finish" id="btn-show-report" onclick="generateReport()">
-            📊 產生成績與學習診斷
+          <button class="quiz-btn-action" id="btn-show-report" onclick="generateReport()" title="隨時跳過剩餘題目，直接交卷查看診斷報告" style="color: #047857; border-color: #10b981;">
+            📊 提前交卷看診斷
           </button>
         </div>
       </div>
@@ -6817,13 +6817,30 @@
         clearBtn.disabled = quizSubmitted || (currentAnswer === null);
       }
 
-      // 下一步 / 查看報告按鈕
+      // 下一步 / 查看報告按鈕與右側交卷按鈕動態切換（UI/UX 最佳化：消除第 20 題雙重按鈕困惑）
       const nextBtn = document.getElementById("btn-next-q");
+      const reportBtn = document.getElementById("btn-show-report");
+
       if (index === preQuizData.length - 1) {
-        nextBtn.innerText = quizSubmitted ? "回到診斷報告 📊" : "查看診斷報告 📊";
+        // 到達最後一題 (第 20 題)：隱藏右側交卷按鈕，由左側主按鈕承接唯一最高權重 CTA
+        if (reportBtn) reportBtn.style.display = "none";
+        
+        if (quizSubmitted) {
+          nextBtn.innerText = "📊 返回診斷報告";
+          nextBtn.className = "quiz-btn-action quiz-btn-primary";
+        } else {
+          nextBtn.innerText = "🎉 完成測驗，查看診斷報告 📊";
+          nextBtn.className = "quiz-btn-action quiz-btn-finish";
+        }
         nextBtn.onclick = generateReport;
       } else {
+        // 第 1 ~ 19 題：保持順暢線性導航，右側提供隨時提前交卷入口
+        if (reportBtn) {
+          reportBtn.style.display = "inline-flex";
+          reportBtn.innerText = quizSubmitted ? "📊 回到診斷報告" : "📊 提前交卷看診斷";
+        }
         nextBtn.innerText = "下一題 ➡️";
+        nextBtn.className = "quiz-btn-action quiz-btn-primary";
         nextBtn.onclick = () => navigateQuiz(1);
       }
 
